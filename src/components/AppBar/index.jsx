@@ -27,6 +27,9 @@ function AppBar() {
         justifyContent: "space-between",
         gap: 2,
         overflowX: "auto",
+        bgcolor: (theme) =>
+          theme.palette.mode === "light" ? "#0f0f0f" : "#1d2125",
+        paddingX: 2,
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -53,7 +56,18 @@ function AppBar() {
             <Recent />
             <Starred />
             <Templates />
-            <Button variant="outlined">Create</Button>
+            <Button
+              variant="outlined"
+              sx={{
+                bgcolor: "primary.createBtnBg",
+                color: "primary.textCreateBtnColor",
+                "&:hover": {
+                  bgcolor: "primary.createBtnBg_Hovered",
+                },
+              }}
+            >
+              Create
+            </Button>
           </Box>
         </Box>
       </Box>
@@ -63,7 +77,7 @@ function AppBar() {
           label="Search field"
           type="search"
           size="small"
-          sx={{ minWidth: "120px" }}
+          sx={{ minWidth: "120px", bgcolor: "primary.searchBoxBg" }}
         />
         <ModeSelect />
         <Tooltip title="Notification">

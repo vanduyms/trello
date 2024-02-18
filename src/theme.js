@@ -1,21 +1,42 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+
+const APP_BAR_HEIGHT = '58px';
+const BOARD_BAR_HEIGHT = '60px';
+const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`;
+
+
 const theme = extendTheme({
   trelloCustom: {
-    appBarHeight: '58px',
-    boardBarHeight: '60px',
+    appBarHeight: APP_BAR_HEIGHT,
+    boardBarHeight: BOARD_BAR_HEIGHT,
+    boardContentHeight: BOARD_CONTENT_HEIGHT,
   },
   colorSchemes: {
     light: {
       palette: {
         primary: {
-          main: '#216E4E',
+          main: '#fff',
+          textCreateBtnColor: "#fff",
+          createBtnBg: '#ffffff33',
+          createBtnBg_Hovered: '#ffffff4d',
+          searchBoxBg: "#ffffff33",
+          colorTextColumn: "#172b4d",
+          scrollBarColumnBg: "#ced0da",
+          scrollBarColumnBg_Hovered: "#bdc3c7"
         },
       },
     },
     dark: {
       palette: {
         primary: {
-          main: '#fff',
+          main: '#9fadbc',
+          textCreateBtn: "#000",
+          createBtnBg: '#579dff',
+          createBtnBg_Hovered: '#85b8ff',
+          searchBoxBg: "#transparent",
+          colorTextColumn: "#B6C2CF",
+          scrollBarColumnBg: "#1e1e1e",
+          scrollBarColumnBg_Hovered: "#3b3b3a",
         },
       },
     }
@@ -33,7 +54,7 @@ const theme = extendTheme({
             borderRadius: '8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#00b894',
+            // backgroundColor: '#00b894',
           },
         }
       }
@@ -72,6 +93,15 @@ const theme = extendTheme({
           color: theme.palette.primary.main,
           fontSize: '0.875rem'
         })
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          "&.MuiTypography-body1": {
+            fontSize: "0.875rem"
+          }
+        }
       }
     }
   },
