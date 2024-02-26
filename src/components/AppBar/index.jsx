@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import ModeSelect from "../../components/ModeSelect";
+import ModeSelect from "../ModeSelect/ModeSelect";
 import AppsIcon from "@mui/icons-material/Apps";
 import TrelloIcon from "~/assets/trello.svg?react";
 import Typography from "@mui/material/Typography";
@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Badge from "@mui/material/Badge";
 import TextField from "@mui/material/TextField";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import { Tooltip } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Profiles from "./Menus/Profiles";
 

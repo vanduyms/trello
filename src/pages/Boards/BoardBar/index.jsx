@@ -25,7 +25,7 @@ const MENU_STYLES = {
   },
 };
 
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -46,13 +46,15 @@ function BoardBar() {
         <Chip
           sx={MENU_STYLES}
           icon={<DashboardIcon />}
-          label="Dashboard"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLES}
           icon={<PublicOutlinedIcon />}
-          label="Private/Public Workspace"
+          label={`${String(board?.type).charAt(0).toUpperCase()}${String(
+            board?.type
+          ).slice(1)}`}
           clickable
         />
       </Box>
