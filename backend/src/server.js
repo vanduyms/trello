@@ -2,13 +2,14 @@ import express from 'express'
 import { CONNECT_DB, CLOSE_DB, GET_DB } from "~/config/mongodb";
 import exitHook from "async-exit-hook";
 import { env } from '~/config/environment';
-const app = express()
+import { APIs_V1 } from "~/routes/v1";
+
+const app = express();
 
 const START_SERVER = () => {
-  app.get('/', (req, res) => {
-    // Test Absolute import mapOrder
-    res.end('<h1>Hello World!</h1><hr>')
-  })
+  app.use(express.json());
+
+  app.use("/v1", APIs_V1);
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
