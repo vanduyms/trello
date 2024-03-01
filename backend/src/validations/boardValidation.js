@@ -18,10 +18,10 @@ const createNew = async (req, res, next) => {
       'string.tim': 'Description must not have leading or trailing whitespace'
     })
   });
+
   try {
     await correctCondition.validateAsync(req.body, { abortEarly: false });
-
-    res.status(StatusCodes.CREATED).json({ message: "Note: API create new list boards" })
+    next();
   } catch (error) {
     res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
       errors: new Error(error).message
