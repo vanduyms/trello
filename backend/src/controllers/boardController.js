@@ -1,4 +1,3 @@
-import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { boardService } from "~/services/boardService";
 
@@ -13,6 +12,16 @@ const createNew = async (req, res, next) => {
     //   errors: new Error(error).message
     // })
   }
+};
+
+const getDetails = async (req, res, next) => {
+  try {
+    const boardId = req.params.id;
+    const result = await boardService.getDetails(boardId);
+    res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    next(error);
+  }
 }
 
-export const boardController = { createNew }
+export const boardController = { createNew, getDetails }

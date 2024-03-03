@@ -1,4 +1,6 @@
+import { StatusCodes } from "http-status-codes";
 import { boardModel } from "~/models/boardModel";
+import ApiError from "~/utils/apiError";
 import { slugify } from "~/utils/formatter";
 
 const createNew = async (reqBody) => {
@@ -9,14 +11,7 @@ const createNew = async (reqBody) => {
     }
 
     const createdBoard = await boardModel.createNew(newBoard);
-    // console.log(createdBoard);
-
     const getNewBoard = await boardModel.findOneById(createdBoard.insertedId);
-
-    console.log(getNewBoard)
-
-
-    // Call to model to handle to save record newBoard to database
 
     return getNewBoard;
 
@@ -25,6 +20,19 @@ const createNew = async (reqBody) => {
   }
 }
 
+const getDetails = async (boardId) => {
+  try {
+    const board = boardModel.getDetails(boardId);
+    if (!board) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Board not found !");
+    }
+    return board;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const boardService = {
-  createNew
+  createNew,
+  getDetails
 }
