@@ -1,15 +1,12 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import ApiError from "~/utils/apiError";
-
-const Router = express.Router();
+import { boardService } from "~/services/boardService";
 
 const createNew = async (req, res, next) => {
   try {
-    // await correctCondition.validateAsync(req.body, { abortEarly: false });
+    const createdBoard = await boardService.createNew(req.body);
 
-    res.status(StatusCodes.CREATED).json({ message: "Note: API create new list boards" })
-    // throw new ApiError(StatusCodes.BAD_GATEWAY, "message");
+    res.status(StatusCodes.CREATED).json(createdBoard)
   } catch (error) {
     next(error)
     // res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
