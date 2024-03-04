@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { StatusCodes } from "http-status-codes";
 import ApiError from "~/utils/apiError";
+import { BOARD_TYPES } from "~/utils/constants";
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -11,13 +12,8 @@ const createNew = async (req, res, next) => {
       'string.max': 'Title max 50 chars',
       'string.tim': 'Title must not have leading or trailing whitespace'
     }),
-    description: Joi.string().required().min(3).max(256).trim().strict().message({
-      'string.required': "Description is required",
-      'string.empty': 'Description is not allowed to empty',
-      'string.min': 'Description min 3 chars',
-      'string.max': 'Description max 256 chars',
-      'string.tim': 'Description must not have leading or trailing whitespace'
-    })
+    description: Joi.string().required().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(...Object.values(BOARD_TYPES)).required()
   });
 
   try {
