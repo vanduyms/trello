@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -15,11 +15,13 @@ import ListCard from "./ListCards/ListCard";
 import { mapOrder } from "~/utils/sort";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import TextField from "@mui/material/TextField";
+import CloseIcon from "@mui/icons-material/Close";
 
 function Column({ column }) {
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +46,23 @@ function Column({ column }) {
     transition,
     height: "100%",
     opacity: isDragging ? 0.5 : undefined,
+  };
+
+  const [openNewCardForm, setOpenNewCardForm] = useState(false);
+  const [newCardTitle, setNewCardTitle] = useState("");
+
+  const toggleOpenNewCardForm = () => {
+    console.log("State", openNewCardForm);
+    setOpenNewCardForm(!openNewCardForm);
+  };
+
+  const addNewCard = () => {
+    if (!newCardTitle) {
+      return;
+    }
+
+    toggleOpenNewCardForm();
+    setNewCardTitle("");
   };
 
   return (
@@ -145,47 +164,126 @@ function Column({ column }) {
         <Box
           sx={{
             height: (theme) => theme.trelloCustom.columnFooterHeight,
-            p: 2,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            gap: 1,
+            p: 1.25,
+            // marginY: 1,
           }}
         >
-          <Button
-            sx={{
-              color: "primary.colorTextColumn",
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-            startIcon={<AddIcon />}
-          >
-            Add a card
-          </Button>
-          <Tooltip title="Create from template...">
-            <Button
+          {!openNewCardForm ? (
+            <Box
               sx={{
-                padding: "0px 4px",
-                minWidth: "max-content !important",
-                color: "primary.colorTextColumn",
-                // "& .MuiButtonBase-root": {
-                //   min-width: "max-content !important"
-                // },
-                "& .MuiButton-endIcon": {
-                  mr: 0,
-                  ml: 0,
-                  padding: "6px 4px",
-                },
+                gap: 1,
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-              id="basic-button-recent"
-              aria-controls={open ? "basic-menu-recent" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              endIcon={<AddToPhotosIcon />}
-            ></Button>
-          </Tooltip>
+            >
+              <Button
+                onClick={toggleOpenNewCardForm}
+                sx={{
+                  color: "primary.colorTextColumn",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+                startIcon={<AddIcon />}
+              >
+                Add a card
+              </Button>
+
+              <Tooltip title="Create from template...">
+                <Button
+                  sx={{
+                    padding: "0px 4px",
+                    minWidth: "max-content !important",
+                    color: "primary.colorTextColumn",
+                    // "& .MuiButtonBase-root": {
+                    //   min-width: "max-content !important"
+                    // },
+                    "& .MuiButton-endIcon": {
+                      mr: 0,
+                      ml: 0,
+                      padding: "6px 4px",
+                    },
+                  }}
+                  id="basic-button-recent"
+                  aria-controls={open ? "basic-menu-recent" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClick}
+                  endIcon={<AddToPhotosIcon />}
+                ></Button>
+              </Tooltip>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                padding: "4px 10px",
+                borderRadius: "6px",
+                backgroundColor: (theme) => theme.palette.primary.bgCard,
+                display: "flex",
+                flexDirection: "row",
+                gap: 1,
+              }}
+            >
+              <TextField
+                label="Enter column title ..."
+                type="search"
+                size="small"
+                variant="outlined"
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                sx={{
+                  "& label": { color: "white" },
+                  "& input": { color: "white" },
+                  "& label.Mui-focused": { color: "white" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "white" },
+                    "&:hover fieldset": { borderColor: "white" },
+                    "&.Mui-focused fieldset": { borderColor: "white" },
+                  },
+                }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{
+                    color: "white",
+                    boxShadow: "none",
+                    border: "0.5px solid",
+                    borderColor: (theme) => theme.palette.success.main,
+                    "&:hover": {
+                      bgColor: (theme) => theme.palette.success.main,
+                    },
+                  }}
+                  onClick={addNewCard}
+                >
+                  Add
+                </Button>
+                <CloseIcon
+                  fontSize="small"
+                  sx={{
+                    color: "white",
+                    cursor: "pointer",
+                    "&:hover": { color: (theme) => theme.palette.warning.main },
+                  }}
+                  onClick={toggleOpenNewCardForm}
+                />
+              </Box>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>

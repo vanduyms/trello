@@ -15,8 +15,13 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import Profiles from "./Menus/Profiles";
+import { useState } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 
 function AppBar() {
+  const [searchValue, setSearchValue] = useState("");
   return (
     <Box
       sx={{
@@ -74,10 +79,43 @@ function AppBar() {
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <TextField
           id="outlined-search"
-          label="Search field"
+          label="Search"
           type="search"
           size="small"
-          sx={{ minWidth: "120px", bgcolor: "primary.searchBoxBg" }}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "white" }} />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <CloseIcon
+                  fontSize="small"
+                  sx={{
+                    color: searchValue ? "white" : "transparent",
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => setSearchValue("")}
+                />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            minWidth: "120px",
+            maxWidth: "180px",
+            bgcolor: "primary.searchBoxBg",
+            // "& label": { color: "white" },
+            // "& input": { color: "white" },
+            // "& label.Mui-focused": { color: "white" },
+            // "& .MuiOutlinedInput-root": {
+            //   "& fieldset": { borderColor: "white" },
+            //   "&:hover fieldset": { borderColor: "white" },
+            //   "&.Mui-focused fieldset": { borderColor: "white" },
+            // },
+          }}
         />
         <ModeSelect />
         <Tooltip title="Notification">

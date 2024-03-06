@@ -25,7 +25,8 @@ const theme = extendTheme({
           searchBoxBg: "#ffffff33",
           colorTextColumn: "#172b4d",
           scrollBarColumnBg: "#ced0da",
-          scrollBarColumnBg_Hovered: "#bdc3c7"
+          scrollBarColumnBg_Hovered: "#bdc3c7",
+          bgCard: "white"
         },
       },
     },
@@ -40,6 +41,7 @@ const theme = extendTheme({
           colorTextColumn: "#B6C2CF",
           scrollBarColumnBg: "#1e1e1e",
           scrollBarColumnBg_Hovered: "#3b3b3a",
+          bgCard: "#1e1e1e"
         },
       },
     }
