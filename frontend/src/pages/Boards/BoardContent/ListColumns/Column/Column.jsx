@@ -17,7 +17,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { toast } from "react-toastify";
 function Column({ column }) {
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
 
@@ -58,6 +58,9 @@ function Column({ column }) {
 
   const addNewCard = () => {
     if (!newCardTitle) {
+      toast.error("Please enter Card Title!", {
+        position: "top-right",
+      });
       return;
     }
 
@@ -235,6 +238,8 @@ function Column({ column }) {
                 type="search"
                 size="small"
                 variant="outlined"
+                autoFocus
+                data-no-dnd="true"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{

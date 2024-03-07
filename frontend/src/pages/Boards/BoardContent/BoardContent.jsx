@@ -6,8 +6,8 @@ import {
   DndContext,
   // PointerSensor,
   DragOverlay,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   useSensor,
   useSensors,
   defaultDropAnimationSideEffects,
@@ -17,13 +17,14 @@ import {
   getFirstCollision,
   // closestCenter,
 } from "@dnd-kit/core";
+import { MouseSensor, TouchSensor } from "~/customLibraries/dndKitSensors";
 import { arrayMove } from "@dnd-kit/sortable";
 import Column from "./ListColumns/Column/Column";
 import TrelloCard from "./ListColumns/Column/ListCards/TrelloCard/TrelloCard";
 import { cloneDeep } from "lodash";
 import { useRef } from "react";
 import { isEmpty } from "lodash";
-import { generatePlaceHolderCard } from "~/utils/fomatter";
+import { generatePlaceHolderCard } from "~/utils/formatter";
 
 const ACTIVE_DRAG_ITEM = {
   COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",

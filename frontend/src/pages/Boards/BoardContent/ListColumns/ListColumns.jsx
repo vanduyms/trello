@@ -5,7 +5,7 @@ import Column from "./Column/Column";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { toast } from "react-toastify";
 import {
   SortableContext,
   horizontalListSortingStrategy,
@@ -21,6 +21,7 @@ function ListColumns({ columns }) {
 
   const addNewColumn = () => {
     if (!newColumnTitle) {
+      toast.error("Please enter Column Title!");
       return;
     }
 
@@ -92,6 +93,7 @@ function ListColumns({ columns }) {
               type="search"
               size="small"
               variant="outlined"
+              autoFocus
               value={newColumnTitle}
               onChange={(e) => setNewColumnTitle(e.target.value)}
               sx={{
