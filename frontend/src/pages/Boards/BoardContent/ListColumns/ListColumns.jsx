@@ -63,11 +63,18 @@ function ListColumns({ columns }) {
             <Button
               startIcon={<NoteAddIcon />}
               sx={{
-                color: "white",
+                color: (theme) => theme.palette.primary.colorTextColumn,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark" ? "#101204" : "#f1f2f4",
                 width: "100%",
                 justifyContent: "flex-start",
                 pl: 2.5,
                 py: 1,
+                "&:hover": {
+                  color: (theme) => theme.palette.primary.colorTextColumn,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark" ? "#1b1f13" : "#f1f2f4",
+                },
               }}
             >
               Add another list
@@ -82,7 +89,8 @@ function ListColumns({ columns }) {
               p: 1,
               borderRadius: "6px",
               height: "fit-content",
-              bgcolor: "#ffffff3d",
+              bgcolor: (theme) =>
+                theme.palette.mode === "dark" ? "#1e1e1e" : "#f1f2f4",
               display: "flex",
               flexDirection: "column",
               gap: 1,
@@ -97,13 +105,28 @@ function ListColumns({ columns }) {
               value={newColumnTitle}
               onChange={(e) => setNewColumnTitle(e.target.value)}
               sx={{
-                "& label": { color: "white" },
-                "& input": { color: "white" },
-                "& label.Mui-focused": { color: "white" },
+                "& label": {
+                  color: (theme) => theme.palette.primary.colorAddCardColumn,
+                },
+                "& input": {
+                  color: (theme) => theme.palette.primary.colorAddCardColumn,
+                },
+                "& label.Mui-focused": {
+                  color: (theme) => theme.palette.primary.colorAddCardColumn,
+                },
                 "& .MuiOutlinedInput-root": {
-                  "& fieldset": { borderColor: "white" },
-                  "&:hover fieldset": { borderColor: "white" },
-                  "&.Mui-focused fieldset": { borderColor: "white" },
+                  "& fieldset": {
+                    borderColor: (theme) =>
+                      theme.palette.primary.colorAddCardColumn,
+                  },
+                  "&:hover fieldset": {
+                    borderColor: (theme) =>
+                      theme.palette.primary.colorAddCardColumn,
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: (theme) =>
+                      theme.palette.primary.colorAddCardColumn,
+                  },
                 },
               }}
             />
@@ -134,6 +157,7 @@ function ListColumns({ columns }) {
                 sx={{
                   color: "white",
                   cursor: "pointer",
+                  color: (theme) => theme.palette.primary.colorTextColumn,
                   "&:hover": { color: (theme) => theme.palette.warning.main },
                 }}
                 onClick={toggleOpenNewColumnForm}

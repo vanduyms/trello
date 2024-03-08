@@ -227,7 +227,8 @@ function Column({ column }) {
                 width: "100%",
                 padding: "4px 10px",
                 borderRadius: "6px",
-                backgroundColor: (theme) => theme.palette.primary.bgCard,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light" ? "#fff" : "#1e1e1e",
                 display: "flex",
                 flexDirection: "row",
                 gap: 1,
@@ -243,13 +244,28 @@ function Column({ column }) {
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{
-                  "& label": { color: "white" },
-                  "& input": { color: "white" },
-                  "& label.Mui-focused": { color: "white" },
+                  "& label": {
+                    color: (theme) => theme.palette.primary.colorAddCardColumn,
+                  },
+                  "& input": {
+                    color: (theme) => theme.palette.primary.colorAddCardColumn,
+                  },
+                  "& label.Mui-focused": {
+                    color: (theme) => theme.palette.primary.colorAddCardColumn,
+                  },
                   "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "white" },
-                    "&:hover fieldset": { borderColor: "white" },
-                    "&.Mui-focused fieldset": { borderColor: "white" },
+                    "& fieldset": {
+                      borderColor: (theme) =>
+                        theme.palette.primary.colorAddCardColumn,
+                    },
+                    "&:hover fieldset": {
+                      borderColor: (theme) =>
+                        theme.palette.primary.colorAddCardColumn,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: (theme) =>
+                        theme.palette.primary.colorAddCardColumn,
+                    },
                   },
                 }}
               />
@@ -282,6 +298,7 @@ function Column({ column }) {
                   sx={{
                     color: "white",
                     cursor: "pointer",
+                    color: (theme) => theme.palette.primary.colorTextColumn,
                     "&:hover": { color: (theme) => theme.palette.warning.main },
                   }}
                   onClick={toggleOpenNewCardForm}
