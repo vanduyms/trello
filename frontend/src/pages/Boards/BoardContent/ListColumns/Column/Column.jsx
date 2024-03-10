@@ -18,7 +18,8 @@ import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
-function Column({ column }) {
+
+function Column({ column, createNewCard }) {
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -52,17 +53,23 @@ function Column({ column }) {
   const [newCardTitle, setNewCardTitle] = useState("");
 
   const toggleOpenNewCardForm = () => {
-    console.log("State", openNewCardForm);
     setOpenNewCardForm(!openNewCardForm);
   };
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error("Please enter Card Title!", {
         position: "top-right",
       });
       return;
     }
+
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id,
+    };
+
+    await createNewCard(newCardData);
 
     toggleOpenNewCardForm();
     setNewCardTitle("");

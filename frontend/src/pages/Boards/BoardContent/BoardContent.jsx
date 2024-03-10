@@ -31,7 +31,7 @@ const ACTIVE_DRAG_ITEM = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: {
   //     distance: 10,
@@ -265,6 +265,10 @@ function BoardContent({ board }) {
           oldColumnIndex,
           newColumnIndex
         );
+
+        // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id);
+
+        moveColumns(dndOrderedColumns);
         setOrderedColumns(dndOrderedColumns);
       }
     }
@@ -323,6 +327,7 @@ function BoardContent({ board }) {
     },
     [activeDragItemType, orderedColumns]
   );
+
   return (
     <DndContext
       sensors={sensors}
@@ -340,7 +345,11 @@ function BoardContent({ board }) {
           p: "10px 0",
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={dropAnimationCustom}>
           {!activeDragItemType && null}
           {activeDragItemType == ACTIVE_DRAG_ITEM.COLUMN && (

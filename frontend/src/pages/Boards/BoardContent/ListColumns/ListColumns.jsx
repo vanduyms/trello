@@ -12,18 +12,22 @@ import {
 } from "@dnd-kit/sortable";
 import { useState } from "react";
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
 
   const toggleOpenNewColumnForm = () =>
     setOpenNewColumnForm(!openNewColumnForm);
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error("Please enter Column Title!");
       return;
     }
+
+    const newColumnData = { title: newColumnTitle };
+
+    await createNewColumn(newColumnData);
 
     toggleOpenNewColumnForm();
     setNewColumnTitle("");
@@ -46,7 +50,11 @@ function ListColumns({ columns }) {
         }}
       >
         {columns.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column
+            key={column._id}
+            column={column}
+            createNewCard={createNewCard}
+          />
         ))}
         {!openNewColumnForm ? (
           <Box
