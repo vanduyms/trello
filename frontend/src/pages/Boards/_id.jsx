@@ -12,7 +12,12 @@ import {
   createNewColumnAPI,
   createNewCardAPI,
   updateBoardDetailsAPI,
+  updateColumnDetailsAPI,
 } from "~/apis";
+import { mapOrder } from "~/utils/sort";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 
 function Board() {
   const [board, setBoard] = useState(null);
@@ -21,11 +26,15 @@ function Board() {
     const boardId = "65e5cbf10dc8744a7fff3ece";
 
     fetchBoardDetailsAPI(boardId).then((board) => {
+      board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
+
       // When reload website, it is necessary to fix when dragging and dropping a item to an empty column
       board.columns.forEach((column) => {
         if (isEmpty(column.cards)) {
           column.cards = [generatePlaceHolderCard(column)];
           column.cardOrderIds = [generatePlaceHolderCard(column)._id];
+        } else {
+          column.cards = mapOrder(column.cards, column.cardOrderIds, "_id");
         }
       });
       setBoard(board);
@@ -81,6 +90,44 @@ function Board() {
       columnOrderIds: dndOrderedColumnsIds,
     });
   };
+
+  const moveCardInTheSameColumn = (
+    dndOrderedCards,
+    dndOrderedCardIds,
+    columnId
+  ) => {
+    const newBoard = { ...board };
+    const columnToUpdated = newBoard.columns.find(
+      (column) => column._id === columnId
+    );
+    if (columnToUpdated) {
+      columnToUpdated.cards = dndOrderedCards;
+      columnToUpdated.cardOrderIds = dndOrderedCardIds;
+    }
+
+    setBoard(newBoard);
+
+    updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds });
+  };
+
+  if (!board) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+          width: "100vw",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress color="secondary" />
+        <Typography>Loading ...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBar />
@@ -90,6 +137,7 @@ function Board() {
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumns={moveColumns}
+        moveCardInTheSameColumn={moveCardInTheSameColumn}
       />
     </Container>
   );

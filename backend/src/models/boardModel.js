@@ -100,8 +100,7 @@ const update = async (boardId, updateData) => {
         delete updateData[fieldName];
       }
     });
-    console.log("BoardID: ", boardId);
-    console.log("UpdateData: ", updateData);
+
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
       { _id: new ObjectId(boardId) },
       { $set: updateData },

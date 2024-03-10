@@ -12,7 +12,6 @@ import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import ListCard from "./ListCards/ListCard";
-import { mapOrder } from "~/utils/sort";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
@@ -20,7 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
 
 function Column({ column, createNewCard }) {
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
+  const orderedCards = column.cards;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -56,7 +55,7 @@ function Column({ column, createNewCard }) {
     setOpenNewCardForm(!openNewCardForm);
   };
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error("Please enter Card Title!", {
         position: "top-right",
@@ -69,7 +68,7 @@ function Column({ column, createNewCard }) {
       columnId: column._id,
     };
 
-    await createNewCard(newCardData);
+    createNewCard(newCardData);
 
     toggleOpenNewCardForm();
     setNewCardTitle("");
