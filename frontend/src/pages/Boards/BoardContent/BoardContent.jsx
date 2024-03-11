@@ -36,6 +36,7 @@ function BoardContent({
   createNewCard,
   moveColumns,
   moveCardInTheSameColumn,
+  moveCardToDifferentColumn,
 }) {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: {
@@ -86,7 +87,8 @@ function BoardContent({
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumns((prevColumns) => {
       const overCardIndex = overColumn?.cards?.findIndex(
@@ -156,6 +158,15 @@ function BoardContent({
         nextOverColumns.cardOrderIds = nextOverColumns.cards.map(
           (card) => card._id
         );
+
+        if (triggerFrom === "handleDragEnd") {
+          moveCardToDifferentColumn(
+            activeDraggingCardId,
+            oldColumnWhenDraggingCard._id,
+            nextOverColumns._id,
+            nextColumns
+          );
+        }
       }
       // console.log(nextColumns);
       return nextColumns;
@@ -203,7 +214,8 @@ function BoardContent({
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        "handleDragOver"
       );
     }
   };
@@ -233,7 +245,8 @@ function BoardContent({
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          "handleDragEnd"
         );
       } else {
         // Drag and drop card in a column

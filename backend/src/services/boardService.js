@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { cloneDeep } from "lodash";
 import { boardModel } from "~/models/boardModel";
+import { cardModel } from "~/models/cardModel";
+import { columnModel } from "~/models/columnModel";
 import ApiError from "~/utils/apiError";
 import { slugify } from "~/utils/formatter";
 
@@ -32,6 +34,7 @@ const getDetails = async (boardId) => {
 
     resBoard.columns.forEach(column => {
       column.cards = resBoard.cards.filter(card => card.columnId.equals(column._id));
+      column.cards = resBoard.cards.filter(card => card.columnId.toString() === column._id.toString());
     });
 
     delete resBoard.cards;
@@ -57,8 +60,32 @@ const update = async (boardId, reqBody) => {
   }
 }
 
+const moveCardToDifferentColumn = async (reqBody) => {
+  try {
+
+    await columnModel.update(reqBody.prevColumnId, {
+      cardOrderIds: reqBody.prevCardOrderIds,
+      updatedAt: Date.now()
+    });
+
+    await columnModel.update(reqBody.nextColumnId, {
+      cardOrderIds: reqBody.nextCardOrderIds,
+      updatedAt: Date.now()
+    });
+
+    await cardModel.update(reqBody.currentCardId, {
+      columnId: reqBody.nextColumnId
+    });
+    return {};
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const boardService = {
   createNew,
   getDetails,
-  update
+  update,
+  moveCardToDifferentColumn
 }
