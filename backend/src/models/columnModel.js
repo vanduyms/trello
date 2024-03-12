@@ -89,6 +89,18 @@ const update = async (columnId, updateData) => {
   }
 }
 
+const deleteOneById = async (columnId) => {
+  try {
+    const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).deleteOne(
+      { _id: new ObjectId(columnId) },
+      { returnDocument: "after" }
+    );
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
@@ -96,5 +108,6 @@ export const columnModel = {
   createNew,
   findOneById,
   pushCardOrderIds,
-  update
+  update,
+  deleteOneById
 }

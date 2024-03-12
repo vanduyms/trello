@@ -14,11 +14,13 @@ import {
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
   moveCardToDifferentColumnAPI,
+  deleteColumnDetailsAPI,
 } from "~/apis";
 import { mapOrder } from "~/utils/sort";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import { toast } from "react-toastify";
 
 function Board() {
   const [board, setBoard] = useState(null);
@@ -142,6 +144,19 @@ function Board() {
     });
   };
 
+  const deleteColumnDetails = async (columnId) => {
+    const newBoard = { ...board };
+    newBoard.columns = newBoard.columns.filter((c) => c._id !== columnId);
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (_id) => _id !== columnId
+    );
+    setBoard(newBoard);
+
+    deleteColumnDetailsAPI(columnId).then((res) =>
+      toast.success(res?.deleteResult)
+    );
+  };
+
   if (!board) {
     return (
       <Box
@@ -171,6 +186,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   );

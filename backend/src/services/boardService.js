@@ -87,5 +87,5 @@ export const boardService = {
   createNew,
   getDetails,
   update,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
 }

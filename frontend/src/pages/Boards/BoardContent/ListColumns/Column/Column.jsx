@@ -17,8 +17,15 @@ import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
+import AddCardIcon from "@mui/icons-material/AddCard";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import { useConfirm } from "material-ui-confirm";
 
-function Column({ column, createNewCard }) {
+function Column({ column, createNewCard, deleteColumnDetails }) {
   const orderedCards = column.cards;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,6 +79,19 @@ function Column({ column, createNewCard }) {
 
     toggleOpenNewCardForm();
     setNewCardTitle("");
+  };
+
+  const confirmDeleteColumn = useConfirm();
+  const handleDeleteColumn = (e) => {
+    confirmDeleteColumn({
+      title: "Delete column",
+      description:
+        "This action will permanently delete your Column and its Cards! Are you sure ?",
+      confirmationText: "Confirm",
+      cancellationText: "Cancel",
+    })
+      .then(() => deleteColumnDetails(column._id))
+      .catch();
   };
 
   return (
@@ -133,6 +153,7 @@ function Column({ column, createNewCard }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 "aria-labelledby": "basic-button-recent",
               }}
@@ -146,23 +167,83 @@ function Column({ column, createNewCard }) {
               <MenuList
                 dense
                 sx={{
+                  "& > .MuiButtonBase-root": {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+
+                    "& > .MuiListItemText-root": {
+                      width: "100%",
+                      "&:first-of-type": {
+                        width: "max-content",
+                        mr: 2,
+                      },
+                    },
+                  },
                   color: "primary.main",
                 }}
               >
-                <MenuItem>
-                  <ListItemText>Add card</ListItemText>
+                <MenuItem
+                  sx={{
+                    "&:hover": {
+                      color: "success.light",
+                      "& .add-card-icon": {
+                        color: "success.light",
+                      },
+                    },
+                  }}
+                  onClick={toggleOpenNewCardForm}
+                >
+                  <ListItemText>
+                    <AddCardIcon className="add-card-icon" fontSize="small" />
+                  </ListItemText>
+                  <ListItemText>Add new card</ListItemText>
                 </MenuItem>
                 <MenuItem>
-                  <ListItemText>Copy list</ListItemText>
+                  <ListItemText>
+                    <ContentCutIcon fontSize="small" />
+                  </ListItemText>
+                  <ListItemText>Cut</ListItemText>
                 </MenuItem>
                 <MenuItem>
-                  <ListItemText>Move list</ListItemText>
+                  <ListItemText>
+                    <ContentCopyIcon fontSize="small" />
+                  </ListItemText>
+                  <ListItemText>Copy</ListItemText>
+                </MenuItem>
+                <MenuItem>
+                  <ListItemText>
+                    <ContentPasteIcon fontSize="small" />
+                  </ListItemText>
+                  <ListItemText>Paste</ListItemText>
                 </MenuItem>
 
                 <Divider />
 
+                <MenuItem
+                  onClick={handleDeleteColumn}
+                  sx={{
+                    "&:hover": {
+                      color: "error.dark",
+                      "& .delete-forever-icon": {
+                        color: "error.dark",
+                      },
+                    },
+                  }}
+                >
+                  <ListItemText>
+                    <DeleteForeverIcon
+                      className="delete-forever-icon"
+                      fontSize="small"
+                    />
+                  </ListItemText>
+                  <ListItemText>Delete this column</ListItemText>
+                </MenuItem>
                 <MenuItem>
-                  <ListItemText>Create a rule</ListItemText>
+                  <ListItemText>
+                    <ArchiveIcon fontSize="small" />
+                  </ListItemText>
+                  <ListItemText>Archive this column</ListItemText>
                 </MenuItem>
               </MenuList>
             </Menu>
