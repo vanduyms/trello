@@ -72,11 +72,14 @@ function Board() {
     const columnToUpdated = newBoard.columns.find(
       (column) => column._id === createdNewCard.columnId
     );
-    if (columnToUpdated) {
+
+    if (columnToUpdated.cards.some((card) => card.FE_PlaceholderCard)) {
+      columnToUpdated.cards = [createdNewCard];
+      columnToUpdated.cardOrderIds = [createdNewCard._id];
+    } else {
       columnToUpdated.cards.push(createdNewCard);
       columnToUpdated.cardOrderIds.push(createdNewCard._id);
     }
-
     setBoard(newBoard);
   };
 
@@ -123,11 +126,16 @@ function Board() {
     newBoard.columnOrderIds = dndOrderedColumnIds;
     setBoard(newBoard);
 
+    // Call API from BE
+    let prevCardOrderIds = dndOrderedColumns.find(
+      (c) => c._id === prevColumnId
+    )?.cardOrderIds;
+    // Solve the problem when pulling the last card from the column, the empty column will have a placeholder card, need to delete it before sending data to BE
+    if (prevCardOrderIds[0].includes("placeholder-card")) prevCardOrderIds = [];
     moveCardToDifferentColumnAPI({
       currentCardId,
       prevColumnId,
-      prevCardOrderIds: dndOrderedColumns.find((c) => c._id === prevColumnId)
-        ?.cardOrderIds,
+      prevCardOrderIds,
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)
         ?.cardOrderIds,
