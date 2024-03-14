@@ -1,18 +1,24 @@
 import Joi from "joi";
 import { ObjectId } from "mongodb";
 import { GET_DB } from "~/config/mongodb";
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
+import bcrypt from "bcrypt";
 
-const USER_COLLECTION_NAME = 'columns';
+const USER_COLLECTION_NAME = 'users';
 const USER_COLLECTION_SCHEMA = Joi.object({
-  boardId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
-  slug: Joi.string().required().min(3).trim().strict(),
   email: Joi.string().email().required().trim().strict(),
-  password: Joi.string().required().min(6).max(50).strict(),
+  password: Joi.string().required().strict(),
+
+  username: Joi.string().required().strict(),
+  displayName: Joi.string(),
+
+  avatar: Joi.string().default(""),
+  role: Joi.string().default("client"),
+
+  isActive: Joi.boolean().default(false),
+  verifyToken: Joi.string(),
 
   createAt: Joi.date().timestamp('javascript').default(Date.now),
-  updateAt: Joi.date().timestamp("javascript").default(null),
-  _destroy: Joi.boolean().default(false)
+  updateAt: Joi.date().timestamp("javascript").default(null)
 });
 
 const validateBeforeCreate = async (data) => {
@@ -23,18 +29,26 @@ const createNew = async (data) => {
   try {
     const validateData = await validateBeforeCreate(data);
 
-    return createColumn;
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(validateData.password, salt);
+    const dataHash = {
+      ...validateData,
+      password: passwordHash
+    };
+
+    const createdUser = await GET_DB().collection(USER_COLLECTION_NAME).insertOne(dataHash);
+    return createdUser;
   } catch (err) {
     throw new Error(err);
   }
 }
 
-
 const findOneById = async (id) => {
   try {
     const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne({
       _id: new ObjectId(id)
-    });
+    }, { "password": 0 });
 
     return result;
   } catch (err) {
@@ -42,7 +56,7 @@ const findOneById = async (id) => {
   }
 }
 
-export const columnModel = {
+export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
   createNew,
