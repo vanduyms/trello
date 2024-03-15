@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-let generateToken = (user, secretSignature, tokenLife) => {
+export const generateToken = (user, secretSignature, tokenLife) => {
   return new Promise((resolve, reject) => {
     const userData = {
       _id: user._id,
@@ -20,7 +20,7 @@ let generateToken = (user, secretSignature, tokenLife) => {
   });
 }
 
-let verifyToken = (token, secretKey) => {
+export const verifyToken = (token, secretKey) => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, secretKey, (error, decoded) => {
       if (error) {
@@ -30,8 +30,3 @@ let verifyToken = (token, secretKey) => {
     });
   });
 }
-
-module.exports = {
-  generateToken: generateToken,
-  verifyToken: verifyToken,
-};
