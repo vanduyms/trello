@@ -1,5 +1,5 @@
 import { verifyToken } from "~/utils/jwt.helper";
-import env from "~/config/environment";
+import { env } from "~/config/environment";
 const debug = console.log.bind(console);
 
 export const isAuth = async (req, res, next) => {
