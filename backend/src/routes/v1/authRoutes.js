@@ -11,5 +11,6 @@ Router.route("/")
 
 Router.route("/register").post(userValidation.createNew, authController.register);
 Router.route("/login").post(authController.login);
+Router.route("/refresh_token").post(authController.generateAccessToken);
 
 export const authRoutes = Router;

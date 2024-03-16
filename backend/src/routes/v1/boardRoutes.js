@@ -1,6 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { boardController } from "~/controllers/boardController";
+import { isAuth } from "~/middlewares/authMiddleware";
 import { boardValidation } from "~/validations/boardValidation";
 const Router = express.Router();
 
@@ -8,12 +9,12 @@ Router.route("/")
   .get((req, res) => {
     res.status(StatusCodes.OK).json({ message: "Note: API get list boards" })
   })
-  .post(boardValidation.createNew, boardController.createNew);
+  .post(isAuth, boardValidation.createNew, boardController.createNew);
 
 Router.route("/:id")
-  .get(boardController.getDetails)
-  .put(boardValidation.update, boardController.update)
+  .get(isAuth, boardController.getDetails)
+  .put(isAuth, boardValidation.update, boardController.update)
 
 Router.route("/supports/moving_card")
-  .put(boardValidation.moveCardToDifferentColumn, boardController.moveCardToDifferentColumn)
+  .put(isAuth, boardValidation.moveCardToDifferentColumn, boardController.moveCardToDifferentColumn)
 export const boardRoutes = Router;

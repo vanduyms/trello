@@ -15,6 +15,7 @@ const createNew = async (reqBody) => {
     throw error;
   }
 }
+
 export const userService = {
   createNew,
 }

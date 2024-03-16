@@ -1,19 +1,18 @@
 import { verifyToken } from "~/utils/jwt.helper";
 import { env } from "~/config/environment";
-const debug = console.log.bind(console);
+import { userModel } from "~/models/userModel";
 
 export const isAuth = async (req, res, next) => {
-  // Get token is sent from client
-  const tokenFromClient = req.body.token || req.query.token || req.headers["x-access-token"];
+  const token = req.header("Authorization");
 
-  if (tokenFromClient) {
+  if (token) {
     try {
-      const decoded = verifyToken(tokenFromClient, env.ACCESS_TOKEN_SECRET);
-      req.jwtDecoded = decoded;
+      const decoded = await verifyToken(token, env.ACCESS_TOKEN_SECRET);
+      const user = await userModel.findOneById(decoded.data._id);
+      req.user = user;
 
       next();
     } catch (error) {
-      debug("Error while verify token:", error);
       return res.status(401).json({
         message: 'Unauthorized.',
       });

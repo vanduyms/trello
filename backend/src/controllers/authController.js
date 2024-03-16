@@ -8,13 +8,13 @@ const login = async (req, res, next) => {
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         path: '/v1/refresh_token',
         maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .status(StatusCodes.OK)
       .json({
-        msg: "Login success!",
+        // msg: "Login success!",
         accessToken,
         user: {
           ...user,
@@ -36,13 +36,13 @@ const register = async (req, res, next) => {
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         path: '/v1/refresh_token',
         maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .status(StatusCodes.CREATED)
       .json({
-        msg: "Register success!",
+        // msg: "Register success!",
         accessToken,
         user: {
           ...user,
@@ -54,7 +54,17 @@ const register = async (req, res, next) => {
   }
 }
 
+const generateAccessToken = async (req, res, next) => {
+  try {
+    const access_token = await authService.generateAccessToken();
+    res.status(StatusCodes.CREATED).json({ access_token: access_token });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const authController = {
   login,
-  register
+  register,
+  generateAccessToken
 }

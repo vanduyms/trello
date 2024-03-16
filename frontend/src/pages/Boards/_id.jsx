@@ -1,34 +1,35 @@
-import Container from "@mui/material/Container";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
+import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar";
 import BoardBar from "./BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
 
-import { useEffect, useState } from "react";
 import { generatePlaceHolderCard } from "../../utils/formatter";
 import { isEmpty } from "lodash";
-import {
-  fetchBoardDetailsAPI,
-  createNewColumnAPI,
-  createNewCardAPI,
-  updateBoardDetailsAPI,
-  updateColumnDetailsAPI,
-  moveCardToDifferentColumnAPI,
-  deleteColumnDetailsAPI,
-} from "~/apis";
 import { mapOrder } from "~/utils/sort";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
+import {
+  deleteDataAPI,
+  getDataAPI,
+  postDataAPI,
+  putDataAPI,
+} from "~/apis/fetchData";
 
 function Board() {
+  const { auth } = useSelector((state) => state);
   const [board, setBoard] = useState(null);
 
   useEffect(() => {
     const boardId = "65e5cbf10dc8744a7fff3ece";
-
-    fetchBoardDetailsAPI(boardId).then((board) => {
+    // Call API to get board details
+    getDataAPI(`/boards/${boardId}`, auth.userToken).then((res) => {
+      console.log(res);
+      let board = res.data;
       board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
 
       // When reload website, it is necessary to fix when dragging and dropping a item to an empty column
@@ -45,10 +46,15 @@ function Board() {
   }, []);
 
   const createNewColumn = async (newColumnData) => {
-    const createdNewColumn = await createNewColumnAPI({
-      ...newColumnData,
-      boardId: board._id,
-    });
+    // Call API to create new column
+    const createdNewColumn = await postDataAPI(
+      `/columns`,
+      {
+        ...newColumnData,
+        boardId: board._id,
+      },
+      auth.userToken
+    ).data;
 
     // When create new column, it doesn't has any card. Therefore, it is necessary to handle the problem of dragging and dropping into an empty column
     createdNewColumn.cards = [generatePlaceHolderCard(createdNewColumn)];
@@ -64,10 +70,15 @@ function Board() {
   };
 
   const createNewCard = async (newCardData) => {
-    const createdNewCard = await createNewCardAPI({
-      ...newCardData,
-      boardId: board._id,
-    });
+    // Call API to create new card
+    const createdNewCard = await postDataAPI(
+      `/cards`,
+      {
+        ...newCardData,
+        boardId: board._id,
+      },
+      auth.userToken
+    ).data;
 
     const newBoard = { ...board };
 
@@ -92,12 +103,16 @@ function Board() {
     newBoard.columnOrderIds = dndOrderedColumnsIds;
     setBoard(newBoard);
 
-    await updateBoardDetailsAPI(newBoard._id, {
-      columnOrderIds: dndOrderedColumnsIds,
-    });
+    await putDataAPI(
+      `/boards/${newBoard._id}`,
+      {
+        columnOrderIds: dndOrderedColumnsIds,
+      },
+      auth.userToken
+    );
   };
 
-  const moveCardInTheSameColumn = (
+  const moveCardInTheSameColumn = async (
     dndOrderedCards,
     dndOrderedCardIds,
     columnId
@@ -113,10 +128,15 @@ function Board() {
 
     setBoard(newBoard);
 
-    updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds });
+    // Call API to update column details
+    await putDataAPI(
+      `/columns/${columnId}`,
+      { cardOrderIds: dndOrderedCardIds },
+      auth.userToken
+    );
   };
 
-  const moveCardToDifferentColumn = (
+  const moveCardToDifferentColumn = async (
     currentCardId,
     prevColumnId,
     nextColumnId,
@@ -134,14 +154,20 @@ function Board() {
     )?.cardOrderIds;
     // Solve the problem when pulling the last card from the column, the empty column will have a placeholder card, need to delete it before sending data to BE
     if (prevCardOrderIds[0].includes("placeholder-card")) prevCardOrderIds = [];
-    moveCardToDifferentColumnAPI({
-      currentCardId,
-      prevColumnId,
-      prevCardOrderIds,
-      nextColumnId,
-      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)
-        ?.cardOrderIds,
-    });
+
+    // Call API to move card ro different column
+    await putDataAPI(
+      `/boards/supports/moving_card`,
+      {
+        currentCardId,
+        prevColumnId,
+        prevCardOrderIds,
+        nextColumnId,
+        nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)
+          ?.cardOrderIds,
+      },
+      auth.userToken
+    );
   };
 
   const deleteColumnDetails = async (columnId) => {
@@ -152,7 +178,8 @@ function Board() {
     );
     setBoard(newBoard);
 
-    deleteColumnDetailsAPI(columnId).then((res) =>
+    // Call API to create delete a column
+    await deleteDataAPI(`/columns/${columnId}`, auth.userToken).then((res) =>
       toast.success(res?.deleteResult)
     );
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -10,14 +10,32 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Link from "@mui/material/Link";
 import Divider from "@mui/material/Divider";
+import { useSelector, useDispatch } from "react-redux";
+import { userLogin } from "~/redux/actions/authAction";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const { auth } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  useEffect(() => {
+    if (auth.userToken) navigate("/home");
+  }, [auth.userToken, navigate]);
+
+  const handleLogin = async () => {
+    const data = { email, password };
+    dispatch(userLogin(data));
   };
 
   return (
@@ -38,7 +56,7 @@ function Login() {
           backgroundColor: "white",
           boxShadow: 2,
           p: 4,
-          width: "40%",
+          width: "400px",
           borderRadius: 2,
         }}
       >
@@ -63,10 +81,18 @@ function Login() {
             },
           }}
         >
-          <OutlinedInput placeholder="Enter your email" autoFocus required />
+          <OutlinedInput
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoFocus
+            required
+          />
           <OutlinedInput
             placeholder="Enter your password"
             type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -83,6 +109,7 @@ function Login() {
           />
           <Button
             variant="contained"
+            onClick={handleLogin}
             sx={{
               padding: 1,
               color: "#fff",

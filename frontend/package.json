@@ -17,13 +17,16 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.4",
     "@mui/material": "^5.15.4",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
     "lodash": "^4.17.21",
     "material-ui-confirm": "^3.0.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-toastify": "^10.0.4",
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^6.22.3",
+    "react-toastify": "^10.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

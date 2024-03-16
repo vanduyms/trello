@@ -38,7 +38,26 @@ const register = async (reqBody) => {
   }
 }
 
+const generateAccessToken = async () => {
+  try {
+    const rft = req.cookies.refreshToken;
+    if (!rft) throw ("Please login now!");
+
+    jwt.verify(rft, env.REFRESH_TOKEN_SECRET, async (err, result) => {
+      if (err) throw (err)
+      const user = await userModel.findOneById(result.id);
+      if (!user) throw ("This does not exist!");
+
+      const access_token = generateToken(user, env.ACCESS_TOKEN_SECRET, env.ACCESS_TOKEN_LIFE);
+      return access_token;
+    })
+  } catch (error) {
+    throw (error);
+  }
+}
+
 export const authService = {
   login,
-  register
+  register,
+  generateAccessToken
 }
