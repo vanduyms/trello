@@ -3,11 +3,11 @@ import { env } from "~/config/environment";
 import { userModel } from "~/models/userModel";
 
 export const isAuth = async (req, res, next) => {
+  // Remove Bearer before token
   const token = req.header("Authorization");
-
   if (token) {
     try {
-      const decoded = await verifyToken(token, env.ACCESS_TOKEN_SECRET);
+      const decoded = await verifyToken(token.slice(7), env.ACCESS_TOKEN_SECRET);
       const user = await userModel.findOneById(decoded.data._id);
       req.user = user;
 

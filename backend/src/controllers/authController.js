@@ -8,13 +8,14 @@ const login = async (req, res, next) => {
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        // secure: true,
-        path: '/v1/refresh_token',
+        // secure: false,
+        sameSite: 'strict',
+        domain: 'http://localhost:8017/',
+        path: 'v1/refresh_token',
         maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .status(StatusCodes.OK)
       .json({
-        // msg: "Login success!",
         accessToken,
         user: {
           ...user,
@@ -42,7 +43,6 @@ const register = async (req, res, next) => {
       })
       .status(StatusCodes.CREATED)
       .json({
-        // msg: "Register success!",
         accessToken,
         user: {
           ...user,
@@ -56,7 +56,7 @@ const register = async (req, res, next) => {
 
 const generateAccessToken = async (req, res, next) => {
   try {
-    const access_token = await authService.generateAccessToken();
+    const access_token = await authService.generateAccessToken(req);
     res.status(StatusCodes.CREATED).json({ access_token: access_token });
   } catch (error) {
     next(error);

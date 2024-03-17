@@ -39,7 +39,6 @@ function BoardBar({ board }) {
         gap: 2,
         paddingX: 2,
         overflowX: "auto",
-        borderTop: "1px solid #9fadbc29",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

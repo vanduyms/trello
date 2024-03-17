@@ -1,44 +1,31 @@
-import axios from "axios";
-import { API_ROOT } from "../utils/constants";
+import axios from "~/setup/axios";
 
-export const getDataAPI = async (url, token) => {
-  const res = axios.get(`${API_ROOT}/v1/${url}`, {
-    headers: { Authorization: token }
-  });
+export const getDataAPI = async (url) => {
+  const res = axios.get(`/v1/${url}`);
   return res;
 }
 
-export const deleteDataAPI = async (url, token) => {
-  const res = axios.delete(`${API_ROOT}/v1/${url}`, {
-    headers: { Authorization: token }
-  });
+export const deleteDataAPI = async (url) => {
+  const res = axios.delete(`/v1/${url}`);
   return res;
 }
 
-export const postDataAPI = async (url, post, token) => {
-  const res = axios.post(`${API_ROOT}/v1/${url}`, post, {
-    headers: { Authorization: token }
-  });
+export const postDataAPI = async (url, post) => {
+  const res = axios.post(`/v1/${url}`, post);
   return res;
 }
 
-export const putDataAPI = async (url, post, token) => {
-  const res = axios.put(`${API_ROOT}/v1/${url}`, post, {
-    headers: { Authorization: token }
-  });
+export const putDataAPI = async (url, post) => {
+  const res = axios.put(`/v1/${url}`, post);
   return res;
 }
 
-export const patchDataAPI = async (url, post, token) => {
-  const res = axios.patch(`${API_ROOT}/v1/${url}`, post, {
-    headers: { Authorization: token }
-  });
+export const patchDataAPI = async (url, post) => {
+  const res = axios.patch(`/v1/${url}`, post);
   return res;
 }
 
-export const postAPI = async (url, token) => {
-  const res = axios.post(`${API_ROOT}/v1/${url}`, {
-    headers: { Authorization: token }
-  });
+export const postAPI = async (url) => {
+  const res = axios.post(`/v1/${url}`);
   return res;
 }

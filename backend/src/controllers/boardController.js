@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import { boardModel } from "~/models/boardModel";
 import { boardService } from "~/services/boardService";
 
 const createNew = async (req, res, next) => {
@@ -13,6 +14,21 @@ const createNew = async (req, res, next) => {
     // })
   }
 };
+
+const getBoardsFromOwnerId = async (req, res, next) => {
+  try {
+    const ownerId = req.params.id;
+    const boards = [];
+
+    const result = await boardModel.findByOwnerId(ownerId);
+    for await (const doc of result) {
+      boards.push(doc);
+    }
+    res.status(StatusCodes.OK).json(boards);
+  } catch (error) {
+    next(error)
+  }
+}
 
 const getDetails = async (req, res, next) => {
   try {
@@ -43,4 +59,4 @@ const moveCardToDifferentColumn = async (req, res, next) => {
   }
 }
 
-export const boardController = { createNew, getDetails, update, moveCardToDifferentColumn }
+export const boardController = { createNew, getBoardsFromOwnerId, getDetails, update, moveCardToDifferentColumn }

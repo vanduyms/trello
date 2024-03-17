@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userLogin } from "~/redux/actions/authAction";
+import { userLogin, userRegister } from "~/redux/actions/authAction";
 
 const userToken = localStorage.getItem('userToken')
   ? localStorage.getItem('userToken')
   : null;
 
-const userInfo = localStorage.getItem('userInfo')
+let userInfo = localStorage.getItem('userInfo')
   ? localStorage.getItem('userInfo')
   : null;
+
+if (typeof userInfo === "string") userInfo = JSON.parse(userInfo);
 
 const initialState = {
   loading: false,
@@ -19,18 +21,40 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    [userLogin.pending]: (state) => {
-      state.loading = true
-    },
-    [userLogin.fulfilled]: (state, payload) => {
+    logout: (state) => {
+      localStorage.removeItem('userToken')
+      localStorage.removeItem('userInfo')
       state.loading = false
-      state.userInfo = payload.data.user
-      state.userToken = payload.data.access_token
+      state.userInfo = null
+      state.userToken = null
     },
-    [userLogin.rejected]: {
-
-    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(userLogin.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(userLogin.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.userInfo = payload.data.user
+        state.userToken = payload.data.accessToken
+      })
+      .addCase(userLogin.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(userRegister.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(userRegister.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.userInfo = payload.data.user
+        state.userToken = payload.data.accessToken
+      })
+      .addCase(userRegister.rejected, (state) => {
+        state.loading = false
+      })
   }
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

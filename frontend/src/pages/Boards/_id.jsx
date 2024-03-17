@@ -3,15 +3,13 @@ import { useEffect, useState } from "react";
 
 import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar";
+import Loading from "~/components/Loading";
 import BoardBar from "./BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
 
 import { generatePlaceHolderCard } from "../../utils/formatter";
 import { isEmpty } from "lodash";
 import { mapOrder } from "~/utils/sort";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
 import {
   deleteDataAPI,
@@ -19,6 +17,7 @@ import {
   postDataAPI,
   putDataAPI,
 } from "~/apis/fetchData";
+import { Navigate } from "react-router-dom";
 
 function Board() {
   const { auth } = useSelector((state) => state);
@@ -27,8 +26,7 @@ function Board() {
   useEffect(() => {
     const boardId = "65e5cbf10dc8744a7fff3ece";
     // Call API to get board details
-    getDataAPI(`/boards/${boardId}`, auth.userToken).then((res) => {
-      console.log(res);
+    getDataAPI(`boards/${boardId}`).then((res) => {
       let board = res.data;
       board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
 
@@ -48,7 +46,7 @@ function Board() {
   const createNewColumn = async (newColumnData) => {
     // Call API to create new column
     const createdNewColumn = await postDataAPI(
-      `/columns`,
+      `columns`,
       {
         ...newColumnData,
         boardId: board._id,
@@ -72,7 +70,7 @@ function Board() {
   const createNewCard = async (newCardData) => {
     // Call API to create new card
     const createdNewCard = await postDataAPI(
-      `/cards`,
+      `cards`,
       {
         ...newCardData,
         boardId: board._id,
@@ -104,7 +102,7 @@ function Board() {
     setBoard(newBoard);
 
     await putDataAPI(
-      `/boards/${newBoard._id}`,
+      `boards/${newBoard._id}`,
       {
         columnOrderIds: dndOrderedColumnsIds,
       },
@@ -130,7 +128,7 @@ function Board() {
 
     // Call API to update column details
     await putDataAPI(
-      `/columns/${columnId}`,
+      `columns/${columnId}`,
       { cardOrderIds: dndOrderedCardIds },
       auth.userToken
     );
@@ -157,7 +155,7 @@ function Board() {
 
     // Call API to move card ro different column
     await putDataAPI(
-      `/boards/supports/moving_card`,
+      `boards/supports/moving_card`,
       {
         currentCardId,
         prevColumnId,
@@ -179,44 +177,35 @@ function Board() {
     setBoard(newBoard);
 
     // Call API to create delete a column
-    await deleteDataAPI(`/columns/${columnId}`, auth.userToken).then((res) =>
+    await deleteDataAPI(`columns/${columnId}`).then((res) =>
       toast.success(res?.deleteResult)
     );
   };
 
-  if (!board) {
+  if (!auth.userToken) {
+    return <Navigate replace to="/" />;
+  }
+  {
+    if (!board) {
+      return <Loading />;
+    }
+
     return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 2,
-          width: "100vw",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress color="secondary" />
-        <Typography>Loading ...</Typography>
-      </Box>
+      <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
+        <AppBar />
+        <BoardBar board={board} />
+        <BoardContent
+          board={board}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+          moveColumns={moveColumns}
+          moveCardInTheSameColumn={moveCardInTheSameColumn}
+          moveCardToDifferentColumn={moveCardToDifferentColumn}
+          deleteColumnDetails={deleteColumnDetails}
+        />
+      </Container>
     );
   }
-
-  return (
-    <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
-      <AppBar />
-      <BoardBar board={board} />
-      <BoardContent
-        board={board}
-        createNewColumn={createNewColumn}
-        createNewCard={createNewCard}
-        moveColumns={moveColumns}
-        moveCardInTheSameColumn={moveCardInTheSameColumn}
-        moveCardToDifferentColumn={moveCardToDifferentColumn}
-        deleteColumnDetails={deleteColumnDetails}
-      />
-    </Container>
-  );
 }
 
 export default Board;

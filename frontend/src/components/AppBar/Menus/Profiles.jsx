@@ -11,10 +11,22 @@ import IconButton from "@mui/material/IconButton";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "~/redux/reducers/authReducer";
 
 export default function Profiles() {
+  const { auth } = useSelector((state) => state);
+  const user = auth?.userInfo;
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    setAnchorEl(null);
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,7 +46,11 @@ export default function Profiles() {
           onClick={handleClick}
           sx={{ padding: 0 }}
         >
-          <Avatar sx={{ width: 24, height: 24 }}>M</Avatar>
+          <Avatar sx={{ width: 24, height: 24 }}>
+            {user?.avatar
+              ? user?.avatar
+              : user?.username.slice(0, 1).toUpperCase()}
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -66,7 +82,7 @@ export default function Profiles() {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

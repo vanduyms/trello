@@ -19,6 +19,7 @@ const theme = extendTheme({
       palette: {
         primary: {
           main: '#fff',
+          black_white: "#000",
           textCreateBtnColor: "#fff",
           createBtnBg: '#ffffff33',
           createBtnBg_Hovered: '#ffffff4d',
@@ -27,7 +28,15 @@ const theme = extendTheme({
           scrollBarColumnBg: "#ced0da",
           scrollBarColumnBg_Hovered: "#bdc3c7",
           bgCard: "white",
-          colorAddCardColumn: "#172b4d"
+          colorAddCardColumn: "#172b4d",
+          textButton: "#172b4d",
+          bgButtonBoard: "#091e420f",
+          bgButtonBoard_Hovered: "#091e4224",
+          titleColorBoard: "#44546f",
+          bgItemBoard: "#6f777b",
+          bgItemBoard_Hovered: "#838c91",
+          bgItemAddCardBoard: "#091e420f",
+          bgItemAddCardBoard_Hovered: "#a6c5e229",
         },
       },
     },
@@ -35,6 +44,7 @@ const theme = extendTheme({
       palette: {
         primary: {
           main: '#9fadbc',
+          black_white: "#fff",
           textCreateBtn: "#000",
           createBtnBg: '#579dff',
           createBtnBg_Hovered: '#85b8ff',
@@ -43,7 +53,15 @@ const theme = extendTheme({
           scrollBarColumnBg: "#1e1e1e",
           scrollBarColumnBg_Hovered: "#3b3b3a",
           bgCard: "#1e1e1e",
-          colorAddCardColumn: "white"
+          colorAddCardColumn: "white",
+          textButton: "#b6c2cf",
+          bgButtonBoard: "#a1bdd914",
+          bgButtonBoard_Hovered: "#a6c5e229",
+          titleColorBoard: "#9fadbc",
+          bgItemBoard: "#6f777b",
+          bgItemBoard_Hovered: "#838c91",
+          bgItemAddCardBoard: "#282d33",
+          bgItemAddCardBoard_Hovered: "#a6c5e229",
         },
       },
     }

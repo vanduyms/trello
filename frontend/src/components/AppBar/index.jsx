@@ -22,6 +22,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState("");
+
   return (
     <Box
       sx={{
@@ -35,6 +36,7 @@ function AppBar() {
         bgcolor: (theme) =>
           theme.palette.mode === "light" ? "#0f0f0f" : "#1d2125",
         paddingX: 2,
+        borderBottom: "1px solid #9fadbc29",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

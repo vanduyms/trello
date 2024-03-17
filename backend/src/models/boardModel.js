@@ -4,13 +4,20 @@ import { GET_DB } from "~/config/mongodb";
 import { BOARD_TYPES } from "~/utils/constants";
 import { cardModel } from "./cardModel";
 import { columnModel } from "./columnModel";
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
 
 const BOARD_COLLECTION_NAME = 'boards';
 const BOARD_COLLECTION_SCHEMA = Joi.object({
+
   title: Joi.string().required().min(3).max(50).trim().strict(),
   slug: Joi.string().required().min(3).trim().strict(),
   description: Joi.string().required().min(3).max(255).trim().strict(),
   type: Joi.string().valid(...Object.values(BOARD_TYPES)).required(),
+
+  ownerIds: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE).strict(),
+  memberIds: Joi.array().items(
+    Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+  ).default([]),
 
   columnOrderIds: Joi.array().items(Joi.string()).default([]),
   createAt: Joi.date().timestamp('javascript').default(Date.now),
@@ -39,6 +46,18 @@ const findOneById = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({
       _id: new ObjectId(id)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+const findByOwnerId = async (id) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
+      ownerIds: new ObjectId(id)
     });
 
     return result;
@@ -137,5 +156,6 @@ export const boardModel = {
   getDetails,
   pushColumnOrderIds,
   update,
-  pullColumnOrderIds
+  pullColumnOrderIds,
+  findByOwnerId
 }

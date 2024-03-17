@@ -3,6 +3,7 @@ import { userService } from "~/services/userService";
 import { generateToken } from "~/utils/jwt.helper";
 import { userModel } from "~/models/userModel";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const login = async (reqBody) => {
   try {
@@ -38,15 +39,15 @@ const register = async (reqBody) => {
   }
 }
 
-const generateAccessToken = async () => {
+const generateAccessToken = async (reqBody) => {
   try {
-    const rft = req.cookies.refreshToken;
-    if (!rft) throw ("Please login now!");
+    const rft = reqBody.cookies.refreshToken;
+    if (!rft) throw new Error("Please login now!");
 
     jwt.verify(rft, env.REFRESH_TOKEN_SECRET, async (err, result) => {
       if (err) throw (err)
-      const user = await userModel.findOneById(result.id);
-      if (!user) throw ("This does not exist!");
+      const user = await userModel.findOneById(result.data._id);
+      if (!user) throw new Error("This does not exist!");
 
       const access_token = generateToken(user, env.ACCESS_TOKEN_SECRET, env.ACCESS_TOKEN_LIFE);
       return access_token;

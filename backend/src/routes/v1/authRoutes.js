@@ -9,8 +9,8 @@ Router.route("/")
     res.status(StatusCodes.OK).json({ message: "Note: API get list users" })
   })
 
-Router.route("/register").post(userValidation.createNew, authController.register);
-Router.route("/login").post(authController.login);
 Router.route("/refresh_token").post(authController.generateAccessToken);
+Router.route("/login").post(authController.login);
+Router.route("/register").post(userValidation.createNew, authController.register);
 
 export const authRoutes = Router;

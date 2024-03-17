@@ -33,8 +33,8 @@ const createNew = async (data) => {
 
     const checkUsername = await GET_DB().collection(USER_COLLECTION_NAME).findOne({ username: validateData.username });
 
-    if (checkEmail) throw new Error("This email is exist");
-    if (checkUsername) throw new Error("This username is exist");
+    if (checkEmail) throw new Error("This email is exist!");
+    if (checkUsername) throw new Error("This username is exist!");
 
     // Hash password
     const salt = await bcrypt.genSalt(10);

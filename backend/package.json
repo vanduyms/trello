@@ -19,6 +19,7 @@
     "@babel/runtime": "^7.22.10",
     "async-exit-hook": "^2.0.1",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
