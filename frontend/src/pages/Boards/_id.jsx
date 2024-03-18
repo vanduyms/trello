@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import Container from "@mui/material/Container";
@@ -8,64 +8,46 @@ import BoardBar from "./BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
 
 import { generatePlaceHolderCard } from "../../utils/formatter";
-import { isEmpty } from "lodash";
-import { mapOrder } from "~/utils/sort";
 import { toast } from "react-toastify";
-import {
-  deleteDataAPI,
-  getDataAPI,
-  postDataAPI,
-  putDataAPI,
-} from "~/apis/fetchData";
-import { Navigate } from "react-router-dom";
+import { deleteDataAPI, postDataAPI, putDataAPI } from "~/apis/fetchData";
+import { Navigate, useParams } from "react-router-dom";
+import { getBoardDetails } from "~/redux/actions/boardAction";
 
 function Board() {
-  const { auth } = useSelector((state) => state);
-  const [board, setBoard] = useState(null);
+  const { auth, boards } = useSelector((state) => state);
+  const board = boards.boardDetails;
+
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
   useEffect(() => {
-    const boardId = "65e5cbf10dc8744a7fff3ece";
-    // Call API to get board details
-    getDataAPI(`boards/${boardId}`).then((res) => {
-      let board = res.data;
-      board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
-
-      // When reload website, it is necessary to fix when dragging and dropping a item to an empty column
-      board.columns.forEach((column) => {
-        if (isEmpty(column.cards)) {
-          column.cards = [generatePlaceHolderCard(column)];
-          column.cardOrderIds = [generatePlaceHolderCard(column)._id];
-        } else {
-          column.cards = mapOrder(column.cards, column.cardOrderIds, "_id");
-        }
-      });
-      setBoard(board);
-    });
+    async function loadData() {
+      await dispatch(getBoardDetails(id));
+    }
+    loadData();
   }, []);
 
-  const createNewColumn = async (newColumnData) => {
-    // Call API to create new column
-    const createdNewColumn = await postDataAPI(
-      `columns`,
-      {
-        ...newColumnData,
-        boardId: board._id,
-      },
-      auth.userToken
-    ).data;
+  // const createNewColumn = async (newColumnData) => {
+  //   // Call API to create new column
+  //   const createdNewColumn = await postDataAPI(
+  //     `columns`,
+  //     {
+  //       ...newColumnData,
+  //       boardId: board._id,
+  //     },
+  //     auth.userToken
+  //   ).data;
 
-    // When create new column, it doesn't has any card. Therefore, it is necessary to handle the problem of dragging and dropping into an empty column
-    createdNewColumn.cards = [generatePlaceHolderCard(createdNewColumn)];
-    createdNewColumn.cardOrderIds = [
-      generatePlaceHolderCard(createdNewColumn)._id,
-    ];
+  //   // When create new column, it doesn't has any card. Therefore, it is necessary to handle the problem of dragging and dropping into an empty column
+  //   createdNewColumn.cards = [generatePlaceHolderCard(createdNewColumn)];
+  //   createdNewColumn.cardOrderIds = [
+  //     generatePlaceHolderCard(createdNewColumn)._id,
+  //   ];
 
-    const newBoard = { ...board };
-    newBoard.columns.push(createdNewColumn);
-    newBoard.columnOrderIds.push(createdNewColumn._id);
-
-    setBoard(newBoard);
-  };
+  //   const newBoard = { ...board };
+  //   newBoard.columns.push(createdNewColumn);
+  //   newBoard.columnOrderIds.push(createdNewColumn._id);
+  // };
 
   const createNewCard = async (newCardData) => {
     // Call API to create new card
@@ -196,7 +178,6 @@ function Board() {
         <BoardBar board={board} />
         <BoardContent
           board={board}
-          createNewColumn={createNewColumn}
           createNewCard={createNewCard}
           moveColumns={moveColumns}
           moveCardInTheSameColumn={moveCardInTheSameColumn}

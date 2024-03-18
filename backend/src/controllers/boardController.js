@@ -30,6 +30,21 @@ const getBoardsFromOwnerId = async (req, res, next) => {
   }
 }
 
+const getBoardsFromMemberId = async (req, res, next) => {
+  try {
+    const memberId = req.params.id;
+    const boards = [];
+
+    const result = await boardModel.findByMemberId(memberId);
+    for await (const doc of result) {
+      boards.push(doc);
+    }
+    res.status(StatusCodes.OK).json(boards);
+  } catch (error) {
+    next(error)
+  }
+}
+
 const getDetails = async (req, res, next) => {
   try {
     const boardId = req.params.id;
@@ -59,4 +74,4 @@ const moveCardToDifferentColumn = async (req, res, next) => {
   }
 }
 
-export const boardController = { createNew, getBoardsFromOwnerId, getDetails, update, moveCardToDifferentColumn }
+export const boardController = { createNew, getBoardsFromOwnerId, getDetails, update, moveCardToDifferentColumn, getBoardsFromMemberId }

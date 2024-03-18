@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
 import { useDispatch, useSelector } from "react-redux";
 import { getBoardsOfOwner } from "~/redux/actions/boardAction";
+import { Navigate } from "react-router-dom";
+import Link from "~/components/Link";
 
 function AllBoard() {
   const { auth, boards } = useSelector((state) => state);
@@ -15,6 +17,7 @@ function AllBoard() {
   useEffect(() => {
     dispatch(getBoardsOfOwner(auth.userInfo._id));
   }, []);
+  if (!auth.userToken) return <Navigate replace to="/" />;
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBar />
@@ -75,27 +78,31 @@ function AllBoard() {
                 width: "100%",
               }}
             >
-              {boards.boards.map((board) => (
-                <Box
+              {boards.boardsIsOwner.map((board) => (
+                <Link
+                  key={board._id}
+                  href={`/board/${board._id}`}
                   sx={{
                     height: "120px",
                     width: { xs: "40%", sm: "30%", md: "20%", lg: "12%" },
                     borderRadius: "4px",
                     mr: 2,
-                    bgcolor: "primary.bgItemBoard",
-                    color: "white",
                     p: 1,
                     cursor: "pointer",
+                    bgcolor: "primary.bgItemBoard",
+                    color: "white",
 
                     "&:hover": {
                       backgroundColor: "primary.bgItemBoard_Hovered",
                     },
                   }}
                 >
-                  <Typography variant="h7" fontWeight={900}>
-                    {board.title}
-                  </Typography>
-                </Box>
+                  <Box>
+                    <Typography variant="h7" fontWeight={900}>
+                      {board.title}
+                    </Typography>
+                  </Box>
+                </Link>
               ))}
               <Box
                 sx={{
@@ -125,57 +132,65 @@ function AllBoard() {
               </Box>
             </Box>
           </Box>
-          <Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  textTransform: "uppercase",
-                  fontWeight: 900,
-                  color: "primary.titleColorBoard",
-                  marginY: 2.5,
-                }}
-              >
-                GUEST WORKSPACES
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                paddingX: 2,
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                width: "100%",
-              }}
-            >
+          {boards.boardsIsMember.length > 0 && (
+            <Box>
               <Box
                 sx={{
-                  height: "120px",
-                  width: { xs: "40%", sm: "30%", md: "20%", lg: "12%" },
-                  borderRadius: "4px",
-                  mr: 2,
-                  bgcolor: "primary.bgItemBoard",
-                  color: "white",
-                  p: 1,
-                  cursor: "pointer",
-
-                  "&:hover": {
-                    backgroundColor: "primary.bgItemBoard_Hovered",
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h7" fontWeight={900}>
-                  Board 1
+                <Typography
+                  variant="h6"
+                  sx={{
+                    textTransform: "uppercase",
+                    fontWeight: 900,
+                    color: "primary.titleColorBoard",
+                    marginY: 2.5,
+                  }}
+                >
+                  GUEST WORKSPACES
                 </Typography>
               </Box>
+              <Box
+                sx={{
+                  paddingX: 2,
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+              >
+                {boards.boardsIsMember.map((board) => (
+                  <Link
+                    key={board._id}
+                    href={`/board/${board._id}`}
+                    sx={{
+                      height: "120px",
+                      width: { xs: "40%", sm: "30%", md: "20%", lg: "12%" },
+                      borderRadius: "4px",
+                      mr: 2,
+                      p: 1,
+                      cursor: "pointer",
+                      bgcolor: "primary.bgItemBoard",
+                      color: "white",
+
+                      "&:hover": {
+                        backgroundColor: "primary.bgItemBoard_Hovered",
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="h7" fontWeight={900}>
+                        {board.title}
+                      </Typography>
+                    </Box>
+                  </Link>
+                ))}
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Box>
     </Container>

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getBoardsOfOwner } from "~/redux/actions/boardAction";
+import { getBoardsOfOwner, getBoardsOfMember, getBoardDetails, createNewColumn } from "~/redux/actions/boardAction";
 
 if (typeof userInfo === "string") userInfo = JSON.parse(userInfo);
 
 const initialState = {
   loading: false,
-  boards: [],
-  boardId: [],
+  boardsIsOwner: [],
+  boardsIsMember: [],
   boardDetails: null,
 };
 
@@ -22,7 +22,34 @@ const authSlice = createSlice({
       })
       .addCase(getBoardsOfOwner.fulfilled, (state, { payload }) => {
         state.loading = false
-        state.boards = payload.data
+        state.boardsIsOwner = payload.data
+      })
+      .addCase(getBoardsOfOwner.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(getBoardsOfMember.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getBoardsOfMember.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardsIsMember = payload.data
+      })
+      .addCase(getBoardsOfMember.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(getBoardDetails.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(getBoardDetails.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(getBoardDetails.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(createNewColumn.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
       })
   }
 });

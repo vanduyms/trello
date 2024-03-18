@@ -66,6 +66,18 @@ const findByOwnerId = async (id) => {
   }
 }
 
+const findByMemberId = async (id) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
+      memberIds: [new ObjectId(id)]
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 const getDetails = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).aggregate([
@@ -157,5 +169,6 @@ export const boardModel = {
   pushColumnOrderIds,
   update,
   pullColumnOrderIds,
-  findByOwnerId
+  findByOwnerId,
+  findByMemberId
 }
