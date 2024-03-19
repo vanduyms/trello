@@ -24,20 +24,19 @@ import { cloneDeep } from "lodash";
 import { useRef } from "react";
 import { isEmpty } from "lodash";
 import { generatePlaceHolderCard } from "~/utils/formatter";
+import { moveColumns } from "~/redux/actions/boardAction";
+import { useDispatch } from "react-redux";
+import {
+  moveCardInTheSameColumn,
+  moveCardToDifferentColumn,
+} from "~/redux/actions/boardAction";
 
 const ACTIVE_DRAG_ITEM = {
   COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-function BoardContent({
-  board,
-  createNewCard,
-  moveColumns,
-  moveCardInTheSameColumn,
-  moveCardToDifferentColumn,
-  deleteColumnDetails,
-}) {
+function BoardContent({ board }) {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: {
   //     distance: 10,
@@ -69,6 +68,8 @@ function BoardContent({
   const [activeDragItemData, setActiveDragItemData] = React.useState(null);
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] =
     React.useState(null);
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     setOrderedColumns(board.columns);
@@ -159,12 +160,19 @@ function BoardContent({
           (card) => card._id
         );
 
+        const prevColumnId = oldColumnWhenDraggingCard._id;
+        const nextColumnId = nextOverColumns._id;
+        const currentCardId = activeDragItemId;
+
         if (triggerFrom === "handleDragEnd") {
-          moveCardToDifferentColumn(
-            activeDraggingCardId,
-            oldColumnWhenDraggingCard._id,
-            nextOverColumns._id,
-            nextColumns
+          dispatch(
+            moveCardToDifferentColumn({
+              board,
+              currentCardId,
+              prevColumnId,
+              nextColumnId,
+              nextColumns, //dndOrderedColumns
+            })
           );
         }
       }
@@ -278,10 +286,15 @@ function BoardContent({
           return nextColumns;
         });
 
-        moveCardInTheSameColumn(
-          dndOrderedCards,
-          dndOrderedCardIds,
-          oldColumnWhenDraggingCard._id
+        let columnId = oldColumnWhenDraggingCard._id;
+
+        dispatch(
+          moveCardInTheSameColumn({
+            board,
+            dndOrderedCards,
+            dndOrderedCardIds,
+            columnId,
+          })
         );
       }
     }
@@ -305,7 +318,7 @@ function BoardContent({
 
         setOrderedColumns(dndOrderedColumns);
 
-        moveColumns(dndOrderedColumns);
+        dispatch(moveColumns({ board, dndOrderedColumns }));
       }
     }
 
@@ -381,11 +394,7 @@ function BoardContent({
           p: "10px 0",
         }}
       >
-        <ListColumns
-          columns={orderedColumns}
-          createNewCard={createNewCard}
-          deleteColumnDetails={deleteColumnDetails}
-        />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimationCustom}>
           {!activeDragItemType && null}
           {activeDragItemType == ACTIVE_DRAG_ITEM.COLUMN && (

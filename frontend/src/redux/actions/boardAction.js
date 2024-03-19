@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getDataAPI, postDataAPI } from "../../apis/fetchData";
+import { deleteDataAPI, getDataAPI, postDataAPI, putDataAPI } from "../../apis/fetchData";
 import { generatePlaceHolderCard } from "../../utils/formatter";
 import { isEmpty } from "lodash";
 import { mapOrder } from "~/utils/sort";
+import { cloneDeep } from "lodash";
 
 export const getBoardsOfOwner = createAsyncThunk("board/getBoardsOfOwner", async (id, { rejectWithValue }) => {
   try {
@@ -59,7 +60,7 @@ export const getBoardDetails = createAsyncThunk("board/getBoardDetails", async (
   }
 });
 
-export const createNewColumn = createAsyncThunk("board/createNewColumn", async ({ board, newColumnData, userToken }, { rejectWithValue }) => {
+export const createNewColumn = createAsyncThunk("board/createNewColumn", async ({ board, newColumnData }, { rejectWithValue }) => {
   try {
     // Call API to create new column
     const res = await postDataAPI(
@@ -67,8 +68,7 @@ export const createNewColumn = createAsyncThunk("board/createNewColumn", async (
       {
         ...newColumnData,
         boardId: board._id,
-      },
-      userToken
+      }
     );
     const createdNewColumn = res?.data;
     // When create new column, it doesn't has any card. Therefore, it is necessary to handle the problem of dragging and dropping into an empty column
@@ -77,12 +77,154 @@ export const createNewColumn = createAsyncThunk("board/createNewColumn", async (
       generatePlaceHolderCard(createdNewColumn)._id,
     ];
 
-    const newBoard = { ...board }
-    newBoard.columns = [...newBoard.columns, createdNewColumn];
-    console.log(newBoard.columns);
-    newBoard.columnOrderIds = [...newBoard.columnOrderIds, createdNewColumn._id];
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdNewColumn);
+    newBoard.columnOrderIds.push(createdNewColumn._id);
 
     return { ...createdNewColumn, data: newBoard };
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const moveColumns = createAsyncThunk("board/moveColumns", async ({ board, dndOrderedColumns }, { rejectWithValue }) => {
+  try {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
+    const newBoard = cloneDeep(board);
+    newBoard.columns = dndOrderedColumns;
+    newBoard.columnOrderIds = dndOrderedColumnsIds;
+
+    putDataAPI(
+      `boards/${newBoard._id}`,
+      {
+        columnOrderIds: dndOrderedColumnsIds,
+      },
+    );
+
+    return { data: newBoard };
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const deleteColumnDetails = createAsyncThunk('board/deleteColumnDetails', async ({ board, columnId }, { rejectWithValue }) => {
+  try {
+    // const res = await deleteDataAPI(`columns/${columnId}`);
+    deleteDataAPI(`columns/${columnId}`);
+
+    const newBoard = cloneDeep(board);
+    newBoard.columns = newBoard.columns.filter((c) => c._id !== columnId);
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (_id) => _id !== columnId
+    );
+    return { data: newBoard };
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const createNewCard = createAsyncThunk('board/createNewCard', async ({ board, newCardData }, { rejectWithValue }) => {
+  try {
+    const res = await postDataAPI(
+      `cards`,
+      {
+        ...newCardData,
+        boardId: board._id,
+      }
+    );
+
+    const createdNewCard = res?.data;
+
+    let newBoard = cloneDeep(board);
+
+    const columnToUpdated =
+      newBoard.columns.find(
+        (column) => column._id === createdNewCard.columnId
+      )
+
+    if (columnToUpdated.cards.some((card) => card.FE_PlaceholderCard)) {
+      columnToUpdated.cards = [createdNewCard];
+      columnToUpdated.cardOrderIds = [createdNewCard._id];
+    } else {
+      columnToUpdated.cards.push(createdNewCard);
+      columnToUpdated.cardOrderIds.push(createdNewCard._id);
+    };
+
+    return { data: newBoard };
+  } catch (error) {
+    console.log(error);
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const moveCardInTheSameColumn = createAsyncThunk('board/moveCardInTheSameColumn', async ({ board, dndOrderedCards, dndOrderedCardIds, columnId }, { rejectWithValue }) => {
+  try {
+    const newBoard = cloneDeep(board);
+    const columnToUpdated = newBoard.columns.find(
+      (column) => column._id === columnId
+    );
+    if (columnToUpdated) {
+      columnToUpdated.cards = dndOrderedCards;
+      columnToUpdated.cardOrderIds = dndOrderedCardIds;
+    }
+    putDataAPI(
+      `columns/${columnId}`,
+      { cardOrderIds: dndOrderedCardIds }
+    );
+    return { data: newBoard };
+  } catch (error) {
+    console.log(error);
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const moveCardToDifferentColumn = createAsyncThunk('board/moveCardToDifferentColumn', async ({ board, currentCardId, prevColumnId, nextColumnId, nextColumns }, { rejectWithValue }) => {
+  try {
+    const dndOrderedColumnIds = nextColumns.map((c) => c._id);
+    const newBoard = cloneDeep(board);
+    newBoard.columns = nextColumns;
+    newBoard.columnOrderIds = dndOrderedColumnIds;
+
+    // Call API from BE
+    let prevCardOrderIds = nextColumns.find(
+      (c) => c._id === prevColumnId
+    )?.cardOrderIds;
+    // Solve the problem when pulling the last card from the column, the empty column will have a placeholder card, need to delete it before sending data to BE
+    if (prevCardOrderIds[0].includes("placeholder-card")) prevCardOrderIds = [];
+
+    // Call API to move card ro different column
+    await putDataAPI(
+      `boards/supports/moving_card`,
+      {
+        currentCardId,
+        prevColumnId,
+        prevCardOrderIds,
+        nextColumnId,
+        nextCardOrderIds: nextColumns.find((c) => c._id === nextColumnId)
+          ?.cardOrderIds,
+      }
+    );
+    return { data: newBoard };
   } catch (error) {
     console.log(error);
     if (error.response && error.response.data.msg) {

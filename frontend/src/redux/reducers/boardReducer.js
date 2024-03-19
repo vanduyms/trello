@@ -1,5 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getBoardsOfOwner, getBoardsOfMember, getBoardDetails, createNewColumn } from "~/redux/actions/boardAction";
+import {
+  getBoardsOfOwner,
+  getBoardsOfMember,
+  getBoardDetails,
+  createNewColumn,
+  deleteColumnDetails,
+  createNewCard,
+  moveColumns,
+  moveCardInTheSameColumn,
+  moveCardToDifferentColumn
+} from "~/redux/actions/boardAction";
 
 if (typeof userInfo === "string") userInfo = JSON.parse(userInfo);
 
@@ -48,6 +58,26 @@ const authSlice = createSlice({
         state.loading = false
       })
       .addCase(createNewColumn.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(moveColumns.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(deleteColumnDetails.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(createNewCard.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(moveCardInTheSameColumn.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(moveCardToDifferentColumn.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })

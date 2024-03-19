@@ -24,12 +24,18 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import { useConfirm } from "material-ui-confirm";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteColumnDetails,
+  createNewCard,
+} from "~/redux/actions/boardAction";
 
-function Column({ column, createNewCard, deleteColumnDetails }) {
+function Column({ column }) {
   const orderedCards = column.cards;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,14 +61,19 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
     opacity: isDragging ? 0.5 : undefined,
   };
 
+  const { boards } = useSelector((state) => state);
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
+
+  const dispatch = useDispatch();
+  const board = boards?.boardDetails;
+  const columnId = column._id;
 
   const toggleOpenNewCardForm = () => {
     setOpenNewCardForm(!openNewCardForm);
   };
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error("Please enter Card Title!", {
         position: "top-right",
@@ -75,14 +86,14 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       columnId: column._id,
     };
 
-    createNewCard(newCardData);
+    await dispatch(createNewCard({ board, newCardData }));
 
     toggleOpenNewCardForm();
     setNewCardTitle("");
   };
 
   const confirmDeleteColumn = useConfirm();
-  const handleDeleteColumn = (e) => {
+  const handleDeleteColumn = () => {
     confirmDeleteColumn({
       title: "Delete column",
       description:
@@ -90,7 +101,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       confirmationText: "Confirm",
       cancellationText: "Cancel",
     })
-      .then(() => deleteColumnDetails(column._id))
+      .then(() => dispatch(deleteColumnDetails({ board, columnId })))
       .catch();
   };
 

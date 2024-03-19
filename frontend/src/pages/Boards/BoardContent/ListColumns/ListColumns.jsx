@@ -14,10 +14,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewColumn } from "~/redux/actions/boardAction";
 
-function ListColumns({ columns, createNewCard, deleteColumnDetails }) {
-  const { auth, boards } = useSelector((state) => state);
+function ListColumns({ columns }) {
+  const { boards } = useSelector((state) => state);
   const dispatch = useDispatch();
-  let userToken = auth?.userToken;
   let board = boards?.boardDetails;
 
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
@@ -35,7 +34,7 @@ function ListColumns({ columns, createNewCard, deleteColumnDetails }) {
     const newColumnData = { title: newColumnTitle };
 
     // createNewColumn(newColumnData);
-    dispatch(createNewColumn({ board, newColumnData, userToken }));
+    dispatch(createNewColumn({ board, newColumnData }));
 
     toggleOpenNewColumnForm();
     setNewColumnTitle("");
@@ -58,12 +57,7 @@ function ListColumns({ columns, createNewCard, deleteColumnDetails }) {
         }}
       >
         {columns.map((column) => (
-          <Column
-            key={column._id}
-            column={column}
-            createNewCard={createNewCard}
-            deleteColumnDetails={deleteColumnDetails}
-          />
+          <Column key={column._id} column={column} />
         ))}
         {!openNewColumnForm ? (
           <Box
