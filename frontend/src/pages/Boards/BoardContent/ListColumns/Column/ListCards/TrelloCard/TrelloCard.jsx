@@ -12,8 +12,14 @@ import Box from "@mui/material/Box";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 
 function TrelloCard({ card }) {
+  const [showEditCard, setShowEditCard] = useState(false);
+
   const shouldShowCardActions = () => {
     return (
       !!card?.memberIds?.length ||
@@ -37,6 +43,14 @@ function TrelloCard({ card }) {
     opacity: isDragging ? 0.5 : undefined,
     border: isDragging ? "1px solid #2ecc71" : undefined,
   };
+
+  const handleClick = () => {
+    setShowEditCard(true);
+  };
+
+  const handleClickAway = () => {
+    setShowEditCard(false);
+  };
   return (
     <Card
       ref={setNodeRef}
@@ -57,10 +71,10 @@ function TrelloCard({ card }) {
 
         "&:hover": {
           borderStyle: "inset",
-          border: "1px solid red",
+          border: !showEditCard && "1px solid red",
 
-          ".MuiBox-root": {
-            display: "flex",
+          "#editButton": {
+            display: "block",
           },
         },
       }}
@@ -69,27 +83,101 @@ function TrelloCard({ card }) {
       <CardContent
         sx={{
           color: "primary.colorTextColumn",
-          p: 1.5,
-          "&:last-child": { p: 1.5 },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          p: showEditCard ? 0 : 1.5,
+          paddingBottom: showEditCard && "0px !important",
+          width: "100%",
+          "& .MuiButtonBase-root": {
+            color: "primary.textCreateBtnColor",
+            backgroundColor: "primary.createBtnBg",
+
+            "&:hover": {
+              backgroundColor: "primary.createBtnBg_Hovered",
+            },
+          },
         }}
       >
-        <Typography variant="h7">{card?.title}</Typography>
         <Box
           sx={{
-            display: "none",
-            width: "25px",
-            height: "25px",
+            display: showEditCard ? "none" : "flex",
+            width: "100%",
+            "&:last-child": { p: 1.5 },
             alignItems: "center",
-            borderRadius: "50%",
-            "&:hover": {
-              backgroundColor: "#282e33",
-            },
+            justifyContent: "space-between",
           }}
         >
-          <CreateOutlinedIcon sx={{ padding: "4px 4px" }} />
+          <Typography variant="h7">{card?.title}</Typography>
+          <Box
+            id="editButton"
+            sx={{
+              display: "none",
+              justifyContent: "space-between",
+              width: "25px",
+              height: "25px",
+              alignItems: "center",
+              borderRadius: "50%",
+              "&:hover": {
+                backgroundColor: "#282e33",
+              },
+            }}
+            onClick={handleClick}
+          >
+            <CreateOutlinedIcon sx={{ padding: "4px 4px" }} />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: showEditCard ? "block" : "none",
+          }}
+        >
+          <ClickAwayListener onClickAway={handleClickAway}>
+            <FormControl
+              sx={{
+                width: "100%",
+                zIndex: 100,
+                padding: "-12px",
+              }}
+            >
+              <TextField multiline={true} rows={2} defaultValue={card?.title} />
+              <Button
+                variant="contained"
+                sx={{
+                  maxWidth: "40px",
+                  position: "fixed",
+                  transform: "translateY(80px)",
+                }}
+              >
+                Save
+              </Button>
+            </FormControl>
+          </ClickAwayListener>
+
+          <Box
+            sx={{
+              position: "fixed",
+              transform: "translate(290px, -74px)",
+
+              display: "flex",
+              flexDirection: "column",
+              gap: 0.5,
+
+              zIndex: 100,
+            }}
+          >
+            <Button variant="contained">Change Cover</Button>
+            <Button variant="contained">Delete</Button>
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              zIndex: 11,
+              background: "#00000099",
+            }}
+          ></Box>
         </Box>
       </CardContent>
       {shouldShowCardActions() && (
