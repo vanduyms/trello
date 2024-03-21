@@ -21,7 +21,7 @@ const CARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 });
 
-const INVALID_UPDATE_FIELD = ["_id", "boardId", "createdAt"];
+const INVALID_UPDATE_FIELD = ["_id", "boardId"];
 
 const validateBeforeCreate = async (data) => {
   return await CARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });

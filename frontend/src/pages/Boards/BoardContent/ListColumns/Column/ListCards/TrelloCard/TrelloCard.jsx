@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,18 +8,21 @@ import GroupIcon from "@mui/icons-material/Group";
 import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import { useState } from "react";
-import { ClickAwayListener } from "@mui/base/ClickAwayListener";
+import { updateCard } from "~/redux/actions/cardAction";
+import { useDispatch, useSelector } from "react-redux";
 
 function TrelloCard({ card }) {
-  const [showEditCard, setShowEditCard] = useState(false);
+  const { boards } = useSelector((state) => state);
+  const board = boards.boardDetails;
 
+  const [showEditCard, setShowEditCard] = useState(false);
+  const [titleUpdate, setTitleUpdate] = useState(card?.title);
   const shouldShowCardActions = () => {
     return (
       !!card?.memberIds?.length ||
@@ -44,13 +47,21 @@ function TrelloCard({ card }) {
     border: isDragging ? "1px solid #2ecc71" : undefined,
   };
 
-  const handleClick = () => {
-    setShowEditCard(true);
-  };
+  const dispatch = useDispatch();
 
-  const handleClickAway = () => {
+  const handleUpdateCard = () => {
+    const id = card?._id;
+    const data = {
+      boardId: card?.boardId,
+      columnId: card?.columnId,
+      title: titleUpdate,
+    };
+    console.log();
+    dispatch(updateCard({ board, id, data }));
+
     setShowEditCard(false);
   };
+
   return (
     <Card
       ref={setNodeRef}
@@ -62,7 +73,6 @@ function TrelloCard({ card }) {
         color: "primary.colorTextColumn",
         cursor: "pointer",
         boxShadow: "0 1px 1px rgba(0, 0, 0, 0.2)",
-        // "&:last-child": { p: 1.5 },
         // overflow: "unset",
         // display: card?.FE_PlaceholderCard ? "none" : "block",
         overflow: card?.FE_PlaceholderCard ? "hidden" : "unset",
@@ -70,8 +80,7 @@ function TrelloCard({ card }) {
         border: "1px solid transparent",
 
         "&:hover": {
-          borderStyle: "inset",
-          border: !showEditCard && "1px solid red",
+          borderColor: "red",
 
           "#editButton": {
             display: "block",
@@ -83,8 +92,7 @@ function TrelloCard({ card }) {
       <CardContent
         sx={{
           color: "primary.colorTextColumn",
-          p: showEditCard ? 0 : 1.5,
-          paddingBottom: showEditCard && "0px !important",
+          p: !showEditCard && 1.5,
           width: "100%",
           "& .MuiButtonBase-root": {
             color: "primary.textCreateBtnColor",
@@ -94,13 +102,15 @@ function TrelloCard({ card }) {
               backgroundColor: "primary.createBtnBg_Hovered",
             },
           },
+          "&:last-child": {
+            paddingBottom: !showEditCard && "12px",
+          },
         }}
       >
         <Box
           sx={{
             display: showEditCard ? "none" : "flex",
             width: "100%",
-            "&:last-child": { p: 1.5 },
             alignItems: "center",
             justifyContent: "space-between",
           }}
@@ -119,17 +129,19 @@ function TrelloCard({ card }) {
                 backgroundColor: "#282e33",
               },
             }}
-            onClick={handleClick}
+            onClick={() => setShowEditCard(true)}
           >
             <CreateOutlinedIcon sx={{ padding: "4px 4px" }} />
           </Box>
         </Box>
+
         <Box
           sx={{
-            display: showEditCard ? "block" : "none",
+            display: showEditCard ? "flex" : "none",
+            width: "100%",
           }}
         >
-          <ClickAwayListener onClickAway={handleClickAway}>
+          <Box id="boxEdit" sx={{ width: "100%" }}>
             <FormControl
               sx={{
                 width: "100%",
@@ -137,7 +149,12 @@ function TrelloCard({ card }) {
                 padding: "-12px",
               }}
             >
-              <TextField multiline={true} rows={2} defaultValue={card?.title} />
+              <TextField
+                multiline={true}
+                rows={2}
+                defaultValue={titleUpdate}
+                onChange={(e) => setTitleUpdate(e.target.value)}
+              />
               <Button
                 variant="contained"
                 sx={{
@@ -145,26 +162,27 @@ function TrelloCard({ card }) {
                   position: "fixed",
                   transform: "translateY(80px)",
                 }}
+                onClick={handleUpdateCard}
               >
                 Save
               </Button>
             </FormControl>
-          </ClickAwayListener>
 
-          <Box
-            sx={{
-              position: "fixed",
-              transform: "translate(290px, -74px)",
+            <Box
+              sx={{
+                position: "fixed",
+                transform: "translate(290px, -74px)",
 
-              display: "flex",
-              flexDirection: "column",
-              gap: 0.5,
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.5,
 
-              zIndex: 100,
-            }}
-          >
-            <Button variant="contained">Change Cover</Button>
-            <Button variant="contained">Delete</Button>
+                zIndex: 100,
+              }}
+            >
+              <Button variant="contained">Change Cover</Button>
+              <Button variant="contained">Delete</Button>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -176,7 +194,9 @@ function TrelloCard({ card }) {
               left: 0,
               zIndex: 11,
               background: "#00000099",
+              cursor: "auto",
             }}
+            onClick={() => setShowEditCard(false)}
           ></Box>
         </Box>
       </CardContent>

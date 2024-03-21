@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 import { API_ROOT } from "~/utils/constants";
 
 const instance = axios.create({
-  withCredentials: true,
   baseURL: API_ROOT,
+  withCredentials: true,
 })
 
 instance.interceptors.request.use(function (config) {

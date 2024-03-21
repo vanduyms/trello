@@ -42,6 +42,7 @@ const register = async (reqBody) => {
 const generateAccessToken = async (reqBody) => {
   try {
     const rft = reqBody.cookies.refreshToken;
+    console.log(rft)
     if (!rft) throw new Error("Please login now!");
 
     jwt.verify(rft, env.REFRESH_TOKEN_SECRET, async (err, result) => {

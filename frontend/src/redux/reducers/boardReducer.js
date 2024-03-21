@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { updateCard } from "~/redux/actions/cardAction";
 import {
   getBoardsOfOwner,
   getBoardsOfMember,
@@ -78,6 +79,13 @@ const authSlice = createSlice({
         state.boardDetails = payload.data
       })
       .addCase(moveCardToDifferentColumn.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(updateCard.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(updateCard.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })
