@@ -8,6 +8,7 @@ const Router = express.Router();
 Router.route("/")
   .post(isAuth, cardValidation.createNew, cardController.createNew);
 Router.route("/:id")
-  .put(isAuth, cardValidation.update, cardController.update);
+  .put(isAuth, cardValidation.update, cardController.update)
+  .delete(isAuth, cardController.deleteOneById);
 
 export const cardRoutes = Router;

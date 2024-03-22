@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateCard } from "~/redux/actions/cardAction";
+import {
+  updateCard,
+  deleteCard
+} from "~/redux/actions/cardAction";
 import {
   getBoardsOfOwner,
   getBoardsOfMember,
@@ -86,6 +89,13 @@ const authSlice = createSlice({
         state.loading = true
       })
       .addCase(updateCard.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(deleteCard.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteCard.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })

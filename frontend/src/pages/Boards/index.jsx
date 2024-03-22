@@ -9,6 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBoardsOfOwner } from "~/redux/actions/boardAction";
 import { Navigate } from "react-router-dom";
 import Link from "~/components/Link";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  FormControl,
+  TextField,
+} from "@mui/material";
 
 function AllBoard() {
   const { auth, boards } = useSelector((state) => state);
@@ -130,6 +137,38 @@ function AllBoard() {
                   Create new card
                 </Typography>
               </Box>
+
+              <Card
+                sx={{
+                  position: "fixed",
+                  transform: "translate(300px, 0px)",
+
+                  maxWidth: 345,
+                }}
+              >
+                <CardHeader title="Create Board" />
+                <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                  <FormControl>
+                    <Typography>Board title</Typography>
+                    <TextField />
+                  </FormControl>
+                  <FormControl>
+                    <Typography>Visibility</Typography>
+                    <TextField
+                      id="filled-select-currency-native"
+                      select
+                      defaultValue="Public"
+                      SelectProps={{
+                        native: true,
+                      }}
+                      // variant="filled"
+                    >
+                      <option value="Public">Public</option>
+                      <option value="Private">Private</option>
+                    </TextField>
+                  </FormControl>
+                </CardContent>
+              </Card>
             </Box>
           </Box>
           {boards.boardsIsMember.length > 0 && (

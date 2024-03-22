@@ -8,11 +8,9 @@ const login = async (req, res, next) => {
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        // secure: false,
-        sameSite: 'strict',
-        domain: 'http://localhost:8017/',
-        path: 'v1/refresh_token',
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
       })
       .status(StatusCodes.OK)
       .json({
@@ -37,9 +35,9 @@ const register = async (req, res, next) => {
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        // secure: true,
-        path: '/v1/refresh_token',
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
       })
       .status(StatusCodes.CREATED)
       .json({

@@ -14,8 +14,9 @@ import Box from "@mui/material/Box";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-import { updateCard } from "~/redux/actions/cardAction";
+import { updateCard, deleteCard } from "~/redux/actions/cardAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useConfirm } from "material-ui-confirm";
 
 function TrelloCard({ card }) {
   const { boards } = useSelector((state) => state);
@@ -56,8 +57,22 @@ function TrelloCard({ card }) {
       columnId: card?.columnId,
       title: titleUpdate,
     };
-    console.log();
     dispatch(updateCard({ board, id, data }));
+
+    setShowEditCard(false);
+  };
+
+  const confirmDeleteCard = useConfirm();
+  const handleDeleteCard = () => {
+    confirmDeleteCard({
+      title: "Delete card",
+      description:
+        "This action will permanently delete your card ! Are you sure ?",
+      confirmationText: "Confirm",
+      cancellationText: "Cancel",
+    })
+      .then(() => dispatch(deleteCard({ board, card })))
+      .catch();
 
     setShowEditCard(false);
   };
@@ -181,7 +196,9 @@ function TrelloCard({ card }) {
               }}
             >
               <Button variant="contained">Change Cover</Button>
-              <Button variant="contained">Delete</Button>
+              <Button variant="contained" onClick={handleDeleteCard}>
+                Delete
+              </Button>
             </Box>
           </Box>
           <Box

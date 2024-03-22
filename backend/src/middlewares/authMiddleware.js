@@ -4,15 +4,16 @@ import { userModel } from "~/models/userModel";
 
 export const isAuth = async (req, res, next) => {
   // Remove Bearer before token
-  const token = req.header("Authorization");
+  const token = req.header("Authorization").split(" ")[1];
   if (token) {
     try {
-      const decoded = await verifyToken(token.slice(7), env.ACCESS_TOKEN_SECRET);
+      const decoded = await verifyToken(token, env.ACCESS_TOKEN_SECRET);
       const user = await userModel.findOneById(decoded.data._id);
       req.user = user;
 
       next();
     } catch (error) {
+      console.log(error);
       return res.status(401).json({
         message: 'Unauthorized.',
       });
