@@ -5,6 +5,22 @@ import { isEmpty } from "lodash";
 import { mapOrder } from "~/utils/sort";
 import { cloneDeep } from "lodash";
 
+export const createNewBoard = createAsyncThunk("board/createNewBoard", async (data, { rejectWithValue }) => {
+  try {
+    const res = await postDataAPI(`boards`, data);
+
+    return res;
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+
 export const getBoardsOfOwner = createAsyncThunk("board/getBoardsOfOwner", async (id, { rejectWithValue }) => {
   try {
     const res = await getDataAPI(`boards/owner/${id}`);

@@ -11,11 +11,10 @@ import IconButton from "@mui/material/IconButton";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "~/redux/reducers/authReducer";
 
-export default function Profiles() {
-  const { auth } = useSelector((state) => state);
+export default function Profiles({ auth }) {
   const user = auth?.userInfo;
 
   const [anchorEl, setAnchorEl] = React.useState(null);

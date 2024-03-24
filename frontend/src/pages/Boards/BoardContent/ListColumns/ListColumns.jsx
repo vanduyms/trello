@@ -11,13 +11,11 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createNewColumn } from "~/redux/actions/boardAction";
 
-function ListColumns({ columns }) {
-  const { boards } = useSelector((state) => state);
+function ListColumns({ board, columns }) {
   const dispatch = useDispatch();
-  let board = boards?.boardDetails;
 
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
@@ -57,7 +55,7 @@ function ListColumns({ columns }) {
         }}
       >
         {columns.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column key={column._id} board={board} column={column} />
         ))}
         {!openNewColumnForm ? (
           <Box

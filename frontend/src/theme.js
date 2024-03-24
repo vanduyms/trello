@@ -37,6 +37,9 @@ const theme = extendTheme({
           bgItemBoard_Hovered: "#838c91",
           bgItemAddCardBoard: "#091e420f",
           bgItemAddCardBoard_Hovered: "#a6c5e229",
+          appBarBgColor: "#0f0f0f",
+          bgBtnPrimary: "#0c66e4",
+          bgBtnPrimary_Hovered: "#85b8ff",
         },
       },
     },
@@ -62,6 +65,9 @@ const theme = extendTheme({
           bgItemBoard_Hovered: "#838c91",
           bgItemAddCardBoard: "#282d33",
           bgItemAddCardBoard_Hovered: "#a6c5e229",
+          appBarBgColor: "#1d2125",
+          bgBtnPrimary: "#0c66e4",
+          bgBtnPrimary_Hovered: "#85b8ff",
         },
       },
     }
@@ -127,6 +133,18 @@ const theme = extendTheme({
             fontSize: "0.875rem"
           }
         }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          input: {
+            color: theme.palette.primary.black_white,
+          },
+          select: {
+            color: theme.palette.primary.black_white,
+          },
+        })
       }
     },
   },

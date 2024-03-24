@@ -3,16 +3,21 @@ import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
-import BoltOutlinedIcon from "@mui/icons-material/BoltOutlined";
+// import BoltOutlinedIcon from "@mui/icons-material/BoltOutlined";
+// import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
-import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+import { useMediaQuery } from "@mui/material";
 
 const MENU_STYLES = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  margin: "auto",
   color: "primary.main",
   bgcolor: "transparent",
   border: "none",
@@ -26,22 +31,37 @@ const MENU_STYLES = {
 };
 
 function BoardBar({ board }) {
+  const mobileViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const tabletViewPort = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
   return (
     <Box
       sx={{
         width: "100%",
         bgcolor: (theme) =>
           theme.palette.mode === "light" ? "#0f0f0f" : "#1d2125",
-        height: (theme) => theme.trelloCustom.boardBarHeight,
-        display: "flex",
+        height: mobileViewPort
+          ? "auto"
+          : (theme) => theme.trelloCustom.boardBarHeight,
+        display: "inline-flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 2,
-        paddingX: 2,
+        gap: mobileViewPort ? "4px" : 2,
+        padding: "8px 16px",
         overflowX: "auto",
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 2,
+          maxWidth: "100%",
+          flexWrap: "nowrap",
+        }}
+      >
         <Tooltip title={board?.description}>
           <Chip
             icon={<DashboardIcon />}
@@ -51,31 +71,68 @@ function BoardBar({ board }) {
           />
         </Tooltip>
         <Chip
-          sx={MENU_STYLES}
+          sx={{
+            ...MENU_STYLES,
+            width: !tabletViewPort ? "auto" : "32px",
+            "& .MuiSvgIcon-root": {
+              marginLeft: "17px",
+            },
+          }}
           icon={<PublicOutlinedIcon />}
-          label={`${String(board?.type).charAt(0).toUpperCase()}${String(
-            board?.type
-          ).slice(1)}`}
+          label={
+            !tabletViewPort &&
+            `${String(board?.type).charAt(0).toUpperCase()}${String(
+              board?.type
+            ).slice(1)}`
+          }
           clickable
         />
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Chip
-          sx={MENU_STYLES}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 1,
+          flexWrap: "nowrap",
+          position: "relative",
+          marginLeft: "auto",
+        }}
+      >
+        {/* <Chip
+          sx={{
+            ...MENU_STYLES,
+            width: !tabletViewPort ? "auto" : "32px",
+            "& .MuiSvgIcon-root": {
+              marginLeft: "17px",
+            },
+          }}
           icon={<RocketLaunchOutlinedIcon />}
-          label="Power-Ups"
+          label={!tabletViewPort && "Power-Ups"}
           clickable
+          size="medium"
         />
         <Chip
-          sx={MENU_STYLES}
+          sx={{
+            ...MENU_STYLES,
+            width: !tabletViewPort ? "auto" : "32px",
+            "& .MuiSvgIcon-root": {
+              marginLeft: "17px",
+            },
+          }}
           icon={<BoltOutlinedIcon />}
-          label="Automation"
+          label={!tabletViewPort && "Automation"}
           clickable
-        />
+        /> */}
         <Chip
-          sx={MENU_STYLES}
+          sx={{
+            ...MENU_STYLES,
+            width: !mobileViewPort ? "auto" : "32px",
+            "& .MuiSvgIcon-root": {
+              marginLeft: "17px",
+            },
+          }}
           icon={<FilterListOutlinedIcon />}
-          label="Filter"
+          label={!mobileViewPort && "Filter"}
           clickable
         />
         <AvatarGroup

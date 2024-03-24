@@ -8,9 +8,9 @@ import BoardBar from "./BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
 
 import { toast } from "react-toastify";
-import { deleteDataAPI, postDataAPI, putDataAPI } from "~/apis/fetchData";
 import { Navigate, useParams } from "react-router-dom";
 import { getBoardDetails } from "~/redux/actions/boardAction";
+import { addToRecentlyViewed } from "~/redux/reducers/boardReducer";
 
 function Board() {
   const { auth, boards } = useSelector((state) => state);
@@ -22,9 +22,10 @@ function Board() {
   useEffect(() => {
     async function loadData() {
       await dispatch(getBoardDetails(id));
+      dispatch(addToRecentlyViewed());
     }
     loadData();
-  }, []);
+  }, [id]);
 
   if (!auth.userToken) {
     return <Navigate replace to="/" />;
@@ -36,7 +37,7 @@ function Board() {
 
     return (
       <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
-        <AppBar />
+        <AppBar auth={auth} boards={boards} />
         <BoardBar board={board} />
         <BoardContent board={board} />
       </Container>

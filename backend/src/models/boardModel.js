@@ -31,11 +31,14 @@ const validateBeforeCreate = async (data) => {
   return await BOARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });
 }
 
-const createNew = async (data) => {
+const createNew = async (userId, data) => {
   try {
     const validateData = await validateBeforeCreate(data);
-
-    const createBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(validateData);
+    const boardData = {
+      ...validateData,
+      ownerIds: new ObjectId(userId)
+    }
+    const createBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(boardData);
     return createBoard;
   } catch (err) {
     throw new Error(err);

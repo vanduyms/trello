@@ -394,7 +394,7 @@ function BoardContent({ board }) {
           p: "10px 0",
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns board={board} columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimationCustom}>
           {!activeDragItemType && null}
           {activeDragItemType == ACTIVE_DRAG_ITEM.COLUMN && (

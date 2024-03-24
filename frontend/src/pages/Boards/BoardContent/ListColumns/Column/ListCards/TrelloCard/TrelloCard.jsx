@@ -18,10 +18,7 @@ import { updateCard, deleteCard } from "~/redux/actions/cardAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 
-function TrelloCard({ card }) {
-  const { boards } = useSelector((state) => state);
-  const board = boards.boardDetails;
-
+function TrelloCard({ board, card }) {
   const [showEditCard, setShowEditCard] = useState(false);
   const [titleUpdate, setTitleUpdate] = useState(card?.title);
   const shouldShowCardActions = () => {
@@ -88,10 +85,10 @@ function TrelloCard({ card }) {
         color: "primary.colorTextColumn",
         cursor: "pointer",
         boxShadow: "0 1px 1px rgba(0, 0, 0, 0.2)",
-        // overflow: "unset",
-        // display: card?.FE_PlaceholderCard ? "none" : "block",
-        overflow: card?.FE_PlaceholderCard ? "hidden" : "unset",
-        height: card?.FE_PlaceholderCard ? "1px" : "unset",
+        overflow: "unset",
+        display: card?.FE_PlaceholderCard ? "none" : "block",
+        // overflow: card?.FE_PlaceholderCard ? "hidden" : "unset",
+        // height: card?.FE_PlaceholderCard ? "1px" : "unset",
         border: "1px solid transparent",
 
         "&:hover": {
@@ -109,12 +106,12 @@ function TrelloCard({ card }) {
           color: "primary.colorTextColumn",
           p: !showEditCard && 1.5,
           width: "100%",
-          "& .MuiButtonBase-root": {
+          "& .MuiButtonBase-root ": {
             color: "primary.textCreateBtnColor",
-            backgroundColor: "primary.createBtnBg",
+            backgroundColor: "primary.bgBtnPrimary",
 
             "&:hover": {
-              backgroundColor: "primary.createBtnBg_Hovered",
+              backgroundColor: "primary.bgBtnPrimary_Hovered",
             },
           },
           "&:last-child": {
@@ -141,7 +138,7 @@ function TrelloCard({ card }) {
               alignItems: "center",
               borderRadius: "50%",
               "&:hover": {
-                backgroundColor: "#282e33",
+                backgroundColor: "#f1f2f4",
               },
             }}
             onClick={() => setShowEditCard(true)}
@@ -156,7 +153,12 @@ function TrelloCard({ card }) {
             width: "100%",
           }}
         >
-          <Box id="boxEdit" sx={{ width: "100%" }}>
+          <Box
+            id="boxEdit"
+            sx={{
+              width: "100%",
+            }}
+          >
             <FormControl
               sx={{
                 width: "100%",

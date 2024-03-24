@@ -9,25 +9,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBoardsOfOwner } from "~/redux/actions/boardAction";
 import { Navigate } from "react-router-dom";
 import Link from "~/components/Link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  FormControl,
-  TextField,
-} from "@mui/material";
+import CreateBoardCard from "~/components/Board/CreateBoardCard";
+import { useState } from "react";
 
 function AllBoard() {
   const { auth, boards } = useSelector((state) => state);
+  const [showCreateBoard, setShowCreateBoard] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBoardsOfOwner(auth.userInfo._id));
+    async function loadData() {
+      await dispatch(getBoardsOfOwner(auth.userInfo._id));
+    }
+
+    loadData();
   }, []);
+
   if (!auth.userToken) return <Navigate replace to="/" />;
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
-      <AppBar />
+      <AppBar boards={boards} auth={auth} />
       <Box
         sx={{
           width: "100%",
@@ -78,11 +79,11 @@ function AllBoard() {
             </Box>
             <Box
               sx={{
-                paddingX: 2,
                 display: "flex",
                 flexDirection: "row",
                 flexWrap: "wrap",
                 width: "100%",
+                gap: 1,
               }}
             >
               {boards.boardsIsOwner.map((board) => (
@@ -91,13 +92,18 @@ function AllBoard() {
                   href={`/board/${board._id}`}
                   sx={{
                     height: "120px",
-                    width: { xs: "40%", sm: "30%", md: "20%", lg: "12%" },
+                    width: {
+                      xs: "calc(50% - 4px)",
+                      sm: "calc(50% - 4px)",
+                      md: "20%",
+                      lg: "12%",
+                    },
                     borderRadius: "4px",
-                    mr: 2,
                     p: 1,
                     cursor: "pointer",
                     bgcolor: "primary.bgItemBoard",
                     color: "white",
+                    textDecoration: "none",
 
                     "&:hover": {
                       backgroundColor: "primary.bgItemBoard_Hovered",
@@ -114,10 +120,15 @@ function AllBoard() {
               <Box
                 sx={{
                   height: "120px",
-                  width: { xs: "40%", sm: "30%", md: "20%", lg: "12%" },
+                  width: {
+                    xs: "calc(50% - 4px)",
+                    sm: "calc(50% - 4px)",
+                    md: "20%",
+                    lg: "12%",
+                  },
                   borderRadius: "4px",
                   p: 1,
-                  mr: 2,
+                  gap: 1,
                   textAlign: "center",
                   display: "flex",
                   cursor: "pointer",
@@ -128,6 +139,7 @@ function AllBoard() {
                     backgroundColor: "primary.bgItemAddCardBoard_Hovered",
                   },
                 }}
+                onClick={() => setShowCreateBoard(!showCreateBoard)}
               >
                 <Typography
                   variant="h7"
@@ -137,38 +149,11 @@ function AllBoard() {
                   Create new card
                 </Typography>
               </Box>
-
-              <Card
-                sx={{
-                  position: "fixed",
-                  transform: "translate(300px, 0px)",
-
-                  maxWidth: 345,
-                }}
-              >
-                <CardHeader title="Create Board" />
-                <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-                  <FormControl>
-                    <Typography>Board title</Typography>
-                    <TextField />
-                  </FormControl>
-                  <FormControl>
-                    <Typography>Visibility</Typography>
-                    <TextField
-                      id="filled-select-currency-native"
-                      select
-                      defaultValue="Public"
-                      SelectProps={{
-                        native: true,
-                      }}
-                      // variant="filled"
-                    >
-                      <option value="Public">Public</option>
-                      <option value="Private">Private</option>
-                    </TextField>
-                  </FormControl>
-                </CardContent>
-              </Card>
+              <CreateBoardCard
+                auth={auth}
+                show={showCreateBoard}
+                setShow={setShowCreateBoard}
+              />
             </Box>
           </Box>
           {boards.boardsIsMember.length > 0 && (

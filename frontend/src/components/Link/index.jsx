@@ -5,7 +5,12 @@ import React, { FC } from "react";
 
 const Link = (props) => {
   return (
-    <MuiLink {...props} component={ReactRouterLink} to={props.href ?? "#"} />
+    <MuiLink
+      sx={{ textDecoration: "none" }}
+      {...props}
+      component={ReactRouterLink}
+      to={props.href ?? "#"}
+    />
   );
 };
 

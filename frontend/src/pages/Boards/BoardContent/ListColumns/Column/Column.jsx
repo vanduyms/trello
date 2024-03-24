@@ -30,7 +30,7 @@ import {
   createNewCard,
 } from "~/redux/actions/boardAction";
 
-function Column({ column }) {
+function Column({ board, column }) {
   const orderedCards = column.cards;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,12 +61,10 @@ function Column({ column }) {
     opacity: isDragging ? 0.5 : undefined,
   };
 
-  const { boards } = useSelector((state) => state);
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
 
   const dispatch = useDispatch();
-  const board = boards?.boardDetails;
   const columnId = column._id;
 
   const toggleOpenNewCardForm = () => {
@@ -261,7 +259,7 @@ function Column({ column }) {
           </Box>
         </Box>
 
-        <ListCard cards={orderedCards} />
+        <ListCard board={board} cards={orderedCards} />
         <Box
           sx={{
             height: (theme) => theme.trelloCustom.columnFooterHeight,

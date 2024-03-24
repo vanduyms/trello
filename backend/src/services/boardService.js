@@ -6,14 +6,14 @@ import { columnModel } from "~/models/columnModel";
 import ApiError from "~/utils/apiError";
 import { slugify } from "~/utils/formatter";
 
-const createNew = async (reqBody) => {
+const createNew = async (userId, reqBody) => {
   try {
     const newBoard = {
       ...reqBody,
-      slug: slugify(reqBody.title)
+      slug: slugify(reqBody.title),
     }
 
-    const createdBoard = await boardModel.createNew(newBoard);
+    const createdBoard = await boardModel.createNew(userId, newBoard);
     const getNewBoard = await boardModel.findOneById(createdBoard.insertedId);
 
     return getNewBoard;
