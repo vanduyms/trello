@@ -15,6 +15,9 @@ Router.route("/:id")
   .get(isAuth, boardController.getDetails)
   .put(isAuth, boardValidation.update, boardController.update)
 
+Router.route("/search/:title")
+  .get(isAuth, boardController.getBoardsFromTitle)
+
 Router.route("/supports/moving_card")
   .put(isAuth, boardValidation.moveCardToDifferentColumn, boardController.moveCardToDifferentColumn);
 

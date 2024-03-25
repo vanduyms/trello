@@ -8,7 +8,6 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
 
 const BOARD_COLLECTION_NAME = 'boards';
 const BOARD_COLLECTION_SCHEMA = Joi.object({
-
   title: Joi.string().required().min(3).max(50).trim().strict(),
   slug: Joi.string().required().min(3).trim().strict(),
   description: Joi.string().required().min(3).max(255).trim().strict(),
@@ -61,6 +60,18 @@ const findByOwnerId = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
       ownerIds: new ObjectId(id)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+const findByTitle = async (title) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
+      title: title
     });
 
     return result;
@@ -173,5 +184,6 @@ export const boardModel = {
   update,
   pullColumnOrderIds,
   findByOwnerId,
-  findByMemberId
+  findByMemberId,
+  findByTitle
 }
