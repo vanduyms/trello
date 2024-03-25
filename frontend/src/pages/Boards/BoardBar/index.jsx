@@ -57,7 +57,7 @@ function BoardBar({ board }) {
         sx={{
           display: "flex",
           alignItems: "flex-start",
-          gap: 2,
+          gap: tabletViewPort ? 1 : 2,
           maxWidth: "100%",
           flexWrap: "nowrap",
         }}
@@ -159,7 +159,11 @@ function BoardBar({ board }) {
             />
           </Tooltip>
         </AvatarGroup>
-        <Button variant="outlined" startIcon={<PersonAddAlt1OutlinedIcon />}>
+        <Button
+          variant="outlined"
+          startIcon={<PersonAddAlt1OutlinedIcon />}
+          sx={{ color: "primary.secondary" }}
+        >
           Share
         </Button>
       </Box>

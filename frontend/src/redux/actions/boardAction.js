@@ -20,6 +20,21 @@ export const createNewBoard = createAsyncThunk("board/createNewBoard", async (da
   }
 });
 
+export const searchBoardTitle = createAsyncThunk("board/search", async (title, { rejectWithValue }) => {
+  try {
+    const res = await getDataAPI(`boards/search?title=${title}`);
+
+    return res;
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
 
 export const getBoardsOfOwner = createAsyncThunk("board/getBoardsOfOwner", async (id, { rejectWithValue }) => {
   try {

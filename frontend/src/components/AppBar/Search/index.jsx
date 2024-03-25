@@ -7,13 +7,25 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import { ClickAwayListener, Typography, useMediaQuery } from "@mui/material";
 import RecentlyViewed from "~/components/Board/RecentlyViewed";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { searchBoardTitle } from "~/redux/actions/boardAction";
+
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Search({ boards }) {
   const [searchValue, setSearchValue] = useState("");
+
   const tabletViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const [showBoxSearch1, setShowBoxSearch1] = useState(false);
   const [showBoxSearch2, setShowBoxSearch2] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    searchValue && dispatch(searchBoardTitle(searchValue));
+  }, [searchValue]);
 
   if (tabletViewPort)
     return (
@@ -109,7 +121,23 @@ function Search({ boards }) {
               >
                 RECENT
               </Typography>
-              <RecentlyViewed boards={boards} />
+              {boards?.loading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              )}
+              {!!searchValue ? (
+                <RecentlyViewed boards={boards?.boards} />
+              ) : (
+                <RecentlyViewed boards={boards?.boardsRecentlyViewed} />
+              )}
             </Box>
           </Box>
         )}
@@ -164,7 +192,7 @@ function Search({ boards }) {
             <Box
               sx={{
                 position: "absolute",
-                minWidth: "318px",
+                minWidth: "286px",
                 maxWidth: "436px",
                 borderWidth: "1px",
                 borderStyle: "solid",
@@ -182,7 +210,23 @@ function Search({ boards }) {
               >
                 RECENT
               </Typography>
-              <RecentlyViewed boards={boards} />
+              {boards?.loading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              )}
+              {!!searchValue ? (
+                <RecentlyViewed boards={boards?.boards} />
+              ) : (
+                <RecentlyViewed boards={boards?.boardsRecentlyViewed} />
+              )}
             </Box>
           )}
         </Box>

@@ -24,6 +24,7 @@ export default function Recent({ boards }) {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        sx={{ color: "primary.secondary" }}
       >
         Recent
       </Button>
@@ -35,7 +36,10 @@ export default function Recent({ boards }) {
         sx={{ "& .MuiPaper-root": { width: "200px", paddingX: "8px" } }}
       >
         <Box onClick={handleClose}>
-          <RecentlyViewed boards={boards} sx={{ position: "absolute" }} />
+          <RecentlyViewed
+            boards={boards?.boardsRecentlyViewed}
+            sx={{ position: "absolute" }}
+          />
         </Box>
       </Menu>
     </div>

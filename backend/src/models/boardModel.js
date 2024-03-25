@@ -56,10 +56,10 @@ const findOneById = async (id) => {
   }
 }
 
-const findByOwnerId = async (id) => {
+const findByTitle = async (search) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
-      ownerIds: new ObjectId(id)
+      title: { $regex: search }
     });
 
     return result;
@@ -68,10 +68,10 @@ const findByOwnerId = async (id) => {
   }
 }
 
-const findByTitle = async (title) => {
+const findByOwnerId = async (id) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
-      title: title
+      ownerIds: new ObjectId(id)
     });
 
     return result;

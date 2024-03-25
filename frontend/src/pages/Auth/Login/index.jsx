@@ -116,7 +116,6 @@ function Login() {
             />
             <Button
               variant="contained"
-              disabled={!(email && password)}
               onClick={handleLogin}
               sx={{
                 padding: 1,

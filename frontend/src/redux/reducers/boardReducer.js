@@ -13,7 +13,8 @@ import {
   createNewCard,
   moveColumns,
   moveCardInTheSameColumn,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
+  searchBoardTitle
 } from "~/redux/actions/boardAction";
 
 const boardsRecentView = localStorage.getItem("boardsRecentlyViewed") ? JSON.parse(localStorage.getItem("boardsRecentlyViewed")) : [];
@@ -23,6 +24,7 @@ const initialState = {
   boardsIsOwner: [],
   boardsIsMember: [],
   boardDetails: null,
+  boards: [],
   boardsRecentlyViewed: boardsRecentView
 };
 
@@ -62,6 +64,16 @@ const authSlice = createSlice({
         state.boardsIsOwner = [...state.boardsIsOwner, payload.data]
       })
       .addCase(createNewBoard.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(searchBoardTitle.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(searchBoardTitle.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boards = payload.data
+      })
+      .addCase(searchBoardTitle.rejected, (state) => {
         state.loading = false
       })
       .addCase(getBoardsOfOwner.pending, (state) => {

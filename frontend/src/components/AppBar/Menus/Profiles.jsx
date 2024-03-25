@@ -65,9 +65,6 @@ export default function Profiles({ auth }) {
           <MenuItem onClick={handleClose}>
             <Avatar sx={{ width: 24, height: 24, marginRight: 2 }} /> Profile
           </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Avatar sx={{ width: 24, height: 24, marginRight: 2 }} /> My account
-          </MenuItem>
           <Divider />
           <MenuItem onClick={handleClose}>
             <ListItemIcon>

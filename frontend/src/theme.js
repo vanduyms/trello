@@ -19,6 +19,7 @@ const theme = extendTheme({
       palette: {
         primary: {
           main: '#fff',
+          secondary: '#fff',
           black_white: "#000",
           textCreateBtnColor: "#fff",
           createBtnBg: '#ffffff33',
@@ -47,6 +48,7 @@ const theme = extendTheme({
       palette: {
         primary: {
           main: '#9fadbc',
+          secondary: '#9fadbc',
           black_white: "#fff",
           textCreateBtn: "#000",
           createBtnBg: '#579dff',
@@ -93,7 +95,7 @@ const theme = extendTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.primary.main,
+          color: theme.palette.primary.black_white,
           fontSize: '0.875rem',
           textTransform: 'none'
         })
@@ -147,6 +149,20 @@ const theme = extendTheme({
         })
       }
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "& .MuiTypography-root": {
+            color: theme.palette.primary.black_white
+          },
+          "& .MuiLink-root": {
+            "&:hover": {
+              backgroundColor: theme.palette.primary.bgButtonBoard_Hovered
+            }
+          },
+        })
+      }
+    }
   },
 });
 

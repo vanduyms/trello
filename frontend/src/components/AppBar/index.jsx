@@ -65,7 +65,7 @@ function AppBar({ auth, boards }) {
                   bgcolor: "primary.createBtnBg_Hovered",
                 },
                 minWidth: tabletViewPort && "max-content !important",
-                paddingX: tabletViewPort && "4px",
+                paddingX: tabletViewPort ? "4px" : 2,
               }}
             >
               {tabletViewPort ? <AddIcon /> : "Create"}

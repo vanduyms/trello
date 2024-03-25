@@ -48,7 +48,7 @@ const getBoardsFromMemberId = async (req, res, next) => {
 
 const getBoardsFromTitle = async (req, res, next) => {
   try {
-    const title = req.body.title;
+    const title = req.query.title;
     const boards = [];
 
     const result = await boardModel.findByTitle(title);
