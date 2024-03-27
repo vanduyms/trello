@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { cardModel } from "~/models/cardModel";
 import { columnModel } from "~/models/columnModel";
 import { slugify } from "~/utils/formatter";

@@ -49,7 +49,19 @@ const findOneById = async (id) => {
   }
 }
 
+const getCommentsOfCardId = async (cardId) => {
+  try {
+    const result = await GET_DB().collection(COMMENT_COLLECTION_NAME).find({
+      cardId: new ObjectId(cardId)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const commentModel = {
   createNew,
-  findOneById
+  getCommentsOfCardId
 }

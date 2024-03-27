@@ -14,6 +14,9 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getCommentsFromCardId } from "~/redux/actions/cardAction";
 
 function CardDetails({ setShow, card, board }) {
   const [comment, setComment] = useState("");
@@ -23,6 +26,17 @@ function CardDetails({ setShow, card, board }) {
     e.stopPropagation();
     setShow(false);
   };
+
+  const dispatch = useDispatch();
+
+  const { cards } = useSelector((state) => state);
+  const cardComments = cards?.comments;
+
+  console.log(cardComments);
+
+  useEffect(() => {
+    dispatch(getCommentsFromCardId(card._id));
+  }, [card]);
 
   const column = board.columns.find((col) => col._id === card.columnId);
 
@@ -152,25 +166,32 @@ function CardDetails({ setShow, card, board }) {
                   </Button>
                 </Box>
 
-                <Box sx={{ mb: 1, width: "100%" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Avatar sx={{ width: 30, height: 30, mr: "10px" }} />
+                {cardComments.map((comment) => (
+                  <Box sx={{ mb: 1, width: "100%" }} key={comment._id}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                        Full name
-                      </Typography>
-                      <Typography variant="h7" sx={{ ml: 1 }}>
-                        Time
-                      </Typography>
+                      <Avatar
+                        src={comment.userAvatar}
+                        sx={{ width: 30, height: 30, mr: "10px" }}
+                      />
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                          {comment.userDisplayName}
+                        </Typography>
+                        <Typography variant="h7" sx={{ ml: 1 }}>
+                          {new Date(comment.createAt).toUTCString()}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box sx={{ pl: 5 }}>
+                      <TextField
+                        placeholder="Write a comment..."
+                        sx={{ width: "100%" }}
+                        value={comment.content}
+                        disabled
+                      />
                     </Box>
                   </Box>
-                  <Box sx={{ pl: 5 }}>
-                    <TextField
-                      placeholder="Write a comment..."
-                      sx={{ width: "100%" }}
-                    />
-                  </Box>
-                </Box>
+                ))}
               </Box>
             </Box>
             <Box
