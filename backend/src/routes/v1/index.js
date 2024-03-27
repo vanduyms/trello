@@ -4,6 +4,7 @@ import { authRoutes } from "./authRoutes";
 import { boardRoutes } from "./boardRoutes";
 import { cardRoutes } from "./cardRoutes";
 import { columnRoutes } from "./columnRoutes";
+import { commentRoutes } from "./commentRoutes";
 import { userRoutes } from "./userRoutes";
 const Router = express.Router();
 
@@ -16,5 +17,6 @@ Router.use("/boards", boardRoutes);
 Router.use("/columns", columnRoutes);
 Router.use("/cards", cardRoutes);
 Router.use("/users", userRoutes);
+Router.use("/comments", commentRoutes);
 
 export const APIs_V1 = Router;

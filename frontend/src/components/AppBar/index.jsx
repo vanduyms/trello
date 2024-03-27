@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import ModeSelect from "../ModeSelect/ModeSelect";
-import AppsIcon from "@mui/icons-material/Apps";
 import TrelloIcon from "~/assets/trello.svg?react";
 import Typography from "@mui/material/Typography";
 import Recent from "./Menus/Recent";

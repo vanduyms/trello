@@ -5,6 +5,7 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
 
 const COMMENT_COLLECTION_NAME = 'comments';
 const COMMENT_COLLECTION_SCHEMA = Joi.object({
+  cardId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
   userId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
   userEmail: Joi.string().email().required().trim().strict(),
   userAvatar: Joi.string().required().trim().strict(),
@@ -22,10 +23,11 @@ const validateBeforeCreate = async (data) => {
 
 const createNew = async (data) => {
   try {
-    const validateData = await validateBeforeCreate(data);
+    const validateData = await validateBeforeCreate({ ...data, userId: String(data.userId) });
     const newCommentToAdd = {
       ...validateData,
       userId: new ObjectId(validateData.userId),
+      cardId: new ObjectId(validateData.cardId),
     }
 
     const createComment = await GET_DB().collection(COMMENT_COLLECTION_NAME).insertOne(newCommentToAdd);
@@ -35,6 +37,19 @@ const createNew = async (data) => {
   }
 }
 
+const findOneById = async (id) => {
+  try {
+    const result = await GET_DB().collection(COMMENT_COLLECTION_NAME).findOne({
+      _id: new ObjectId(id)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const commentModel = {
   createNew,
+  findOneById
 }

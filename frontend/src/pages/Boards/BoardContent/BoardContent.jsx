@@ -30,7 +30,6 @@ import {
   moveCardInTheSameColumn,
   moveCardToDifferentColumn,
 } from "~/redux/actions/boardAction";
-import CardDetails from "~/components/CardDetails";
 
 const ACTIVE_DRAG_ITEM = {
   COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",
@@ -405,7 +404,6 @@ function BoardContent({ board }) {
             <TrelloCard card={activeDragItemData} />
           )}
         </DragOverlay>
-        <CardDetails />
       </Box>
     </DndContext>
   );

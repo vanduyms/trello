@@ -15,12 +15,15 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { updateCard, deleteCard } from "~/redux/actions/cardAction";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
+import CardDetails from "~/components/CardDetails";
 
 function TrelloCard({ board, card }) {
   const [showEditCard, setShowEditCard] = useState(false);
   const [titleUpdate, setTitleUpdate] = useState(card?.title);
+  const [showCardDetails, setShowCardDetails] = useState(false);
+
   const shouldShowCardActions = () => {
     return (
       !!card?.memberIds?.length ||
@@ -28,14 +31,9 @@ function TrelloCard({ board, card }) {
       !!card?.attachments?.length
     );
   };
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: card._id, data: { ...card } });
+
+  let { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: card._id, data: { ...card } });
 
   const dndKitCardStyles = {
     // touchAction: "none",
@@ -100,155 +98,166 @@ function TrelloCard({ board, card }) {
         },
       }}
     >
-      {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
-      <CardContent
-        sx={{
-          color: "primary.colorTextColumn",
-          p: !showEditCard && 1.5,
-          width: "100%",
-          "& .MuiButtonBase-root ": {
-            color: "primary.textCreateBtnColor",
-            backgroundColor: "primary.bgBtnPrimary",
-
-            "&:hover": {
-              backgroundColor: "primary.bgBtnPrimary_Hovered",
-            },
-          },
-          "&:last-child": {
-            paddingBottom: !showEditCard && "12px",
-          },
-        }}
-      >
-        <Box
+      <Box onClick={() => setShowCardDetails(true)}>
+        {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
+        <CardContent
           sx={{
-            display: showEditCard ? "none" : "flex",
+            color: "primary.colorTextColumn",
+            p: !showEditCard && 1.5,
             width: "100%",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h7">{card?.title}</Typography>
-          <Box
-            id="editButton"
-            sx={{
-              display: "none",
-              justifyContent: "space-between",
-              width: "25px",
-              height: "25px",
-              alignItems: "center",
-              borderRadius: "50%",
+            "& .MuiButtonBase-root ": {
+              color: "primary.textCreateBtnColor",
+              backgroundColor: "primary.bgBtnPrimary",
+
               "&:hover": {
-                backgroundColor: "#f1f2f4",
+                backgroundColor: "primary.bgBtnPrimary_Hovered",
               },
-            }}
-            onClick={() => setShowEditCard(true)}
-          >
-            <CreateOutlinedIcon sx={{ padding: "4px 4px" }} />
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: showEditCard ? "flex" : "none",
-            width: "100%",
+            },
+            "&:last-child": {
+              paddingBottom: !showEditCard && "12px",
+            },
           }}
         >
           <Box
-            id="boxEdit"
             sx={{
+              display: showEditCard ? "none" : "flex",
               width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <FormControl
-              sx={{
-                width: "100%",
-                zIndex: 100,
-                padding: "-12px",
-              }}
-            >
-              <TextField
-                multiline={true}
-                rows={2}
-                defaultValue={titleUpdate}
-                onChange={(e) => setTitleUpdate(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                sx={{
-                  maxWidth: "40px",
-                  position: "fixed",
-                  transform: "translateY(80px)",
-                }}
-                onClick={handleUpdateCard}
-              >
-                Save
-              </Button>
-            </FormControl>
-
+            <Typography variant="h7">{card?.title}</Typography>
             <Box
+              id="editButton"
               sx={{
-                position: "fixed",
-                transform: "translate(290px, -74px)",
-
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.5,
-
-                zIndex: 100,
+                display: "none",
+                justifyContent: "space-between",
+                width: "25px",
+                height: "25px",
+                alignItems: "center",
+                borderRadius: "50%",
+                "&:hover": {
+                  backgroundColor: "#f1f2f4",
+                },
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowEditCard(true);
               }}
             >
-              <Button variant="contained">Change Cover</Button>
-              <Button variant="contained" onClick={handleDeleteCard}>
-                Delete
-              </Button>
+              <CreateOutlinedIcon sx={{ padding: "4px 4px" }} />
             </Box>
           </Box>
+
           <Box
             sx={{
+              display: showEditCard ? "flex" : "none",
               width: "100%",
-              position: "fixed",
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              zIndex: 11,
-              background: "#00000099",
-              cursor: "auto",
             }}
-            onClick={() => setShowEditCard(false)}
-          ></Box>
-        </Box>
-      </CardContent>
-      {shouldShowCardActions() && (
-        <CardActions sx={{ p: "0 4px 8px 4px" }}>
-          {!!card?.memberIds.length && (
-            <Button
-              size="small"
-              sx={{ color: "primary.colorTextColumn" }}
-              startIcon={<GroupIcon />}
+          >
+            <Box
+              id="boxEdit"
+              sx={{
+                width: "100%",
+              }}
             >
-              {card?.memberIds.length}
-            </Button>
-          )}
-          {!!card?.comments.length && (
-            <Button
-              size="small"
-              sx={{ color: "primary.colorTextColumn" }}
-              startIcon={<CommentIcon />}
-            >
-              {card?.comments.length}
-            </Button>
-          )}
-          {!!card?.attachments.length && (
-            <Button
-              size="small"
-              sx={{ color: "primary.colorTextColumn" }}
-              startIcon={<AttachmentIcon />}
-            >
-              {card?.attachments.length}
-            </Button>
-          )}
-        </CardActions>
+              <FormControl
+                sx={{
+                  width: "100%",
+                  zIndex: 100,
+                  padding: "-12px",
+                }}
+              >
+                <TextField
+                  multiline={true}
+                  rows={2}
+                  defaultValue={titleUpdate}
+                  onChange={(e) => setTitleUpdate(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  sx={{
+                    maxWidth: "40px",
+                    position: "fixed",
+                    transform: "translateY(80px)",
+                  }}
+                  onClick={handleUpdateCard}
+                >
+                  Save
+                </Button>
+              </FormControl>
+
+              <Box
+                sx={{
+                  position: "fixed",
+                  transform: "translate(290px, -74px)",
+
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 0.5,
+
+                  zIndex: 100,
+                }}
+              >
+                <Button variant="contained">Change Cover</Button>
+                <Button variant="contained" onClick={handleDeleteCard}>
+                  Delete
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                position: "fixed",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                zIndex: 11,
+                background: "#00000099",
+                cursor: "auto",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowEditCard(false);
+              }}
+            ></Box>
+          </Box>
+        </CardContent>
+        {shouldShowCardActions() && (
+          <CardActions sx={{ p: "0 4px 8px 4px" }}>
+            {!!card?.memberIds.length && (
+              <Button
+                size="small"
+                sx={{ color: "primary.colorTextColumn" }}
+                startIcon={<GroupIcon />}
+              >
+                {card?.memberIds.length}
+              </Button>
+            )}
+            {!!card?.comments.length && (
+              <Button
+                size="small"
+                sx={{ color: "primary.colorTextColumn" }}
+                startIcon={<CommentIcon />}
+              >
+                {card?.comments.length}
+              </Button>
+            )}
+            {!!card?.attachments.length && (
+              <Button
+                size="small"
+                sx={{ color: "primary.colorTextColumn" }}
+                startIcon={<AttachmentIcon />}
+              >
+                {card?.attachments.length}
+              </Button>
+            )}
+          </CardActions>
+        )}
+      </Box>
+      {showCardDetails && (
+        <CardDetails setShow={setShowCardDetails} card={card} board={board} />
       )}
     </Card>
   );
