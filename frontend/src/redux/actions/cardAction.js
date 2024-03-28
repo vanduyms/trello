@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
-import { putDataAPI, deleteDataAPI, getDataAPI } from "~/apis/fetchData";
+import { putDataAPI, deleteDataAPI, getDataAPI, postDataAPI } from "~/apis/fetchData";
 
 export const updateCard = createAsyncThunk("card/updateCard", async ({ board, id, data }, { rejectWithValue }) => {
   try {
@@ -36,6 +36,20 @@ export const deleteCard = createAsyncThunk("card/deleteCard", async ({ board, ca
     columnData.cards = columnData.cards.filter(c => c._id !== card._id);
 
     return { data: newBoard };
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const createComment = createAsyncThunk("card/createComment", async (data, { rejectWithValue }) => {
+  try {
+    const res = await postDataAPI(`comments`, data);
+
+    return res;
   } catch (error) {
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)

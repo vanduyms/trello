@@ -17,6 +17,7 @@ import { ClickAwayListener } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCommentsFromCardId } from "~/redux/actions/cardAction";
+import { createComment } from "~/redux/actions/cardAction";
 
 function CardDetails({ setShow, card, board }) {
   const [comment, setComment] = useState("");
@@ -30,15 +31,22 @@ function CardDetails({ setShow, card, board }) {
   const dispatch = useDispatch();
 
   const { cards } = useSelector((state) => state);
-  const cardComments = cards?.comments;
-
-  console.log(cardComments);
 
   useEffect(() => {
     dispatch(getCommentsFromCardId(card._id));
-  }, [card]);
+  }, [card, dispatch]);
 
   const column = board.columns.find((col) => col._id === card.columnId);
+
+  const handleComment = () => {
+    dispatch(
+      createComment({
+        content: comment,
+        cardId: card._id,
+      })
+    );
+    setComment("");
+  };
 
   return (
     <Box
@@ -161,12 +169,13 @@ function CardDetails({ setShow, card, board }) {
                       display: !!comment ? "block" : "none",
                     }}
                     variant="contained"
+                    onClick={handleComment}
                   >
                     Save
                   </Button>
                 </Box>
 
-                {cardComments.map((comment) => (
+                {cards?.comments.map((comment) => (
                   <Box sx={{ mb: 1, width: "100%" }} key={comment._id}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Avatar
@@ -177,7 +186,7 @@ function CardDetails({ setShow, card, board }) {
                         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                           {comment.userDisplayName}
                         </Typography>
-                        <Typography variant="h7" sx={{ ml: 1 }}>
+                        <Typography sx={{ ml: 1, fontSize: "12px" }}>
                           {new Date(comment.createAt).toUTCString()}
                         </Typography>
                       </Box>

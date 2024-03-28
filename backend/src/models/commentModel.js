@@ -61,7 +61,21 @@ const getCommentsOfCardId = async (cardId) => {
   }
 }
 
+const deleteOneById = async (id) => {
+  try {
+    const result = await GET_DB().collection(COMMENT_COLLECTION_NAME).deleteOne({
+      _id: new ObjectId(id)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const commentModel = {
   createNew,
-  getCommentsOfCardId
+  findOneById,
+  getCommentsOfCardId,
+  deleteOneById
 }

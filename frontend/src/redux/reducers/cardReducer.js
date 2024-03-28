@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCommentsFromCardId } from "~/redux/actions/cardAction";
+import { createComment, getCommentsFromCardId } from "~/redux/actions/cardAction";
 
 const initialState = {
   loading: false,
@@ -21,6 +21,15 @@ const cardSlice = createSlice({
         state.comments = payload.data
       })
       .addCase(getCommentsFromCardId.rejected, (state) => {
+        state.loading = false
+      })
+      .addCase(createComment.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(createComment.fulfilled, (state, { payload }) => {
+        state.comments = [payload.data, ...state.comments]
+      })
+      .addCase(createComment.rejected, (state) => {
         state.loading = false
       })
   }

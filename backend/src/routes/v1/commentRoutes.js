@@ -9,7 +9,8 @@ Router.route("/")
   .post(isAuth, commentValidation.createNew, commentController.createNew);
 
 Router.route("/card/:id")
-  .get(isAuth, commentController.getCommentsOfCardId);
+  .get(isAuth, commentController.getCommentsOfCardId)
+  .delete(isAuth, commentController.deleteOneById);
 
 
 export const commentRoutes = Router;

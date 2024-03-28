@@ -30,7 +30,22 @@ const getCommentsOfCardId = async (req, res, next) => {
     next(error)
   }
 }
+
+const deleteOneById = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await commentModel.deleteOneById(id);
+
+    res.status(StatusCodes.OK).json({ msg: "Deleted success!" });
+  } catch (error) {
+    next(error)
+    // res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    //   errors: new Error(error).message
+    // })
+  }
+};
 export const commentController = {
   createNew,
-  getCommentsOfCardId
+  getCommentsOfCardId,
+  deleteOneById
 }
