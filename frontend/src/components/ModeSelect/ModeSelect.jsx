@@ -47,6 +47,16 @@ function ModeSelect() {
           label="Mode"
           value={mode}
           onChange={handleChange}
+          sx={{
+            color: "primary.main",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#fff",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#fff" },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#fff",
+            },
+          }}
         >
           <MenuItem value={"light"}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

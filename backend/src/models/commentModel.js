@@ -13,9 +13,12 @@ const COMMENT_COLLECTION_SCHEMA = Joi.object({
   userDisplayName: Joi.string().required().trim().strict(),
   content: Joi.string().required().trim().strict(),
 
-  createAt: Joi.date().timestamp('javascript').default(Date.now),
+  createdAt: Joi.date().timestamp('javascript').default(Date.now),
+  updatedAt: Joi.date().timestamp('javascript').default(null),
   _destroy: Joi.boolean().default(false)
 });
+
+const INVALID_UPDATE_FIELD = ["_id", "cardId", "userId"];
 
 const validateBeforeCreate = async (data) => {
   return await COMMENT_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });
@@ -73,9 +76,29 @@ const deleteOneById = async (id) => {
   }
 }
 
+const update = async (id, updateData) => {
+  try {
+    Object.keys(updateData).forEach(fieldName => {
+      if (INVALID_UPDATE_FIELD.includes(fieldName)) {
+        delete updateData[fieldName];
+      }
+    });
+
+    const result = await GET_DB().collection(COMMENT_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: updateData },
+      { returnDocument: "after" }
+    );
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const commentModel = {
   createNew,
   findOneById,
   getCommentsOfCardId,
-  deleteOneById
+  deleteOneById,
+  update
 }

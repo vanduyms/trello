@@ -10,6 +10,9 @@ Router.route("/")
 
 Router.route("/card/:id")
   .get(isAuth, commentController.getCommentsOfCardId)
+
+Router.route("/:id")
+  .put(isAuth, commentValidation.update, commentController.update)
   .delete(isAuth, commentController.deleteOneById);
 
 

@@ -16,11 +16,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getCommentsFromCardId } from "~/redux/actions/cardAction";
-import { createComment } from "~/redux/actions/cardAction";
+import { useConfirm } from "material-ui-confirm";
+import {
+  getCommentsFromCardId,
+  createComment,
+  deleteComment,
+  updateComment,
+} from "~/redux/actions/cardAction";
 
 function CardDetails({ setShow, card, board }) {
   const [comment, setComment] = useState("");
+  const [commentEdited, setCommentEdited] = useState("");
+  const [editComment, setEditComment] = useState(false);
   const [description, setDescription] = useState("");
 
   const handleClose = (e) => {
@@ -46,6 +53,27 @@ function CardDetails({ setShow, card, board }) {
       })
     );
     setComment("");
+  };
+
+  const confirmDeleteComment = useConfirm();
+  const handleDeleteComment = (id) => {
+    confirmDeleteComment({
+      title: "Delete comment",
+      description:
+        "This action will permanently delete this comment! Are you sure ?",
+      confirmationText: "Confirm",
+      cancellationText: "Cancel",
+    })
+      .then(async () => {
+        await dispatch(deleteComment(id));
+        setShow(true);
+      })
+      .catch();
+  };
+
+  const handleEditComment = (id) => {
+    const data = { content: commentEdited };
+    dispatch(updateComment({ id, data }));
   };
 
   return (
@@ -187,17 +215,81 @@ function CardDetails({ setShow, card, board }) {
                           {comment.userDisplayName}
                         </Typography>
                         <Typography sx={{ ml: 1, fontSize: "12px" }}>
-                          {new Date(comment.createAt).toUTCString()}
+                          {new Date(comment.createdAt).toUTCString()}
                         </Typography>
                       </Box>
                     </Box>
-                    <Box sx={{ pl: 5 }}>
+                    <Box
+                      sx={{ pl: 5, display: "flex", flexDirection: "column" }}
+                    >
                       <TextField
                         placeholder="Write a comment..."
-                        sx={{ width: "100%" }}
-                        value={comment.content}
-                        disabled
+                        sx={{
+                          width: "100%",
+                          "& .MuiInputBase-input": {
+                            color: "primary.colorText",
+                          },
+                        }}
+                        value={!editComment ? comment.content : commentEdited}
+                        onChange={(e) => {
+                          setCommentEdited(e.target.value);
+                        }}
+                        disabled={!editComment}
                       />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          paddingY: "4px",
+                        }}
+                      >
+                        {!editComment && (
+                          <Box
+                            sx={{
+                              textDecoration: "underline",
+                              fontSize: "14px",
+                              mr: 1,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setEditComment(true);
+                              setCommentEdited(comment.content);
+                            }}
+                          >
+                            Edit
+                          </Box>
+                        )}
+                        {editComment && (
+                          <Box
+                            sx={{
+                              textDecoration: "underline",
+                              fontSize: "14px",
+                              mr: 1,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              handleEditComment(comment._id);
+                              setEditComment(false);
+                            }}
+                          >
+                            Save
+                          </Box>
+                        )}
+                        <Box
+                          sx={{
+                            textDecoration: "underline",
+                            fontSize: "14px",
+                            mr: 1,
+                            cursor: "pointer",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteComment(comment._id);
+                          }}
+                        >
+                          Delete
+                        </Box>
+                      </Box>
                     </Box>
                   </Box>
                 ))}

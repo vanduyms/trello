@@ -98,7 +98,11 @@ function TrelloCard({ board, card }) {
         },
       }}
     >
-      <Box onClick={() => setShowCardDetails(true)}>
+      <Box
+        onClick={() => {
+          !showEditCard && setShowCardDetails(true);
+        }}
+      >
         {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
         <CardContent
           sx={{
@@ -173,6 +177,10 @@ function TrelloCard({ board, card }) {
                   rows={2}
                   defaultValue={titleUpdate}
                   onChange={(e) => setTitleUpdate(e.target.value)}
+                  sx={{
+                    backgroundColor: "primary.main",
+                    borderRadius: 1,
+                  }}
                 />
                 <Button
                   variant="contained"

@@ -59,9 +59,37 @@ export const createComment = createAsyncThunk("card/createComment", async (data,
   }
 });
 
+export const deleteComment = createAsyncThunk("card/deleteCommentById", async (id, { rejectWithValue }) => {
+  try {
+    await deleteDataAPI(`comments/${id}`);
+
+    return { data: id }
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
 export const getCommentsFromCardId = createAsyncThunk("card/getCommentsFromCardId", async (cardId, { rejectWithValue }) => {
   try {
     const res = await getDataAPI(`comments/card/${cardId}`);
+
+    return res;
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const updateComment = createAsyncThunk("card/updateComment", async ({ id, data }, { rejectWithValue }) => {
+  try {
+    const res = await putDataAPI(`comments/${id}`, data);
 
     return res;
   } catch (error) {

@@ -16,6 +16,20 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const createdComment = await commentService.update(id, req.body);
+
+    res.status(StatusCodes.CREATED).json(createdComment)
+  } catch (error) {
+    next(error)
+    // res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    //   errors: new Error(error).message
+    // })
+  }
+};
+
 const getCommentsOfCardId = async (req, res, next) => {
   try {
     const cardId = req.params.id;
@@ -46,6 +60,7 @@ const deleteOneById = async (req, res, next) => {
 };
 export const commentController = {
   createNew,
+  update,
   getCommentsOfCardId,
   deleteOneById
 }

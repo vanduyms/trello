@@ -22,6 +22,21 @@ const createNew = async (user, reqBody) => {
   }
 }
 
+const update = async (id, reqBody) => {
+  try {
+    const updateData = {
+      ...reqBody,
+      updatedAt: Date.now()
+    }
+
+    const updatedComment = await commentModel.update(id, updateData);
+    return updatedComment;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const commentService = {
-  createNew,
+  createNew, update
 }

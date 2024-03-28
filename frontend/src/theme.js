@@ -20,6 +20,7 @@ const theme = extendTheme({
         primary: {
           main: '#fff',
           secondary: '#fff',
+          colorText: '#000',
           black_white: "#000",
           textCreateBtnColor: "#fff",
           createBtnBg: '#ffffff33',
@@ -49,6 +50,7 @@ const theme = extendTheme({
         primary: {
           main: '#9fadbc',
           secondary: '#9fadbc',
+          colorText: '#fff',
           black_white: "#fff",
           textCreateBtn: "#000",
           createBtnBg: '#579dff',
@@ -104,19 +106,18 @@ const theme = extendTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.primary.main,
+          color: theme.palette.primary.colorText,
           fontSize: "0.875rem",
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.colorText
           },
-          '&:hover': {
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.primary.main
-            }
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.colorText
           },
-          '& fieldset': {
-            borderWidth: '1px !important'
-          }
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.primary.colorText,
+            borderWidth: "1px",
+          },
         })
       },
     },
@@ -141,7 +142,7 @@ const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           input: {
-            color: theme.palette.primary.black_white,
+            color: theme.palette.primary.main,
           },
           select: {
             color: theme.palette.primary.black_white,
