@@ -142,6 +142,9 @@ const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           input: {
+            borderWidth: "1px",
+
+            borderColor: theme.palette.primary.main,
             color: theme.palette.primary.main,
           },
           select: {

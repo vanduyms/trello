@@ -5,6 +5,7 @@ import { BOARD_TYPES } from "~/utils/constants";
 import { cardModel } from "./cardModel";
 import { columnModel } from "./columnModel";
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
+import { commentModel } from "./commentModel";
 
 const BOARD_COLLECTION_NAME = 'boards';
 const BOARD_COLLECTION_SCHEMA = Joi.object({
@@ -35,7 +36,8 @@ const createNew = async (userId, data) => {
     const validateData = await validateBeforeCreate(data);
     const boardData = {
       ...validateData,
-      ownerIds: new ObjectId(userId)
+      ownerIds: new ObjectId(userId),
+      memberIds: [new ObjectId(userId)],
     }
     const createBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(boardData);
     return createBoard;
@@ -114,9 +116,28 @@ const getDetails = async (id) => {
           from: cardModel.CARD_COLLECTION_NAME,
           localField: "_id",
           foreignField: "boardId",
-          as: "cards"
+          as: "cards",
+          pipeline: [
+            {
+              $lookup: {
+                from: commentModel.COMMENT_COLLECTION_NAME,
+                let: { card_id: "$_id" },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ["$cardId", "$$card_id"],
+                      },
+                    },
+                  },
+                ],
+                as: "comments",
+              }
+            }
+          ]
         }
       },
+
     ]).toArray();
 
     return result[0] || null;

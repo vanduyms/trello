@@ -12,9 +12,18 @@ const CARD_COLLECTION_SCHEMA = Joi.object({
   title: Joi.string().required().min(3).max(50).trim().strict(),
   description: Joi.string().optional(),
 
-  cardOrderIds: Joi.array().items(
+  memberIds: Joi.array().items(
     Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
+
+  attachments: Joi.array().items(
+    Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+  ).default([]),
+
+  comments: Joi.array().items(
+    Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+  ).default([]),
+
 
   createAt: Joi.date().timestamp('javascript').default(Date.now),
   updateAt: Joi.date().timestamp("javascript").default(null),
@@ -27,13 +36,14 @@ const validateBeforeCreate = async (data) => {
   return await CARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });
 }
 
-const createNew = async (data) => {
+const createNew = async (userId, data) => {
   try {
     const validateData = await validateBeforeCreate(data);
     const newCardToAdd = {
       ...validateData,
       boardId: new ObjectId(validateData.boardId),
-      columnId: new ObjectId(validateData.columnId)
+      columnId: new ObjectId(validateData.columnId),
+      memberIds: [new ObjectId(userId)]
     }
 
     const createCard = await GET_DB().collection(CARD_COLLECTION_NAME).insertOne(newCardToAdd);

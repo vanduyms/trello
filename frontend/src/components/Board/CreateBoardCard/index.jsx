@@ -95,6 +95,9 @@ function CreateBoardCard({ auth, show, setShow }) {
                     ? "white !important"
                     : "black !important",
               },
+              "& .MuiInputBase-input": {
+                color: "primary.colorText",
+              },
             }}
           >
             <FormControl sx={{ paddingY: "10px" }}>
@@ -108,7 +111,6 @@ function CreateBoardCard({ auth, show, setShow }) {
             <FormControl sx={{ paddingY: "10px" }}>
               <Typography>Board description</Typography>
               <TextField
-                autoFocus
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />

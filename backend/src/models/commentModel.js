@@ -96,6 +96,8 @@ const update = async (id, updateData) => {
 }
 
 export const commentModel = {
+  COMMENT_COLLECTION_NAME,
+  COMMENT_COLLECTION_SCHEMA,
   createNew,
   findOneById,
   getCommentsOfCardId,

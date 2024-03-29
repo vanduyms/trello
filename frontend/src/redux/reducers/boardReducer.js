@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   updateCard,
-  deleteCard
+  deleteCard,
+  createComment,
+  deleteComment,
+  updateComment
 } from "~/redux/actions/cardAction";
 import {
   createNewBoard,
@@ -24,7 +27,6 @@ const initialState = {
   boardsIsOwner: [],
   boardsIsMember: [],
   boardDetails: null,
-  boards: [],
   boardsRecentlyViewed: boardsRecentView
 };
 
@@ -49,6 +51,8 @@ const authSlice = createSlice({
         state.boardsRecentlyViewed = [...state.boardsRecentlyViewed, data]
       }
 
+      // state.boardsRecentlyViewed = state.boardsRecentlyViewed.filter(board => allBoards.includes(board));
+
       state.boardsRecentlyViewed.sort((a, b) => b.time - a.time)
 
       localStorage.setItem("boardsRecentlyViewed", JSON.stringify(state.boardsRecentlyViewed))
@@ -56,6 +60,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Create new Board
       .addCase(createNewBoard.pending, (state) => {
         state.loading = true
       })
@@ -66,6 +71,8 @@ const authSlice = createSlice({
       .addCase(createNewBoard.rejected, (state) => {
         state.loading = false
       })
+
+      // Search board by title
       .addCase(searchBoardTitle.pending, (state) => {
         state.loading = true
       })
@@ -76,6 +83,8 @@ const authSlice = createSlice({
       .addCase(searchBoardTitle.rejected, (state) => {
         state.loading = false
       })
+
+      // Get board of owner
       .addCase(getBoardsOfOwner.pending, (state) => {
         state.loading = true
       })
@@ -86,6 +95,8 @@ const authSlice = createSlice({
       .addCase(getBoardsOfOwner.rejected, (state) => {
         state.loading = false
       })
+
+      // Get board of member
       .addCase(getBoardsOfMember.pending, (state) => {
         state.loading = true
       })
@@ -96,6 +107,8 @@ const authSlice = createSlice({
       .addCase(getBoardsOfMember.rejected, (state) => {
         state.loading = false
       })
+
+      // Get board details
       .addCase(getBoardDetails.pending, (state) => {
         state.loading = true
       })
@@ -106,22 +119,40 @@ const authSlice = createSlice({
       .addCase(getBoardDetails.rejected, (state) => {
         state.loading = false
       })
+
+      // Column
+      // Create new column
+      .addCase(createNewColumn.pending, (state) => {
+        state.loading = true
+      })
       .addCase(createNewColumn.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })
+      .addCase(createNewColumn.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Move column
       .addCase(moveColumns.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })
+
+      // Delete a column
       .addCase(deleteColumnDetails.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })
+
+      // Card
+      // Create new card
       .addCase(createNewCard.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })
+
+      // Move card
       .addCase(moveCardInTheSameColumn.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
@@ -130,6 +161,8 @@ const authSlice = createSlice({
         state.loading = false
         state.boardDetails = payload.data
       })
+
+      // Update card
       .addCase(updateCard.pending, (state) => {
         state.loading = true
       })
@@ -137,10 +170,37 @@ const authSlice = createSlice({
         state.loading = false
         state.boardDetails = payload.data
       })
+
+      // Delete card
       .addCase(deleteCard.pending, (state) => {
         state.loading = true
       })
       .addCase(deleteCard.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+
+      // Comments
+      // Create new comment
+      .addCase(createComment.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(createComment.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+      .addCase(createComment.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Delete a comment
+      .addCase(deleteComment.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails = payload.data
+      })
+
+      // Update comment
+      .addCase(updateComment.fulfilled, (state, { payload }) => {
         state.loading = false
         state.boardDetails = payload.data
       })

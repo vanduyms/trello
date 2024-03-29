@@ -45,11 +45,20 @@ export const deleteCard = createAsyncThunk("card/deleteCard", async ({ board, ca
   }
 });
 
-export const createComment = createAsyncThunk("card/createComment", async (data, { rejectWithValue }) => {
+export const createComment = createAsyncThunk("card/createComment", async ({ board, card, data }, { rejectWithValue }) => {
   try {
     const res = await postDataAPI(`comments`, data);
 
-    return res;
+    const createdComment = res.data;
+    let newBoard = cloneDeep(board);
+
+    const columnData = newBoard.columns.find(column => column._id === card.columnId);
+
+    const cardUpdated = columnData.cards.find(c => c._id === card._id);
+
+    cardUpdated.comments.push(createdComment);
+
+    return { data: newBoard };
   } catch (error) {
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
@@ -59,11 +68,18 @@ export const createComment = createAsyncThunk("card/createComment", async (data,
   }
 });
 
-export const deleteComment = createAsyncThunk("card/deleteCommentById", async (id, { rejectWithValue }) => {
+export const deleteComment = createAsyncThunk("card/deleteCommentById", async ({ board, card, id }, { rejectWithValue }) => {
   try {
     await deleteDataAPI(`comments/${id}`);
 
-    return { data: id }
+    let newBoard = cloneDeep(board);
+
+    const columnData = newBoard.columns.find(column => column._id === card.columnId);
+
+    const cardUpdate = columnData.cards.find(c => c._id === card._id);
+
+    cardUpdate.comments = cardUpdate.comments.filter(c => c._id !== id);
+    return { data: newBoard }
   } catch (error) {
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
@@ -87,11 +103,22 @@ export const getCommentsFromCardId = createAsyncThunk("card/getCommentsFromCardI
   }
 });
 
-export const updateComment = createAsyncThunk("card/updateComment", async ({ id, data }, { rejectWithValue }) => {
+export const updateComment = createAsyncThunk("card/updateComment", async ({ board, card, id, data }, { rejectWithValue }) => {
   try {
     const res = await putDataAPI(`comments/${id}`, data);
 
-    return res;
+    const updatedComment = res.data;
+    let newBoard = cloneDeep(board);
+
+    const columnData = newBoard.columns.find(column => column._id === card.columnId);
+
+    const cardUpdate = columnData.cards.find(c => c._id === card._id);
+
+    const indexToUpdate = cardUpdate.comments.findIndex(comment => comment._id === id);
+
+    cardUpdate.comments.splice(indexToUpdate, 1, updatedComment);
+
+    return { data: newBoard };
   } catch (error) {
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)

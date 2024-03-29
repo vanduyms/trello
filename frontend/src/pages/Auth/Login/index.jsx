@@ -77,7 +77,6 @@ function Login() {
               py: 2,
               width: "100%",
               "& .MuiInputBase-root": {
-                border: "2px solid #ccc",
                 color: "black",
                 fontSize: "14px",
 

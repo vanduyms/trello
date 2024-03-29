@@ -14,11 +14,9 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 import {
-  getCommentsFromCardId,
   createComment,
   deleteComment,
   updateComment,
@@ -37,21 +35,14 @@ function CardDetails({ setShow, card, board }) {
 
   const dispatch = useDispatch();
 
-  const { cards } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(getCommentsFromCardId(card._id));
-  }, [card, dispatch]);
-
   const column = board.columns.find((col) => col._id === card.columnId);
 
   const handleComment = () => {
-    dispatch(
-      createComment({
-        content: comment,
-        cardId: card._id,
-      })
-    );
+    const data = {
+      content: comment,
+      cardId: card._id,
+    };
+    dispatch(createComment({ board, card, data }));
     setComment("");
   };
 
@@ -65,7 +56,7 @@ function CardDetails({ setShow, card, board }) {
       cancellationText: "Cancel",
     })
       .then(async () => {
-        await dispatch(deleteComment(id));
+        await dispatch(deleteComment({ board, card, id }));
         setShow(true);
       })
       .catch();
@@ -73,7 +64,7 @@ function CardDetails({ setShow, card, board }) {
 
   const handleEditComment = (id) => {
     const data = { content: commentEdited };
-    dispatch(updateComment({ id, data }));
+    dispatch(updateComment({ board, card, id, data }));
   };
 
   return (
@@ -203,7 +194,7 @@ function CardDetails({ setShow, card, board }) {
                   </Button>
                 </Box>
 
-                {cards?.comments.map((comment) => (
+                {card?.comments.map((comment) => (
                   <Box sx={{ mb: 1, width: "100%" }} key={comment._id}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Avatar

@@ -7,7 +7,6 @@ import Loading from "~/components/Loading";
 import BoardBar from "./BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
 
-import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router-dom";
 import { getBoardDetails } from "~/redux/actions/boardAction";
 import { addToRecentlyViewed } from "~/redux/reducers/boardReducer";

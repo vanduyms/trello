@@ -234,7 +234,7 @@ function TrelloCard({ board, card }) {
         </CardContent>
         {shouldShowCardActions() && (
           <CardActions sx={{ p: "0 4px 8px 4px" }}>
-            {!!card?.memberIds.length && (
+            {card?.memberIds.length > 1 && (
               <Button
                 size="small"
                 sx={{ color: "primary.colorTextColumn" }}
