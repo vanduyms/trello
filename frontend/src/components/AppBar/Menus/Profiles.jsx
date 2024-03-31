@@ -13,6 +13,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useDispatch } from "react-redux";
 import { logout } from "~/redux/reducers/authReducer";
+import Link from "~/components/Link";
 
 export default function Profiles({ auth }) {
   const user = auth?.userInfo;
@@ -62,9 +63,11 @@ export default function Profiles({ auth }) {
         }}
       >
         <MenuList dense>
-          <MenuItem onClick={handleClose}>
-            <Avatar sx={{ width: 24, height: 24, marginRight: 2 }} /> Profile
-          </MenuItem>
+          <Link href={`/user/${user._id}`}>
+            <MenuItem onClick={handleClose}>
+              <Avatar sx={{ width: 24, height: 24, marginRight: 2 }} /> Profile
+            </MenuItem>
+          </Link>
           <Divider />
           <MenuItem onClick={handleClose}>
             <ListItemIcon>

@@ -42,6 +42,8 @@ const theme = extendTheme({
           appBarBgColor: "#0f0f0f",
           bgBtnPrimary: "#0c66e4",
           bgBtnPrimary_Hovered: "#85b8ff",
+          tabTextColor: "#6666",
+          tabTextColor_Focused: "#000",
         },
       },
     },
@@ -72,6 +74,8 @@ const theme = extendTheme({
           appBarBgColor: "#1d2125",
           bgBtnPrimary: "#0c66e4",
           bgBtnPrimary_Hovered: "#85b8ff",
+          tabTextColor: "#b8b8b8",
+          tabTextColor_Focused: "#9fadbc",
         },
       },
     }
