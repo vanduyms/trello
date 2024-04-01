@@ -8,15 +8,18 @@ import FormGroup from "@mui/material/FormGroup";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { userUpdate } from "~/redux/actions/authAction";
+import { toast } from "react-toastify";
 
 function EditProfile({ user }) {
   const [username, setUsername] = useState(user?.username);
   const [fullName, setFullName] = useState(user?.fullName);
-  const [description, setDescription] = useState(
-    user?.description ? user?.description : ""
-  );
+  const [bio, setBio] = useState(user?.bio ? user?.bio : "");
 
-  const [avatar, setAvatar] = useState("");
+  const dispatch = useDispatch();
+
+  const [avatar, setAvatar] = useState(user?.avatar);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -46,6 +49,17 @@ function EditProfile({ user }) {
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
     TransformFile(file);
+  };
+
+  const handleUpdateProfile = () => {
+    const id = user._id;
+    const data = {
+      username: username,
+      fullName: fullName,
+      bio: bio,
+      avatar: avatar,
+    };
+    dispatch(userUpdate({ id, data, toast }));
   };
 
   return (
@@ -120,8 +134,8 @@ function EditProfile({ user }) {
           <TextField
             multiline
             minRows={2}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
           />
         </FormControl>
         <Button
@@ -132,6 +146,7 @@ function EditProfile({ user }) {
               backgroundColor: "primary.createBtnBg_Hovered",
             },
           }}
+          onClick={handleUpdateProfile}
         >
           Save
         </Button>

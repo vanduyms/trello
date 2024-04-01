@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postDataAPI } from "../../apis/fetchData";
+import { postDataAPI, putDataAPI } from "../../apis/fetchData";
+import { imageUpload } from "~/utils/imageUpload";
 
 export const userLogin = createAsyncThunk("api/login", async (data, { rejectWithValue }) => {
   try {
@@ -25,6 +26,30 @@ export const userRegister = createAsyncThunk("api/register", async (data, { reje
     localStorage.setItem('userToken', res.data.accessToken);
     localStorage.setItem('userInfo', JSON.stringify(res.data.user));
 
+    return res;
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const userUpdate = createAsyncThunk("api/updateUser", async ({ id, data, toast }, { rejectWithValue }) => {
+  try {
+    const image = data.avatar;
+    const avatarUrl = await imageUpload(image);
+
+    const updateData = {
+      ...data,
+      avatar: avatarUrl.url
+    }
+
+    const res = await putDataAPI(`users/${id}/update`, updateData);
+    localStorage.setItem("userInfo", JSON.stringify((res.data)));
+
+    toast.success("Updated profile success!")
     return res;
   } catch (error) {
     if (error.response && error.response.data.msg) {

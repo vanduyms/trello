@@ -11,5 +11,16 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const updatedUser = await userService.update(userId, req.body);
 
-export const userController = { createNew }
+    res.status(StatusCodes.CREATED).json({ ...updatedUser, password: "" })
+  } catch (error) {
+    next(error)
+  }
+};
+
+
+export const userController = { createNew, update }

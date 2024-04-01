@@ -46,11 +46,7 @@ export default function Profiles({ auth }) {
           onClick={handleClick}
           sx={{ padding: 0 }}
         >
-          <Avatar sx={{ width: 24, height: 24 }}>
-            {user?.avatar
-              ? user?.avatar
-              : user?.username.slice(0, 1).toUpperCase()}
-          </Avatar>
+          <Avatar sx={{ width: 24, height: 24 }} src={user?.avatar} />
         </IconButton>
       </Tooltip>
       <Menu

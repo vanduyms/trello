@@ -12,6 +12,23 @@ const createNew = async (reqBody) => {
   }
 }
 
+
+const update = async (userId, reqBody) => {
+  try {
+    const updateUser = {
+      ...reqBody,
+      updatedAt: Date.now()
+    }
+    const updatedUser = await userModel.update(userId, updateUser);
+
+    return updatedUser;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const userService = {
   createNew,
+  update
 }

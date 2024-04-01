@@ -83,6 +83,10 @@ function Login() {
                 "& input": {
                   paddingY: "10px",
                 },
+
+                "& > fieldset": {
+                  borderColor: "black",
+                },
               },
             }}
           >

@@ -20,4 +20,26 @@ const createNew = async (req, res, next) => {
   }
 }
 
-export const userValidation = { createNew }
+const update = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    username: Joi.string().required().strict(),
+    fullName: Joi.string().optional(),
+
+    avatar: Joi.string().default(""),
+    bio: Joi.string().min(3).max(250).default(""),
+  });
+
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true
+    });
+    next();
+  } catch (error) {
+    console.log(error)
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+  }
+}
+
+
+export const userValidation = { createNew, update }

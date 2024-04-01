@@ -30,7 +30,8 @@ const MENU_STYLES = {
   },
 };
 
-function BoardBar({ board }) {
+function BoardBar({ auth, board }) {
+  const user = auth?.userInfo;
   const mobileViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const tabletViewPort = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
@@ -151,10 +152,10 @@ function BoardBar({ board }) {
             },
           }}
         >
-          <Tooltip title="vanduyms">
+          <Tooltip title={user?.username}>
             <Avatar
-              alt="Van Duy"
-              src="/static/images/avatar/1.jpg"
+              alt={user?.fullName}
+              src={user?.avatar}
               sx={{ cursor: "pointer" }}
             />
           </Tooltip>

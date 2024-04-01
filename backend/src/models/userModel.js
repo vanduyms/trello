@@ -9,7 +9,9 @@ const USER_COLLECTION_SCHEMA = Joi.object({
   password: Joi.string().required().strict(),
 
   username: Joi.string().required().strict(),
-  displayName: Joi.string().optional(),
+  fullName: Joi.string().min(3).max(50).default(""),
+
+  bio: Joi.string().min(3).max(250).default(""),
 
   avatar: Joi.string().default(""),
   role: Joi.string().default("client"),
@@ -24,6 +26,8 @@ const USER_COLLECTION_SCHEMA = Joi.object({
 const validateBeforeCreate = async (data) => {
   return await USER_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false, allowUnknown: true });
 }
+
+const INVALID_UPDATE_FIELD = ["_id", "createdAt", "role"];
 
 const createNew = async (data) => {
   try {
@@ -74,10 +78,31 @@ const findOneByEmail = async (email) => {
   }
 }
 
+const update = async (userId, updateData) => {
+  try {
+    Object.keys(updateData).forEach(fieldName => {
+      if (INVALID_UPDATE_FIELD.includes(fieldName)) {
+        delete updateData[fieldName];
+      }
+    });
+
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(userId) },
+      { $set: updateData },
+      { returnDocument: "after" }
+    );
+    return result;
+
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  findOneByEmail
+  findOneByEmail,
+  update
 }
