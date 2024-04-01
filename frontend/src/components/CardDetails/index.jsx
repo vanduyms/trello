@@ -92,6 +92,7 @@ function CardDetails({ setShow, card, board }) {
             width: 600,
             borderRadius: 4,
             cursor: "auto",
+            margin: 1,
           }}
         >
           <CardHeader
@@ -111,6 +112,10 @@ function CardDetails({ setShow, card, board }) {
           <CardContent
             sx={{
               display: "flex",
+              flexDirection: {
+                sm: "row",
+                xs: "column",
+              },
               width: "100%",
               gap: 1.5,
               "& .MuiInputBase-root": {

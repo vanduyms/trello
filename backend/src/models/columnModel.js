@@ -13,8 +13,8 @@ const COLUMN_COLLECTION_SCHEMA = Joi.object({
     Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
 
-  createAt: Joi.date().timestamp('javascript').default(Date.now),
-  updateAt: Joi.date().timestamp("javascript").default(null),
+  createdAt: Joi.date().timestamp('javascript').default(Date.now),
+  updatedAt: Joi.date().timestamp("javascript").default(null),
   _destroy: Joi.boolean().default(false)
 });
 

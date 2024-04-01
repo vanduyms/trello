@@ -65,7 +65,7 @@ function EditProfile({ user }) {
   return (
     <Box
       sx={{
-        width: "35%",
+        width: { sm: "80%", md: "50%", lg: "35%" },
         display: "flex",
         m: "auto",
         flexDirection: "column",

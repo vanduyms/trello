@@ -1,3 +1,4 @@
+import { postAPI } from "~/apis/fetchData";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_ROOT } from "~/utils/constants";
@@ -29,7 +30,7 @@ instance.interceptors.response.use(function (response) {
     originalRequest._retry = true;
 
     try {
-      const response = await axios.post(`${API_ROOT}/v1/refresh_token`);
+      const response = await postAPI(`refresh_token`);
       const { access_token } = response.data;
 
       localStorage.setItem('userToken', access_token);

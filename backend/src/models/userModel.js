@@ -19,8 +19,8 @@ const USER_COLLECTION_SCHEMA = Joi.object({
   isActive: Joi.boolean().default(false),
   verifyToken: Joi.string().default(null),
 
-  createAt: Joi.date().timestamp('javascript').default(Date.now),
-  updateAt: Joi.date().timestamp("javascript").default(null)
+  createdAt: Joi.date().timestamp('javascript').default(Date.now),
+  updatedAt: Joi.date().timestamp("javascript").default(null)
 });
 
 const validateBeforeCreate = async (data) => {

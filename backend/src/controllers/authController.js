@@ -5,13 +5,18 @@ const login = async (req, res, next) => {
   try {
     const { accessToken, refreshToken, user } = await authService.login(req.body);
 
-    res
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'None',
+    res.cookie(
+      "refreshToken",
+      refreshToken,
+      {
+        sameSite: "None",
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000
-      })
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      }
+    );
+
+    res
       .status(StatusCodes.OK)
       .json({
         accessToken,
@@ -32,13 +37,18 @@ const register = async (req, res, next) => {
   try {
     const { accessToken, refreshToken, user } = await authService.register(req.body);
 
-    res
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'None',
+    res.cookie(
+      "refreshToken",
+      refreshToken,
+      {
+        sameSite: "None",
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000
-      })
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      }
+    );
+
+    res
       .status(StatusCodes.CREATED)
       .json({
         accessToken,
