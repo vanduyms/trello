@@ -10,15 +10,18 @@ const CARD_COLLECTION_SCHEMA = Joi.object({
   slug: Joi.string().required().min(3).trim().strict(),
 
   title: Joi.string().required().min(3).max(50).trim().strict(),
-  description: Joi.string().optional(),
+  description: Joi.string().trim().default(null),
 
   memberIds: Joi.array().items(
     Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
 
+  cover: Joi.string().default(null),
+
   attachments: Joi.array().items(
     Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   ).default([]),
+
 
   comments: Joi.array().items(
     Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)

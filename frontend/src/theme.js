@@ -170,7 +170,14 @@ const theme = extendTheme({
           },
         })
       }
-    }
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: () => ({
+          border: "1px solid #000"
+        })
+      }
+    },
   },
 });
 

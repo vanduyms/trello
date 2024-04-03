@@ -36,7 +36,7 @@ const ACTIVE_DRAG_ITEM = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-function BoardContent({ board }) {
+function BoardContent({ auth, board }) {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: {
   //     distance: 10,
@@ -394,14 +394,14 @@ function BoardContent({ board }) {
           p: "10px 0",
         }}
       >
-        <ListColumns board={board} columns={orderedColumns} />
+        <ListColumns auth={auth} board={board} columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimationCustom}>
           {!activeDragItemType && null}
           {activeDragItemType == ACTIVE_DRAG_ITEM.COLUMN && (
-            <Column column={activeDragItemData} />
+            <Column auth={auth} column={activeDragItemData} />
           )}
           {activeDragItemType == ACTIVE_DRAG_ITEM.CARD && (
-            <TrelloCard card={activeDragItemData} />
+            <TrelloCard auth={auth} card={activeDragItemData} />
           )}
         </DragOverlay>
       </Box>

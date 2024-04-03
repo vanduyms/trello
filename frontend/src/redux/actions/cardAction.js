@@ -13,7 +13,13 @@ export const updateCard = createAsyncThunk("card/updateCard", async ({ board, id
 
     const indexToUpdate = columnData.cards.findIndex(card => card._id === updatedCard._id);
 
-    columnData.cards.splice(indexToUpdate, 1, updatedCard);
+    const commentOfCards = columnData.cards[indexToUpdate].comments;
+    const updatedCardWithComment = {
+      ...updatedCard,
+      comments: commentOfCards
+    };
+
+    columnData.cards.splice(indexToUpdate, 1, updatedCardWithComment);
 
     return { data: newBoard };
   } catch (error) {

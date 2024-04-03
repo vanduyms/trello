@@ -61,8 +61,9 @@ const findOneById = async (id) => {
 const findByTitle = async (search) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({
-      title: { $regex: search }
+      title: { $regex: search, $options: 'i' }
     });
+
 
     return result;
   } catch (err) {

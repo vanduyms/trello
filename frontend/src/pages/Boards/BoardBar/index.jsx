@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import { useMediaQuery } from "@mui/material";
+import ShareBoard from "~/components/Board/ShareBoard";
 
 const MENU_STYLES = {
   display: "flex",
@@ -168,6 +169,7 @@ function BoardBar({ auth, board }) {
           Share
         </Button>
       </Box>
+      <ShareBoard />
     </Box>
   );
 }

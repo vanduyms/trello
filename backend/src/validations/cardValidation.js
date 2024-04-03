@@ -9,6 +9,8 @@ const createNew = async (req, res, next) => {
     columnId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
 
     title: Joi.string().required().min(3).max(50).trim().strict(),
+    description: Joi.string().trim().default(null),
+    cover: Joi.string().default(null),
   });
 
   try {
@@ -25,6 +27,7 @@ const update = async (req, res, next) => {
     columnId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
 
     title: Joi.string().required().min(3).max(50).trim().strict(),
+    description: Joi.string(),
   });
 
   try {

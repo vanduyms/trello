@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 import CardDetails from "~/components/CardDetails";
 
-function TrelloCard({ board, card }) {
+function TrelloCard({ auth, board, card }) {
   const [showEditCard, setShowEditCard] = useState(false);
   const [titleUpdate, setTitleUpdate] = useState(card?.title);
   const [showCardDetails, setShowCardDetails] = useState(false);
@@ -265,7 +265,12 @@ function TrelloCard({ board, card }) {
         )}
       </Box>
       {showCardDetails && (
-        <CardDetails setShow={setShowCardDetails} card={card} board={board} />
+        <CardDetails
+          setShow={setShowCardDetails}
+          auth={auth}
+          card={card}
+          board={board}
+        />
       )}
     </Card>
   );

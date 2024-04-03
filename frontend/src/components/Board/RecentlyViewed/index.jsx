@@ -1,13 +1,14 @@
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Link from "~/components/Link";
 import React from "react";
 
 function RecentlyViewed({ boards }) {
-  let boardsUpdated = boards;
-  let hasTimeField = boards.some((item) => item.time !== undefined);
-  if (hasTimeField) boardsUpdated = boards.map((item) => item.board);
+  if (boards) {
+    let boardsUpdated = boards;
+    let hasTimeField = boards.some((item) => item.time !== undefined);
+    if (hasTimeField) boardsUpdated = boards.map((item) => item.board);
 
-  if (boards)
     return (
       <Box
         sx={{
@@ -42,6 +43,7 @@ function RecentlyViewed({ boards }) {
         ))}
       </Box>
     );
+  }
 }
 
 export default RecentlyViewed;

@@ -16,17 +16,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
+import { styled } from "@mui/material/styles";
 import {
   createComment,
   deleteComment,
   updateComment,
 } from "~/redux/actions/cardAction";
+import { updateCard } from "~/redux/actions/cardAction";
 
-function CardDetails({ setShow, card, board }) {
+function CardDetails({ setShow, auth, card, board }) {
   const [comment, setComment] = useState("");
   const [commentEdited, setCommentEdited] = useState("");
   const [editComment, setEditComment] = useState(false);
-  const [description, setDescription] = useState("");
+  const [changeDescription, setChangeDescription] = useState(false);
+  const [description, setDescription] = useState(card?.description);
+  const [cover, setCover] = useState("");
 
   const handleClose = (e) => {
     e.stopPropagation();
@@ -36,6 +40,36 @@ function CardDetails({ setShow, card, board }) {
   const dispatch = useDispatch();
 
   const column = board.columns.find((col) => col._id === card.columnId);
+
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
+  const TransformFile = (file) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setCover(reader.result);
+      };
+    } else {
+      setCover("");
+    }
+  };
+
+  const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    TransformFile(file);
+  };
 
   const handleComment = () => {
     const data = {
@@ -65,6 +99,18 @@ function CardDetails({ setShow, card, board }) {
   const handleEditComment = (id) => {
     const data = { content: commentEdited };
     dispatch(updateComment({ board, card, id, data }));
+  };
+
+  const handleUpdateCard = () => {
+    const id = card._id;
+    const data = {
+      boardId: card.boardId,
+      columnId: card.columnId,
+      title: card.title,
+      description: description,
+    };
+    dispatch(updateCard({ board, id, data }));
+    setChangeDescription(false);
   };
 
   return (
@@ -144,6 +190,7 @@ function CardDetails({ setShow, card, board }) {
                   rows={2}
                   placeholder="Add a more detailed description..."
                   sx={{ width: "100%", pl: 5 }}
+                  onClick={() => setChangeDescription(true)}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
@@ -155,9 +202,10 @@ function CardDetails({ setShow, card, board }) {
                     "&:hover": {
                       backgroundColor: "primary.createBtnBg_Hovered",
                     },
-                    display: !!description ? "block" : "none",
+                    display: !!changeDescription ? "block" : "none",
                   }}
                   variant="contained"
+                  onClick={handleUpdateCard}
                 >
                   Save
                 </Button>
@@ -173,7 +221,10 @@ function CardDetails({ setShow, card, board }) {
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Avatar sx={{ width: 30, height: 30, mr: 1 }} />
+                    <Avatar
+                      sx={{ width: 30, height: 30, mr: 1 }}
+                      src={auth?.userInfo?.avatar}
+                    />
                     <TextField
                       multiline
                       placeholder="Write a comment..."
@@ -299,8 +350,17 @@ function CardDetails({ setShow, card, board }) {
                 paddingY: 1,
               }}
             >
-              <Button variant="contained" startIcon={<InsertPhotoIcon />}>
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<InsertPhotoIcon />}
+              >
                 Cover
+                <VisuallyHiddenInput
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={handleUploadImage}
+                />
               </Button>
               <Button variant="contained" startIcon={<AttachFileIcon />}>
                 Attachment

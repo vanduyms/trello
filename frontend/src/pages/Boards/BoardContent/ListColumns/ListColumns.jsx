@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createNewColumn } from "~/redux/actions/boardAction";
 
-function ListColumns({ board, columns }) {
+function ListColumns({ auth, board, columns }) {
   const dispatch = useDispatch();
 
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
@@ -55,7 +55,7 @@ function ListColumns({ board, columns }) {
         }}
       >
         {columns.map((column) => (
-          <Column key={column._id} board={board} column={column} />
+          <Column key={column._id} auth={auth} board={board} column={column} />
         ))}
         {!openNewColumnForm ? (
           <Box
