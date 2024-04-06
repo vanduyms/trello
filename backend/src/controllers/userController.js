@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import { userModel } from "~/models/userModel";
 import { userService } from "~/services/userService";
 
 const createNew = async (req, res, next) => {
@@ -22,5 +23,20 @@ const update = async (req, res, next) => {
   }
 };
 
+const searchUserByEmail = async (req, res, next) => {
+  try {
+    const userEmail = req.query.email;
+    const result = await userModel.findOneByEmail(userEmail);
 
-export const userController = { createNew, update }
+    res.status(StatusCodes.CREATED).json({ ...result, password: "" })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+export const userController = {
+  createNew,
+  update,
+  searchUserByEmail
+}

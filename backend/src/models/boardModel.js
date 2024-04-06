@@ -6,6 +6,7 @@ import { cardModel } from "./cardModel";
 import { columnModel } from "./columnModel";
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "~/utils/validators";
 import { commentModel } from "./commentModel";
+import { userModel } from "./userModel";
 
 const BOARD_COLLECTION_NAME = 'boards';
 const BOARD_COLLECTION_SCHEMA = Joi.object({
@@ -37,7 +38,6 @@ const createNew = async (userId, data) => {
     const boardData = {
       ...validateData,
       ownerIds: new ObjectId(userId),
-      memberIds: [new ObjectId(userId)],
     }
     const createBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(boardData);
     return createBoard;
@@ -101,7 +101,39 @@ const getDetails = async (id) => {
       {
         $match: {
           _id: new ObjectId(id),
-          _destroy: false
+          _destroy: false,
+        }
+      },
+      {
+        $lookup: {
+          from: userModel.USER_COLLECTION_NAME,
+          let: { user_id: "$memberIds" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $in: ["$_id", "$$user_id"],
+                },
+              },
+            },
+          ],
+          as: "members",
+        }
+      },
+      {
+        $lookup: {
+          from: userModel.USER_COLLECTION_NAME,
+          let: { user_id: "$ownerIds" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$user_id"],
+                },
+              },
+            },
+          ],
+          as: "ownerUser",
         }
       },
       {

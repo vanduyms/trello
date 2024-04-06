@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import { useMediaQuery } from "@mui/material";
 import ShareBoard from "~/components/Board/ShareBoard";
+import { useState } from "react";
 
 const MENU_STYLES = {
   display: "flex",
@@ -32,9 +33,12 @@ const MENU_STYLES = {
 };
 
 function BoardBar({ auth, board }) {
+  const memberOfBoard = [...board.ownerUser, ...board.members];
   const user = auth?.userInfo;
   const mobileViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const tabletViewPort = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
+  const [showShareBoard, setShowShareBoard] = useState(false);
 
   return (
     <Box
@@ -153,23 +157,28 @@ function BoardBar({ auth, board }) {
             },
           }}
         >
-          <Tooltip title={user?.username}>
-            <Avatar
-              alt={user?.fullName}
-              src={user?.avatar}
-              sx={{ cursor: "pointer" }}
-            />
-          </Tooltip>
+          {memberOfBoard.map((member) => (
+            <Tooltip title={member?.username} key={member._id}>
+              <Avatar
+                alt={member?.fullName}
+                src={member?.avatar}
+                sx={{ cursor: "pointer" }}
+              />
+            </Tooltip>
+          ))}
         </AvatarGroup>
         <Button
           variant="outlined"
           startIcon={<PersonAddAlt1OutlinedIcon />}
           sx={{ color: "primary.secondary" }}
+          onClick={() => setShowShareBoard(true)}
         >
           Share
         </Button>
       </Box>
-      <ShareBoard />
+      {showShareBoard && (
+        <ShareBoard setShow={setShowShareBoard} auth={auth} board={board} />
+      )}
     </Box>
   );
 }

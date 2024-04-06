@@ -44,6 +44,7 @@ const theme = extendTheme({
           bgBtnPrimary_Hovered: "#85b8ff",
           tabTextColor: "#6666",
           tabTextColor_Focused: "#000",
+          widgetBgColor: "#f1f2f4"
         },
       },
     },
@@ -76,6 +77,7 @@ const theme = extendTheme({
           bgBtnPrimary_Hovered: "#85b8ff",
           tabTextColor: "#b8b8b8",
           tabTextColor_Focused: "#9fadbc",
+          widgetBgColor: "#1e1e1e"
         },
       },
     }
