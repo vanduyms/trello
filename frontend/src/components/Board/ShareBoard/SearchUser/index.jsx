@@ -5,9 +5,10 @@ import { getDataAPI } from "~/apis/fetchData";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
+import LoadingIcon from "~/components/LoadingIcon";
 
 function SearchUser({
+  board,
   emailSearch,
   setEmailSearch,
   userShareAdded,
@@ -26,11 +27,12 @@ function SearchUser({
 
     loadData();
   }, [emailSearch]);
-
-  const handleAddUserShare = () => {
-    setUserShareAdded([...userShareAdded, user]);
-    console.log(userShareAdded);
-    setEmailSearch("");
+  const handleAddUserShare = (id) => {
+    if (id === board.ownerUser[0]._id || board.memberIds.includes(id)) return;
+    else {
+      setUserShareAdded([...userShareAdded, user]);
+      setEmailSearch("");
+    }
   };
 
   if (emailSearch) {
@@ -40,6 +42,8 @@ function SearchUser({
           position: "absolute",
           zIndex: 100000,
           width: "100%",
+          top: "54px",
+          left: "0px",
 
           display: "flex",
           flexDirection: "row",
@@ -58,18 +62,7 @@ function SearchUser({
           borderColor: "primary.colorTextColumn",
         }}
       >
-        {loading && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <CircularProgress color="secondary" />
-          </Box>
-        )}
+        {loading && <LoadingIcon />}
         {user.email ? (
           <Box
             sx={{
@@ -78,7 +71,7 @@ function SearchUser({
               alignItems: "center",
               width: "100%",
             }}
-            onClick={handleAddUserShare}
+            onClick={() => handleAddUserShare(user._id)}
           >
             <Avatar src={user.avatar} />
             <Box>

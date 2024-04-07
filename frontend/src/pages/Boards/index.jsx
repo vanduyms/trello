@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
 import { useDispatch, useSelector } from "react-redux";
-import { getBoardsOfOwner } from "~/redux/actions/boardAction";
+import { getBoardsIsOwnerAndMember } from "~/redux/actions/boardAction";
 import { Navigate } from "react-router-dom";
 import Link from "~/components/Link";
 import CreateBoardCard from "~/components/Board/CreateBoardCard";
@@ -19,7 +19,7 @@ function AllBoard() {
 
   useEffect(() => {
     async function loadData() {
-      await dispatch(getBoardsOfOwner(auth.userInfo._id));
+      await dispatch(getBoardsIsOwnerAndMember(auth.userInfo._id));
     }
 
     loadData();
@@ -179,7 +179,7 @@ function AllBoard() {
               </Box>
               <Box
                 sx={{
-                  paddingX: 2,
+                  // paddingX: 2,
                   display: "flex",
                   flexDirection: "row",
                   flexWrap: "wrap",

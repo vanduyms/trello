@@ -36,9 +36,9 @@ export const searchBoardTitle = createAsyncThunk("board/search", async (title, {
 });
 
 
-export const getBoardsOfOwner = createAsyncThunk("board/getBoardsOfOwner", async (id, { rejectWithValue }) => {
+export const getBoardsIsOwnerAndMember = createAsyncThunk("board/getBoardIsOwnerAndMember", async (id, { rejectWithValue }) => {
   try {
-    const res = await getDataAPI(`boards/owner/${id}`);
+    const res = await getDataAPI(`boards/ownAndMem/${id}`);
 
     return res;
   } catch (error) {
@@ -56,6 +56,25 @@ export const getBoardsOfMember = createAsyncThunk("board/getBoardsOfMember", asy
 
     return res;
   } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+});
+
+export const shareBoard = createAsyncThunk("board/shareBoard", async ({ boardId, userShareAdded }, { rejectWithValue }) => {
+  try {
+    const memberIds = userShareAdded.map(user => user._id);
+
+    await putDataAPI(`boards/${boardId}`, {
+      memberIds: memberIds
+    });
+
+    return { data: userShareAdded };
+  } catch (error) {
+    console.log(error)
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {

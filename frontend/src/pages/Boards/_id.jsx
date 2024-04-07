@@ -37,7 +37,7 @@ function Board() {
     return (
       <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
         <AppBar auth={auth} boards={boards} />
-        <BoardBar auth={auth} board={board} />
+        <BoardBar boards={boards} />
         <BoardContent auth={auth} board={board} />
       </Container>
     );

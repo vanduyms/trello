@@ -10,8 +10,11 @@ import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchUser from "./SearchUser";
 import InputAdornment from "@mui/material/InputAdornment";
+import { shareBoard } from "~/redux/actions/boardAction";
+import LoadingIcon from "~/components/LoadingIcon";
 
-function ShareBoard({ setShow, auth, board }) {
+function ShareBoard({ setShow, boards }) {
+  const board = boards.boardDetails;
   const [emailSearch, setEmailSearch] = useState("");
   const [userShareAdded, setUserShareAdded] = useState([]);
 
@@ -21,6 +24,18 @@ function ShareBoard({ setShow, auth, board }) {
   };
 
   const dispatch = useDispatch();
+
+  const handleRemoveUserShare = (id) => {
+    const updateUserShareAdded = userShareAdded.filter(
+      (user) => user._id !== id
+    );
+    setUserShareAdded(updateUserShareAdded);
+  };
+
+  const handleShareBoard = () => {
+    const boardId = board._id;
+    dispatch(shareBoard({ boardId, userShareAdded }));
+  };
 
   return (
     <Box
@@ -100,13 +115,61 @@ function ShareBoard({ setShow, auth, board }) {
                 gap: 1.5,
               }}
             >
-              <Box sx={{ width: "100%", position: "relative" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "primary.black_white",
+                  paddingX: 2,
+                  borderRadius: 1,
+                }}
+              >
+                {userShareAdded.map((user) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      backgroundColor: "primary.bgButtonBoard",
+                      borderRadius: 1,
+                      padding: "4px 12px",
+                    }}
+                    key={user._id}
+                  >
+                    <Typography>{user.username}</Typography>
+                    <CloseIcon
+                      fontSize="small"
+                      sx={{
+                        color: "primary.colorTextColumn",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleRemoveUserShare(user._id)}
+                    />
+                  </Box>
+                ))}
                 <TextField
-                  placeholder="Email address"
+                  placeholder={userShareAdded.length ? "" : "Email address"}
+                  autoFocus={true}
                   sx={{
                     width: "100%",
                     "& .MuiInputBase-input": {
                       color: "primary.black_white",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      paddingRight: 0,
+                    },
+
+                    "& input": {
+                      paddingX: userShareAdded ? "8px" : 0,
+                    },
+
+                    "& fieldset": {
+                      border: "none",
+                      outline: "none",
                     },
                   }}
                   onClick={() => {}}
@@ -128,6 +191,7 @@ function ShareBoard({ setShow, auth, board }) {
                   }}
                 />
                 <SearchUser
+                  board={board}
                   emailSearch={emailSearch}
                   setEmailSearch={setEmailSearch}
                   userShareAdded={userShareAdded}
@@ -157,8 +221,9 @@ function ShareBoard({ setShow, auth, board }) {
                     backgroundColor: "primary.createBtnBg_Hovered",
                   },
                 }}
+                onClick={handleShareBoard}
               >
-                Share
+                {boards.loading ? <LoadingIcon /> : "Share"}
               </Button>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -186,33 +251,37 @@ function ShareBoard({ setShow, auth, board }) {
               </TextField>
             </Box>
 
-            {board.members.map((member) => (
-              <Box
-                key={member._id}
-                sx={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                  <Avatar src={member?.avatar} />
-                  <Box>
-                    <Typography>{member?.fullName}</Typography>
-                    <Typography>{`@${member?.username}`}</Typography>
-                  </Box>
-                </Box>
-                <TextField
-                  id="filled-select-currency-native"
-                  select
-                  defaultValue="Admin"
-                  SelectProps={{
-                    native: true,
-                  }}
-                  // onChange={(e) => setTypeBoard(e.target.value)}
-                  disabled
+            {boards.loading ? (
+              <LoadingIcon />
+            ) : (
+              board.members.map((member) => (
+                <Box
+                  key={member._id}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <option value="member">Member</option>
-                  {/* <option value="private">Private</option> */}
-                </TextField>
-              </Box>
-            ))}
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                    <Avatar src={member?.avatar} />
+                    <Box>
+                      <Typography>{member?.fullName}</Typography>
+                      <Typography>{`@${member?.username}`}</Typography>
+                    </Box>
+                  </Box>
+                  <TextField
+                    id="filled-select-currency-native"
+                    select
+                    defaultValue="Admin"
+                    SelectProps={{
+                      native: true,
+                    }}
+                    // onChange={(e) => setTypeBoard(e.target.value)}
+                    disabled
+                  >
+                    <option value="member">Member</option>
+                    {/* <option value="private">Private</option> */}
+                  </TextField>
+                </Box>
+              ))
+            )}
           </CardContent>
         </Card>
       </ClickAwayListener>

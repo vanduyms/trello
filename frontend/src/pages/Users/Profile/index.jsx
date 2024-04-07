@@ -11,8 +11,9 @@ import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { userUpdate } from "~/redux/actions/authAction";
 import { toast } from "react-toastify";
+import LoadingIcon from "~/components/LoadingIcon";
 
-function EditProfile({ user }) {
+function EditProfile({ auth, user }) {
   const [username, setUsername] = useState(user?.username);
   const [fullName, setFullName] = useState(user?.fullName);
   const [bio, setBio] = useState(user?.bio ? user?.bio : "");
@@ -147,8 +148,9 @@ function EditProfile({ user }) {
             },
           }}
           onClick={handleUpdateProfile}
+          disabled={auth.loading}
         >
-          Save
+          {auth.loading ? <LoadingIcon /> : "Save"}
         </Button>
       </FormGroup>
     </Box>

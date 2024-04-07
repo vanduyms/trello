@@ -73,7 +73,7 @@ function Profile() {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <EditProfile user={user} />
+              <EditProfile auth={auth} user={user} />
             </TabPanel>
             <TabPanel value="2">Item Two</TabPanel>
           </TabContext>

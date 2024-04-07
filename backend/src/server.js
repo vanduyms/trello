@@ -7,21 +7,28 @@ import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware';
 import cors from "cors";
 import { corsOptions } from './config/cors';
 import cookieParser from "cookie-parser";
-
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const START_SERVER = () => {
   const app = express();
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(cors(corsOptions));
 
-  app.use(express.json());
+  const httpServer = createServer(app);
+  const io = new Server(httpServer, {});
+
+  io.on("connection", (socket) => {
+    socket.emit("first_connect", "Hello");
+  });
+
   app.use("/v1", APIs_V1);
   app.use(errorHandlingMiddleware);
 
-
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
+  httpServer.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
     console.log(`Hello, I am running at ${env.APP_HOST}:${env.APP_PORT}/`)
   })

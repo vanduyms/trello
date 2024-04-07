@@ -21,7 +21,6 @@ Router.route("/:id")
 Router.route("/supports/moving_card")
   .put(isAuth, boardValidation.moveCardToDifferentColumn, boardController.moveCardToDifferentColumn);
 
-Router.route("/owner/:id").get(isAuth, boardController.getBoardsFromOwnerId)
-Router.route("/member/:id").get(isAuth, boardController.getBoardsFromMemberId)
+Router.route("/ownAndMem/:id").get(isAuth, boardController.getBoardsOwnerMember)
 
 export const boardRoutes = Router;

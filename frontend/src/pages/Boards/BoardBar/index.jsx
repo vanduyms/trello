@@ -32,9 +32,9 @@ const MENU_STYLES = {
   },
 };
 
-function BoardBar({ auth, board }) {
+function BoardBar({ boards }) {
+  const board = boards.boardDetails;
   const memberOfBoard = [...board.ownerUser, ...board.members];
-  const user = auth?.userInfo;
   const mobileViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const tabletViewPort = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
@@ -177,7 +177,7 @@ function BoardBar({ auth, board }) {
         </Button>
       </Box>
       {showShareBoard && (
-        <ShareBoard setShow={setShowShareBoard} auth={auth} board={board} />
+        <ShareBoard setShow={setShowShareBoard} boards={boards} />
       )}
     </Box>
   );

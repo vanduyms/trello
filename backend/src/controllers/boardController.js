@@ -16,31 +16,27 @@ const createNew = async (req, res, next) => {
   }
 };
 
-const getBoardsFromOwnerId = async (req, res, next) => {
+const getBoardsOwnerMember = async (req, res, next) => {
   try {
     const ownerId = req.params.id;
-    const boards = [];
-
-    const result = await boardModel.findByOwnerId(ownerId);
-    for await (const doc of result) {
-      boards.push(doc);
-    }
-    res.status(StatusCodes.OK).json(boards);
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getBoardsFromMemberId = async (req, res, next) => {
-  try {
     const memberId = req.params.id;
-    const boards = [];
 
-    const result = await boardModel.findByMemberId(memberId);
-    for await (const doc of result) {
-      boards.push(doc);
+    const boardsIsOwner = [];
+    const boardsIsMember = [];
+
+    const resultOwner = await boardModel.findByOwnerId(ownerId);
+    const resultMember = await boardModel.findByMemberId(memberId);
+
+    for await (const doc of resultOwner) {
+      boardsIsOwner.push(doc);
     }
-    res.status(StatusCodes.OK).json(boards);
+    for await (const doc of resultMember) {
+      boardsIsMember.push(doc);
+    }
+    res.status(StatusCodes.OK).json({
+      boardsIsOwner: boardsIsOwner,
+      boardsIsMember: boardsIsMember,
+    });
   } catch (error) {
     next(error)
   }
@@ -92,10 +88,9 @@ const moveCardToDifferentColumn = async (req, res, next) => {
 
 export const boardController = {
   createNew,
-  getBoardsFromOwnerId,
+  getBoardsOwnerMember,
   getDetails,
   update,
   moveCardToDifferentColumn,
-  getBoardsFromMemberId,
   getBoardsFromTitle
 }

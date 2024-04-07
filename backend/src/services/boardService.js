@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { cloneDeep } from "lodash";
+import { ObjectId } from "mongodb";
 import { boardModel } from "~/models/boardModel";
 import { cardModel } from "~/models/cardModel";
 import { columnModel } from "~/models/columnModel";
@@ -47,8 +48,13 @@ const getDetails = async (boardId) => {
 
 const update = async (boardId, reqBody) => {
   try {
+    let memberIds = [];
+    if (reqBody.memberIds.length > 0)
+      memberIds = reqBody.memberIds.map(item => new ObjectId(item));
+
     const updateBoard = {
       ...reqBody,
+      memberIds: memberIds,
       updatedAt: Date.now()
     }
     const updatedBoard = await boardModel.update(boardId, updateBoard);

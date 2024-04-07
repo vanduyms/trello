@@ -8,7 +8,7 @@ import {
 } from "~/redux/actions/cardAction";
 import {
   createNewBoard,
-  getBoardsOfOwner,
+  getBoardsIsOwnerAndMember,
   getBoardsOfMember,
   getBoardDetails,
   createNewColumn,
@@ -17,7 +17,8 @@ import {
   moveColumns,
   moveCardInTheSameColumn,
   moveCardToDifferentColumn,
-  searchBoardTitle
+  searchBoardTitle,
+  shareBoard
 } from "~/redux/actions/boardAction";
 
 const boardsRecentView = localStorage.getItem("boardsRecentlyViewed") ? JSON.parse(localStorage.getItem("boardsRecentlyViewed")) : [];
@@ -84,27 +85,16 @@ const authSlice = createSlice({
         state.loading = false
       })
 
-      // Get board of owner
-      .addCase(getBoardsOfOwner.pending, (state) => {
+      // Get boards is owner and member
+      .addCase(getBoardsIsOwnerAndMember.pending, (state) => {
         state.loading = true
       })
-      .addCase(getBoardsOfOwner.fulfilled, (state, { payload }) => {
+      .addCase(getBoardsIsOwnerAndMember.fulfilled, (state, { payload }) => {
         state.loading = false
-        state.boardsIsOwner = payload.data
+        state.boardsIsOwner = payload.data.boardsIsOwner
+        state.boardsIsMember = payload.data.boardsIsMember
       })
-      .addCase(getBoardsOfOwner.rejected, (state) => {
-        state.loading = false
-      })
-
-      // Get board of member
-      .addCase(getBoardsOfMember.pending, (state) => {
-        state.loading = true
-      })
-      .addCase(getBoardsOfMember.fulfilled, (state, { payload }) => {
-        state.loading = false
-        state.boardsIsMember = payload.data
-      })
-      .addCase(getBoardsOfMember.rejected, (state) => {
+      .addCase(getBoardsIsOwnerAndMember.rejected, (state) => {
         state.loading = false
       })
 
@@ -117,6 +107,18 @@ const authSlice = createSlice({
         state.boardDetails = payload.data
       })
       .addCase(getBoardDetails.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Share board to user
+      .addCase(shareBoard.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(shareBoard.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.boardDetails.members = payload.data
+      })
+      .addCase(shareBoard.rejected, (state) => {
         state.loading = false
       })
 

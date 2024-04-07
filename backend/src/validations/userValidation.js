@@ -26,7 +26,6 @@ const update = async (req, res, next) => {
     fullName: Joi.string().optional(),
 
     avatar: Joi.string().default(""),
-    bio: Joi.string().min(3).max(250).default(""),
   });
 
   try {
