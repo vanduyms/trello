@@ -28,8 +28,7 @@ function Board() {
 
   if (!auth.userToken) {
     return <Navigate replace to="/" />;
-  }
-  {
+  } else {
     if (!board) {
       return <Loading />;
     }

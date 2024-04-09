@@ -77,10 +77,11 @@ function Login() {
               py: 2,
               width: "100%",
               "& .MuiInputBase-root": {
-                color: "black",
                 fontSize: "14px",
 
                 "& input": {
+                  color: "primary.colorTextColumn",
+
                   paddingY: "10px",
                 },
 

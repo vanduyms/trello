@@ -14,7 +14,7 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 import { styled } from "@mui/material/styles";
 import {
@@ -25,6 +25,7 @@ import {
 import { updateCard } from "~/redux/actions/cardAction";
 
 function CardDetails({ setShow, auth, card, board }) {
+  const { socket } = useSelector((state) => state);
   const [comment, setComment] = useState("");
   const [commentEdited, setCommentEdited] = useState("");
   const [editComment, setEditComment] = useState(false);
@@ -76,7 +77,7 @@ function CardDetails({ setShow, auth, card, board }) {
       content: comment,
       cardId: card._id,
     };
-    dispatch(createComment({ board, card, data }));
+    dispatch(createComment({ board, card, data, socket }));
     setComment("");
   };
 
@@ -90,7 +91,7 @@ function CardDetails({ setShow, auth, card, board }) {
       cancellationText: "Cancel",
     })
       .then(async () => {
-        await dispatch(deleteComment({ board, card, id }));
+        await dispatch(deleteComment({ board, card, id, socket }));
         setShow(true);
       })
       .catch();
@@ -136,6 +137,8 @@ function CardDetails({ setShow, auth, card, board }) {
           sx={{
             position: "relative",
             width: 600,
+            maxHeight: 550,
+            overflow: "scroll",
             borderRadius: 4,
             cursor: "auto",
             margin: 1,

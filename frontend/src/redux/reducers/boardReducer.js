@@ -57,6 +57,9 @@ const authSlice = createSlice({
       state.boardsRecentlyViewed.sort((a, b) => b.time - a.time)
 
       localStorage.setItem("boardsRecentlyViewed", JSON.stringify(state.boardsRecentlyViewed))
+    },
+    updateBoard: (state, { payload }) => {
+      state.boardDetails = payload
     }
   },
   extraReducers: (builder) => {
@@ -209,5 +212,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { addToRecentlyViewed } = authSlice.actions
+export const { addToRecentlyViewed, updateBoard } = authSlice.actions
 export default authSlice.reducer;

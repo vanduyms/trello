@@ -51,7 +51,7 @@ export const deleteCard = createAsyncThunk("card/deleteCard", async ({ board, ca
   }
 });
 
-export const createComment = createAsyncThunk("card/createComment", async ({ board, card, data }, { rejectWithValue }) => {
+export const createComment = createAsyncThunk("card/createComment", async ({ board, card, data, socket }, { rejectWithValue }) => {
   try {
     const res = await postDataAPI(`comments`, data);
 
@@ -64,6 +64,8 @@ export const createComment = createAsyncThunk("card/createComment", async ({ boa
 
     cardUpdated.comments.push(createdComment);
 
+    socket.socket.emit("updateBoard", newBoard);
+
     return { data: newBoard };
   } catch (error) {
     if (error.response && error.response.data.msg) {
@@ -74,7 +76,7 @@ export const createComment = createAsyncThunk("card/createComment", async ({ boa
   }
 });
 
-export const deleteComment = createAsyncThunk("card/deleteCommentById", async ({ board, card, id }, { rejectWithValue }) => {
+export const deleteComment = createAsyncThunk("card/deleteCommentById", async ({ board, card, id, socket }, { rejectWithValue }) => {
   try {
     await deleteDataAPI(`comments/${id}`);
 
@@ -85,6 +87,9 @@ export const deleteComment = createAsyncThunk("card/deleteCommentById", async ({
     const cardUpdate = columnData.cards.find(c => c._id === card._id);
 
     cardUpdate.comments = cardUpdate.comments.filter(c => c._id !== id);
+
+    socket.socket.emit("updateBoard", newBoard);
+
     return { data: newBoard }
   } catch (error) {
     if (error.response && error.response.data.msg) {

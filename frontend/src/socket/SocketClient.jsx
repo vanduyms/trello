@@ -1,14 +1,22 @@
 import React, { Fragment, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateBoard } from "~/redux/reducers/boardReducer";
 
 const SocketClient = () => {
-  const { socket } = useSelector((state) => state);
+  const { auth, socket } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    socket.socket?.on("first_connect", (arg) => {
-      console.log(arg);
+    socket.socket?.emit("joinUser", auth.userInfo);
+  }, [socket, auth?.userInfo]);
+
+  useEffect(() => {
+    socket.socket?.on("updateBoardToClient", (board) => {
+      dispatch(updateBoard(board));
     });
-  }, [socket]);
+
+    return () => socket.socket?.off("updateBoardToClient");
+  }, [socket, dispatch, auth]);
 
   return <Fragment></Fragment>;
 };

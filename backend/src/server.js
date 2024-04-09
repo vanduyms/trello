@@ -9,6 +9,7 @@ import { corsOptions } from './config/cors';
 import cookieParser from "cookie-parser";
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import SocketServer from './sockets';
 
 const START_SERVER = () => {
   const app = express();
@@ -19,10 +20,15 @@ const START_SERVER = () => {
   app.use(cors(corsOptions));
 
   const httpServer = createServer(app);
-  const io = new Server(httpServer, {});
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "http://localhost:5173",
+      credentials: true
+    }
+  });
 
   io.on("connection", (socket) => {
-    socket.emit("first_connect", "Hello");
+    SocketServer(socket);
   });
 
   app.use("/v1", APIs_V1);
