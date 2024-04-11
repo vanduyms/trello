@@ -1,0 +1,16 @@
+{
+  "name": "trello",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "cd backend && npm install",
+    "build-server": "cd backend && npm run build",
+    "start-server": "cd backend && npm run production",
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
+    "start-client": "cd client && npm run start"
+  },
+  "author": "Van Duy",
+  "license": "ISC"
+}
