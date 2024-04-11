@@ -11,7 +11,6 @@ export const createNewBoard = createAsyncThunk("board/createNewBoard", async (da
 
     return res;
   } catch (error) {
-    console.log(error)
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {
