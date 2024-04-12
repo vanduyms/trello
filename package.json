@@ -9,7 +9,7 @@
     "start-server": "cd backend && npm run production",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
-    "start-client": "cd client && npm run start"
+    "start-client": "cd client && npm run preview"
   },
   "author": "Van Duy",
   "license": "ISC"
