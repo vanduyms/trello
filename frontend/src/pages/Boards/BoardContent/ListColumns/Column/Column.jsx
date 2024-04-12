@@ -396,9 +396,9 @@ function Column({ auth, board, column }) {
                     cursor: "pointer",
                     // eslint-disable-next-line no-dupe-keys
                     color: (theme) => theme.palette.primary.colorTextColumn,
-                    "&:hover": {
-                      color: "orange",
-                    },
+                    // "&:hover": {
+                    //   color: (theme) => theme.palette.warning.main,
+                    // },
                   }}
                   onClick={toggleOpenNewCardForm}
                 />
