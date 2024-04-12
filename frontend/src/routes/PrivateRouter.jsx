@@ -1,23 +1,10 @@
-import Board from "~/pages/Boards/_id";
-import AllBoard from "~/pages/Boards";
-import Profile from "~/pages/Users/_id";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function PrivateRouter({ auth, boards }) {
+function PrivateRouter({ children }) {
+  const { auth } = useSelector((state) => state);
   if (!auth.userToken) return <Navigate to="/" replace={true} />;
-  return (
-    <>
-      <Route path="/board" element={<AllBoard auth={auth} boards={boards} />} />
-      <Route
-        path="/board/:id"
-        element={<Board auth={auth} boards={boards} socket={socket} />}
-      />
-      <Route
-        path="/user/:id"
-        element={<Profile auth={auth} boards={boards} />}
-      />
-    </>
-  );
+  return children;
 }
 
 export default PrivateRouter;

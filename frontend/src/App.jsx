@@ -9,6 +9,9 @@ import { setSocket } from "~/redux/reducers/socketReducer";
 import SocketClient from "./socket/SocketClient";
 import { API_ROOT } from "~/utils/constants";
 import PrivateRouter from "~/routes/PrivateRouter";
+import AllBoard from "./pages/Boards";
+import Board from "./pages/Boards/_id";
+import Profile from "./pages/Users/_id";
 
 function App() {
   const { auth, boards, socket } = useSelector((state) => state);
@@ -27,7 +30,20 @@ function App() {
       <Routes>
         <Route path="/" element={<Login auth={auth} />} />
         <Route path="/register" element={<Register auth={auth} />} />
-        <PrivateRouter auth={auth} boards={boards} />
+        <PrivateRouter>
+          <Route
+            path="/board"
+            element={<AllBoard auth={auth} boards={boards} />}
+          />
+          <Route
+            path="/board/:id"
+            element={<Board auth={auth} boards={boards} socket={socket} />}
+          />
+          <Route
+            path="/user/:id"
+            element={<Profile auth={auth} boards={boards} />}
+          />
+        </PrivateRouter>
       </Routes>
     </BrowserRouter>
   );
