@@ -1,5 +1,5 @@
 export const WHITELIST_DOMAINS = [
-  "http://localhost:5173"
+  "https://trello-xi.vercel.app/"
 ]
 
 export const BOARD_TYPES = {
