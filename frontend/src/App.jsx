@@ -30,7 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login auth={auth} />} />
         <Route path="/register" element={<Register auth={auth} />} />
-        <PrivateRouter>
+        <Route element={<PrivateRouter auth={auth} />}>
           <Route
             path="/board"
             element={<AllBoard auth={auth} boards={boards} />}
@@ -43,7 +43,8 @@ function App() {
             path="/user/:id"
             element={<Profile auth={auth} boards={boards} />}
           />
-        </PrivateRouter>
+          <Route path="*" />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
