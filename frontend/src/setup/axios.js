@@ -39,6 +39,7 @@ instance.interceptors.response.use(function (response) {
       originalRequest.headers.Authorization = `Bearer ${access_token}`;
       return axios(originalRequest);
     } catch (error) {
+      // 
     }
   }
 

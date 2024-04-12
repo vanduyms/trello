@@ -1,5 +1,6 @@
 let api_root = "";
 
+// eslint-disable-next-line no-undef
 if (process.env.BUILD_MODE === "dev") {
   api_root = "http://localhost:8017/";
 } else {

@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Column from "./Column/Column";
@@ -164,9 +163,8 @@ function ListColumns({ auth, board, columns }) {
               <CloseIcon
                 fontSize="small"
                 sx={{
-                  color: "white",
-                  cursor: "pointer",
                   color: (theme) => theme.palette.primary.colorTextColumn,
+                  cursor: "pointer",
                   "&:hover": { color: (theme) => theme.palette.warning.main },
                 }}
                 onClick={toggleOpenNewColumnForm}

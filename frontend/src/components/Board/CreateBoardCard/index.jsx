@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -126,9 +125,7 @@ function CreateBoardCard({ auth, show, setShow }) {
                 }}
                 onChange={(e) => setTypeBoard(e.target.value)}
               >
-                <option sx={{ padding: "20px 0" }} value="public">
-                  Public
-                </option>
+                <option value="public">Public</option>
                 <option value="private">Private</option>
               </TextField>
             </FormControl>

@@ -21,6 +21,7 @@ module.exports = {
       {
         'patterns': ['@mui/*/*/*']
       }
-    ]
+    ],
+    "react/prop-types": "off"
   },
 }

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable no-extra-boolean-cast */
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -69,7 +70,8 @@ function CardDetails({ setShow, auth, card, board }) {
 
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
-    TransformFile(file);
+    // cover && TransformFile(file);
+    cover && TransformFile(file);
   };
 
   const handleComment = () => {

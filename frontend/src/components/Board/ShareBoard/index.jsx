@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -184,7 +184,7 @@ function ShareBoard({ setShow, boards }) {
                             color: emailSearch ? "white" : "transparent",
                             cursor: "pointer",
                           }}
-                          onClick={(e) => setEmailSearch("")}
+                          onClick={() => setEmailSearch("")}
                         />
                       </InputAdornment>
                     ),
@@ -208,9 +208,7 @@ function ShareBoard({ setShow, boards }) {
                 sx={{ width: 175 }}
                 // onChange={(e) => setTypeBoard(e.target.value)}
               >
-                <option sx={{ paddingY: "20px" }} value="public">
-                  Member
-                </option>
+                <option value="public">Member</option>
                 {/* <option value="private">Private</option> */}
               </TextField>
               <Button
@@ -244,9 +242,7 @@ function ShareBoard({ setShow, boards }) {
                 // onChange={(e) => setTypeBoard(e.target.value)}
                 disabled
               >
-                <option sx={{ paddingY: "20px" }} value="public">
-                  Admin
-                </option>
+                <option value="public">Admin</option>
                 {/* <option value="private">Private</option> */}
               </TextField>
             </Box>

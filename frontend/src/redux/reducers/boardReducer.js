@@ -9,7 +9,6 @@ import {
 import {
   createNewBoard,
   getBoardsIsOwnerAndMember,
-  getBoardsOfMember,
   getBoardDetails,
   createNewColumn,
   deleteColumnDetails,

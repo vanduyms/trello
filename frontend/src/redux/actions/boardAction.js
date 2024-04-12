@@ -25,7 +25,7 @@ export const searchBoardTitle = createAsyncThunk("board/search", async (title, {
 
     return res;
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {
@@ -73,7 +73,7 @@ export const shareBoard = createAsyncThunk("board/shareBoard", async ({ boardId,
 
     return { data: userShareAdded };
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {
@@ -209,11 +209,11 @@ export const createNewCard = createAsyncThunk('board/createNewCard', async ({ bo
     } else {
       columnToUpdated.cards.push(createdNewCard);
       columnToUpdated.cardOrderIds.push(createdNewCard._id);
-    };
+    }
 
     return { data: newBoard };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {
@@ -238,7 +238,7 @@ export const moveCardInTheSameColumn = createAsyncThunk('board/moveCardInTheSame
     );
     return { data: newBoard };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {
@@ -275,7 +275,7 @@ export const moveCardToDifferentColumn = createAsyncThunk('board/moveCardToDiffe
     );
     return { data: newBoard };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {

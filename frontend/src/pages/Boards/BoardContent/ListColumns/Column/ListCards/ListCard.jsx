@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import TrelloCard from "./TrelloCard/TrelloCard";
 import {

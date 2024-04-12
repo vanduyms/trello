@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable no-extra-boolean-cast */
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,7 +25,7 @@ function Search({ boards }) {
 
   useEffect(() => {
     searchValue && dispatch(searchBoardTitle(searchValue));
-  }, [searchValue]);
+  }, [searchValue, dispatch]);
 
   if (tabletViewPort)
     return (
@@ -85,7 +85,7 @@ function Search({ boards }) {
                         color: searchValue ? "white" : "transparent",
                         cursor: "pointer",
                       }}
-                      onClick={(e) => setSearchValue("")}
+                      onClick={() => setSearchValue("")}
                     />
                   </InputAdornment>
                 ),
@@ -169,7 +169,7 @@ function Search({ boards }) {
                       color: searchValue ? "white" : "transparent",
                       cursor: "pointer",
                     }}
-                    onClick={(e) => setSearchValue("")}
+                    onClick={() => setSearchValue("")}
                   />
                 </InputAdornment>
               ),

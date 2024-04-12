@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar";
@@ -23,7 +23,7 @@ function AllBoard() {
     }
 
     loadData();
-  }, []);
+  }, [auth.userInfo._id, dispatch]);
 
   if (!auth.userToken) return <Navigate replace to="/" />;
   else

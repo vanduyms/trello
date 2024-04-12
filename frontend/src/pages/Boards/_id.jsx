@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar";
@@ -24,7 +24,7 @@ function Board() {
       dispatch(addToRecentlyViewed());
     }
     loadData();
-  }, [id]);
+  }, [dispatch, id]);
 
   if (!auth.userToken) {
     return <Navigate replace to="/" />;

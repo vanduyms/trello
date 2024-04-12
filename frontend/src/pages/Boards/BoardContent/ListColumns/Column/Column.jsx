@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -24,7 +24,7 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import { useConfirm } from "material-ui-confirm";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   deleteColumnDetails,
   createNewCard,
@@ -394,8 +394,11 @@ function Column({ auth, board, column }) {
                   sx={{
                     color: "white",
                     cursor: "pointer",
+                    // eslint-disable-next-line no-dupe-keys
                     color: (theme) => theme.palette.primary.colorTextColumn,
-                    "&:hover": { color: (theme) => theme.palette.warning.main },
+                    "&:hover": {
+                      color: (theme) => theme.palette.warning.main,
+                    },
                   }}
                   onClick={toggleOpenNewCardForm}
                 />

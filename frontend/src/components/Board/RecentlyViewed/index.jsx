@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "~/components/Link";
-import React from "react";
 
 function RecentlyViewed({ boards }) {
   if (boards) {
