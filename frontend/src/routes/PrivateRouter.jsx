@@ -1,6 +1,6 @@
-import Board from "./pages/Boards/_id";
-import AllBoard from "./pages/Boards";
-import Profile from "./pages/Users/_id";
+import Board from "~/pages/Boards/_id";
+import AllBoard from "~/pages/Boards";
+import Profile from "~/pages/Users/_id";
 import { Navigate } from "react-router-dom";
 
 function PrivateRouter({ auth, boards }) {
