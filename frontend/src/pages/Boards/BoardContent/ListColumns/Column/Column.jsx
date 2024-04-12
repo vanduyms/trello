@@ -392,13 +392,12 @@ function Column({ auth, board, column }) {
                 <CloseIcon
                   fontSize="small"
                   sx={{
-                    color: "white",
                     cursor: "pointer",
                     // eslint-disable-next-line no-dupe-keys
                     color: (theme) => theme.palette.primary.colorTextColumn,
-                    // "&:hover": {
-                    //   color: (theme) => theme.palette.warning.main,
-                    // },
+                    "&:hover": {
+                      color: (theme) => theme.palette.warning.main,
+                    },
                   }}
                   onClick={toggleOpenNewCardForm}
                 />
