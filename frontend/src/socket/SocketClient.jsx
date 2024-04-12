@@ -1,9 +1,8 @@
 import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateBoard } from "~/redux/reducers/boardReducer";
 
-const SocketClient = () => {
-  const { auth, socket } = useSelector((state) => state);
+const SocketClient = ({ auth, socket }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {

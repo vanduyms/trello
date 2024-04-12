@@ -30,7 +30,7 @@ import {
   createNewCard,
 } from "~/redux/actions/boardAction";
 
-function Column({ auth, board, column }) {
+function Column({ auth, board, column, socket }) {
   const orderedCards = column.cards;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -259,7 +259,12 @@ function Column({ auth, board, column }) {
           </Box>
         </Box>
 
-        <ListCard auth={auth} board={board} cards={orderedCards} />
+        <ListCard
+          auth={auth}
+          board={board}
+          cards={orderedCards}
+          socket={socket}
+        />
         <Box
           sx={{
             height: (theme) => theme.trelloCustom.columnFooterHeight,

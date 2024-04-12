@@ -5,7 +5,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-function ListCard({ auth, board, cards }) {
+function ListCard({ auth, board, cards, socket }) {
   return (
     <SortableContext
       items={cards?.map((c) => c._id)}
@@ -35,7 +35,13 @@ function ListCard({ auth, board, cards }) {
         }}
       >
         {cards.map((card) => (
-          <TrelloCard key={card._id} auth={auth} board={board} card={card} />
+          <TrelloCard
+            key={card._id}
+            auth={auth}
+            board={board}
+            card={card}
+            socket={socket}
+          />
         ))}
       </Box>
     </SortableContext>

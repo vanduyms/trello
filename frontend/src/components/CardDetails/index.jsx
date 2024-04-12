@@ -15,7 +15,7 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { ClickAwayListener } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 import { styled } from "@mui/material/styles";
 import {
@@ -25,8 +25,7 @@ import {
 } from "~/redux/actions/cardAction";
 import { updateCard } from "~/redux/actions/cardAction";
 
-function CardDetails({ setShow, auth, card, board }) {
-  const { socket } = useSelector((state) => state);
+function CardDetails({ setShow, auth, card, board, socket }) {
   const [comment, setComment] = useState("");
   const [commentEdited, setCommentEdited] = useState("");
   const [editComment, setEditComment] = useState(false);

@@ -6,13 +6,11 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import { useSelector } from "react-redux";
 import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar";
 import EditProfile from "./Profile";
 
-function Profile() {
-  const { auth, boards } = useSelector((state) => state);
+function Profile({ auth, boards }) {
   const user = auth.userInfo;
   const [value, setValue] = React.useState("1");
 

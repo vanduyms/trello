@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { useConfirm } from "material-ui-confirm";
 import CardDetails from "~/components/CardDetails";
 
-function TrelloCard({ auth, board, card }) {
+function TrelloCard({ auth, board, card, socket }) {
   const [showEditCard, setShowEditCard] = useState(false);
   const [titleUpdate, setTitleUpdate] = useState(card?.title);
   const [showCardDetails, setShowCardDetails] = useState(false);
@@ -270,6 +270,7 @@ function TrelloCard({ auth, board, card }) {
           auth={auth}
           card={card}
           board={board}
+          socket={socket}
         />
       )}
     </Card>

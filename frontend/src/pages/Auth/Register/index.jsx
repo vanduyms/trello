@@ -8,13 +8,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userRegister } from "~/redux/actions/authAction";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "~/components/Loading";
 
-function Login() {
-  const { auth } = useSelector((state) => state);
+function Login({ auth }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
