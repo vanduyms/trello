@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { boardModel } from "~/models/boardModel";
 import { cardModel } from "~/models/cardModel";
 import { columnModel } from "~/models/columnModel";
-import ApiError from "~/utils/apiError";
+import ApiError from "~/utils/apiHandleError";
 import { slugify } from "~/utils/formatter";
 
 const createNew = async (userId, reqBody) => {

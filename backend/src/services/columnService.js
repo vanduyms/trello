@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { boardModel } from "~/models/boardModel";
 import { cardModel } from "~/models/cardModel";
 import { columnModel } from "~/models/columnModel";
-import ApiError from "~/utils/apiError";
+import ApiError from "~/utils/apiHandleError";
 import { slugify } from "~/utils/formatter";
 
 const createNew = async (reqBody) => {
