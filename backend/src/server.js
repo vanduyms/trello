@@ -34,10 +34,17 @@ const START_SERVER = () => {
   app.use("/v1", APIs_V1);
   app.use(errorHandlingMiddleware);
 
-  httpServer.listen(env.APP_PORT, env.APP_HOST, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Hello, I am running at ${env.APP_HOST}:${env.APP_PORT}/`)
-  })
+  if (env.BUILD_MODE === "production") {
+    httpServer.listen(process.env.PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Hello, I am running at port ${process.env.PORT}`)
+    })
+  } else {
+    httpServer.listen(env.LOCAL_APP_PORT, env.LOCAL_APP_HOST, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Hello, I am running at ${env.APP_HOST}:${env.APP_PORT}/`)
+    })
+  }
 
   exitHook(() => {
     console.log("Disconnecting from Mongo DB ... ");
