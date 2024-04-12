@@ -13,16 +13,19 @@ import Logout from "@mui/icons-material/Logout";
 import { useDispatch } from "react-redux";
 import { logout } from "~/redux/reducers/authReducer";
 import Link from "~/components/Link";
+import { useNavigate } from "react-router-dom";
 
 export default function Profiles({ auth }) {
   const user = auth?.userInfo;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/");
     setAnchorEl(null);
   };
 
