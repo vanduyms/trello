@@ -9,12 +9,13 @@ import { useEffect } from "react";
 import io from "socket.io-client";
 import { setSocket } from "~/redux/reducers/socketReducer";
 import SocketClient from "~/socket/SocketClient";
+import { API_ROOT } from "~/utils/constants";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const socketIO = io("http://localhost:8017");
+    const socketIO = io(API_ROOT);
     dispatch(setSocket(socketIO));
 
     // return () => socketIO.close();
