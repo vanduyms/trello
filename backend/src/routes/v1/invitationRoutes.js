@@ -6,6 +6,6 @@ const Router = express.Router();
 
 
 Router.route("/")
-  .put(isAuth, invitationValidation.createNew, invitationController.createNew)
+  .post(isAuth, invitationValidation.createNew, invitationController.createNew)
 
 export const invitationRoutes = Router;

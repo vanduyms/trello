@@ -13,6 +13,7 @@ import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined
 import { useMediaQuery } from "@mui/material";
 import ShareBoard from "~/components/Board/ShareBoard";
 import { useState } from "react";
+import MenuBoardBar from "~/components/Board/BoardBar/MenuBoardBar";
 
 const MENU_STYLES = {
   display: "flex",
@@ -174,6 +175,7 @@ function BoardBar({ boards }) {
         >
           Share
         </Button>
+        <MenuBoardBar />
       </Box>
       {showShareBoard && (
         <ShareBoard setShow={setShowShareBoard} boards={boards} />

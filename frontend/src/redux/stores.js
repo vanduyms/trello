@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import alertReducer from './reducers/alertReducer'
 import authReducer from './reducers/authReducer'
 import boardReducer from './reducers/boardReducer'
 import socketReducer from './reducers/socketReducer'
@@ -8,7 +9,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     boards: boardReducer,
-    socket: socketReducer
+    socket: socketReducer,
+    alert: alertReducer
     // cards: cardReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
