@@ -89,9 +89,30 @@ const moveCardToDifferentColumn = async (reqBody) => {
   }
 }
 
+const deleteItem = async (boardId) => {
+  try {
+    const targetBoard = await boardModel.findOneById(boardId);
+
+    if (!targetBoard) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Column not found");
+    }
+
+    await boardModel.deleteOneById(boardId);
+
+    await columnModel.deleteManyByBoardId(boardId);
+
+    await cardModel.deleteManyByBoardId(boardId);
+
+    return { deleteResult: "Board is deleted successfully!" }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const boardService = {
   createNew,
   getDetails,
   update,
   moveCardToDifferentColumn,
+  deleteItem
 }

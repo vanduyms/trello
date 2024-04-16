@@ -12,12 +12,37 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
+import { useDispatch } from "react-redux";
+import { deleteBoard } from "~/redux/actions/boardAction";
+import { useNavigate } from "react-router-dom";
+import { useConfirm } from "material-ui-confirm";
 
-export default function MenuBoardBar() {
+export default function MenuBoardBar({ board, socket }) {
+  const boardId = board._id;
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const confirmDeleteComment = useConfirm();
+
+  const handleDeleteBoard = () => {
+    confirmDeleteComment({
+      title: "Delete board",
+      description:
+        "This action will permanently delete this board! Are you sure ?",
+      confirmationText: "Confirm",
+      cancellationText: "Cancel",
+    })
+      .then(async () => {
+        dispatch(deleteBoard({ board, boardId, socket }));
+        navigate(-1);
+      })
+      .catch();
   };
 
   const DrawerList = (
@@ -39,7 +64,7 @@ export default function MenuBoardBar() {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={handleDeleteBoard}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>

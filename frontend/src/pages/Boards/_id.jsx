@@ -32,7 +32,7 @@ function Board({ auth, boards, socket }) {
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBar auth={auth} boards={boards} />
-      <BoardBar boards={boards} />
+      <BoardBar boards={boards} socket={socket} />
       <BoardContent auth={auth} board={board} socket={socket} />
     </Container>
   );

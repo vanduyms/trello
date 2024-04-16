@@ -4,6 +4,7 @@ import { generatePlaceHolderCard } from "../../utils/formatter";
 import { isEmpty } from "lodash";
 import { mapOrder } from "~/utils/sort";
 import { cloneDeep } from "lodash";
+import { toast } from "react-toastify";
 
 export const createNewBoard = createAsyncThunk("board/createNewBoard", async (data, { rejectWithValue }) => {
   try {
@@ -108,6 +109,23 @@ export const getBoardDetails = createAsyncThunk("board/getBoardDetails", async (
     }
   }
 });
+
+export const deleteBoard = createAsyncThunk('board/deleteBoard', async ({ board, boardId, socket }, { rejectWithValue }) => {
+  try {
+    const res = await deleteDataAPI(`boards/${boardId}`);
+    toast.success("Board is deleted successfully!");
+
+    socket.socket.emit("deleteBoard", board);
+
+    return { ...res }
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+})
 
 export const createNewColumn = createAsyncThunk("board/createNewColumn", async ({ board, newColumnData }, { rejectWithValue }) => {
   try {

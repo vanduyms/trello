@@ -32,7 +32,7 @@ const MENU_STYLES = {
   },
 };
 
-function BoardBar({ boards }) {
+function BoardBar({ boards, socket }) {
   const board = boards.boardDetails;
   const memberOfBoard = [...board.ownerUser, ...board.members];
   const mobileViewPort = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -175,7 +175,7 @@ function BoardBar({ boards }) {
         >
           Share
         </Button>
-        <MenuBoardBar />
+        <MenuBoardBar board={board} socket={socket} />
       </Box>
       {showShareBoard && (
         <ShareBoard setShow={setShowShareBoard} boards={boards} />

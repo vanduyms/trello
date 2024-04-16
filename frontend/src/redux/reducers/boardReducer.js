@@ -17,7 +17,8 @@ import {
   moveCardInTheSameColumn,
   moveCardToDifferentColumn,
   searchBoardTitle,
-  shareBoard
+  shareBoard,
+  deleteBoard
 } from "~/redux/actions/boardAction";
 
 const boardsRecentView = localStorage.getItem("boardsRecentlyViewed") ? JSON.parse(localStorage.getItem("boardsRecentlyViewed")) : [];
@@ -30,7 +31,7 @@ const initialState = {
   boardsRecentlyViewed: boardsRecentView
 };
 
-const authSlice = createSlice({
+const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
@@ -109,6 +110,18 @@ const authSlice = createSlice({
         state.boardDetails = payload.data
       })
       .addCase(getBoardDetails.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Delete board
+      .addCase(deleteBoard.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteBoard.fulfilled, (state) => {
+        state.loading = false
+        state.boardDetails = null
+      })
+      .addCase(deleteBoard.rejected, (state) => {
         state.loading = false
       })
 
@@ -211,5 +224,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { addToRecentlyViewed, updateBoard } = authSlice.actions
-export default authSlice.reducer;
+export const { addToRecentlyViewed, updateBoard } = boardSlice.actions
+export default boardSlice.reducer;

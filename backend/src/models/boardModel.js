@@ -228,6 +228,18 @@ const pullColumnOrderIds = async (column) => {
   }
 }
 
+const deleteOneById = async (id) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).deleteOne(
+      { _id: new ObjectId(id) },
+      { returnDocument: "after" }
+    );
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
@@ -239,5 +251,6 @@ export const boardModel = {
   pullColumnOrderIds,
   findByOwnerId,
   findByMemberId,
-  findByTitle
+  findByTitle,
+  deleteOneById
 }

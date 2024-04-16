@@ -76,6 +76,19 @@ const deleteOneById = async (id) => {
   }
 }
 
+const deleteManyByCardId = async (cardId) => {
+  try {
+    const result = await GET_DB().collection(COMMENT_COLLECTION_NAME).deleteMany({
+      cardId: new ObjectId(cardId)
+    });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+
 const update = async (id, updateData) => {
   try {
     Object.keys(updateData).forEach(fieldName => {
@@ -102,5 +115,6 @@ export const commentModel = {
   findOneById,
   getCommentsOfCardId,
   deleteOneById,
+  deleteManyByCardId,
   update
 }
