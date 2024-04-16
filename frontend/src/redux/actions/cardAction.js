@@ -62,7 +62,7 @@ export const createComment = createAsyncThunk("card/createComment", async ({ boa
 
     const cardUpdated = columnData.cards.find(c => c._id === card._id);
 
-    cardUpdated.comments.push(createdComment);
+    cardUpdated.comments.unshift(createdComment);
 
     socket.socket.emit("updateBoard", newBoard);
 

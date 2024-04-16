@@ -11,6 +11,10 @@ const cardSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    sortComment: (state) => {
+      const allComment = state.comments;
+
+    }
   },
   extraReducers: (builder) => {
     builder

@@ -163,10 +163,15 @@ const getDetails = async (id) => {
                       },
                     },
                   },
+                  {
+                    $sort: { "createdAt": -1 }
+                  }
                 ],
                 as: "comments",
-              }
-            }
+              },
+            },
+
+
           ]
         }
       },

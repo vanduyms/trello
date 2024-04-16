@@ -77,6 +77,12 @@ function CardDetails({ setShow, auth, card, board, socket }) {
     const data = {
       content: comment,
       cardId: card._id,
+
+      userId: auth.userInfo._id,
+      userEmail: auth.userInfo.email,
+      userAvatar: auth.userInfo.avatar,
+      userDescription: auth.userInfo.fullName,
+      userDisplayName: auth.userInfo.username,
     };
     dispatch(createComment({ board, card, data, socket }));
     setComment("");
