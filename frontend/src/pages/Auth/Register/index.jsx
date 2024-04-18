@@ -82,12 +82,25 @@ function Login({ auth }) {
               py: 2,
               width: "100%",
               "& .MuiInputBase-root": {
-                border: "2px solid #ccc",
-                color: "black",
                 fontSize: "14px",
+                "&:hover": {
+                  "& > fieldset": {
+                    borderColor: "black",
+                  },
+                },
+                "&:focus": {
+                  "& > fieldset": {
+                    borderColor: "black",
+                  },
+                },
 
                 "& input": {
+                  color: "black",
                   paddingY: "10px",
+                },
+
+                "& > fieldset": {
+                  borderColor: "black",
                 },
               },
             }}
@@ -96,14 +109,12 @@ function Login({ auth }) {
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              autoFocus
               required
             />
             <OutlinedInput
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              autoFocus
               required
             />
             <OutlinedInput
@@ -156,7 +167,6 @@ function Login({ auth }) {
             <Button
               variant="contained"
               onClick={handleRegister}
-              disabled={!(email && password && passwordConfirm)}
               sx={{
                 padding: 1,
                 color: "#fff",

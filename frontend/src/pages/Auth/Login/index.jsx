@@ -77,9 +77,19 @@ function Login({ auth }) {
               width: "100%",
               "& .MuiInputBase-root": {
                 fontSize: "14px",
+                "&:focus-within": {
+                  "& > fieldset": {
+                    borderColor: "black !important",
+                  },
+                },
+                "&:hover": {
+                  "& > fieldset": {
+                    borderColor: "black",
+                  },
+                },
 
                 "& input": {
-                  color: "primary.colorTextColumn",
+                  color: "black",
 
                   paddingY: "10px",
                 },
