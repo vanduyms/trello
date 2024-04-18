@@ -215,7 +215,7 @@ function CardDetails({ show, setShow, auth, card, board, socket }) {
             }}
             onClick={handleClose}
           >
-            <CloseIcon sx={{ color: "primary.secondary" }} />
+            <CloseIcon sx={{ color: "black" }} />
           </Box>
         </Card>
       </Box>
