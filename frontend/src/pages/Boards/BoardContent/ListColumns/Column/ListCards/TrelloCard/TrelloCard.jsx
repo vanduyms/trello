@@ -266,6 +266,7 @@ function TrelloCard({ auth, board, card, socket }) {
       </Box>
       {showCardDetails && (
         <CardDetails
+          show={showCardDetails}
           setShow={setShowCardDetails}
           auth={auth}
           card={card}

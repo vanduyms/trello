@@ -178,7 +178,11 @@ function BoardBar({ boards, socket }) {
         <MenuBoardBar board={board} socket={socket} />
       </Box>
       {showShareBoard && (
-        <ShareBoard setShow={setShowShareBoard} boards={boards} />
+        <ShareBoard
+          show={showShareBoard}
+          setShow={setShowShareBoard}
+          boards={boards}
+        />
       )}
     </Box>
   );

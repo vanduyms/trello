@@ -1,10 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
+import { imageUpload } from "~/utils/imageUpload";
 import { putDataAPI, deleteDataAPI, getDataAPI, postDataAPI } from "~/apis/fetchData";
 
 export const updateCard = createAsyncThunk("card/updateCard", async ({ board, id, data }, { rejectWithValue }) => {
   try {
-    const res = await putDataAPI(`cards/${id}`, data);
+    let cover = data.cover;
+    let updateData = data;
+
+    if (cover) {
+      const coverUrl = await imageUpload(cover);
+      updateData = {
+        ...data,
+        cover: coverUrl.url
+      }
+    }
+    const res = await putDataAPI(`cards/${id}`, updateData);
 
     const updatedCard = res.data;
     let newBoard = cloneDeep(board);
@@ -23,6 +34,8 @@ export const updateCard = createAsyncThunk("card/updateCard", async ({ board, id
 
     return { data: newBoard };
   } catch (error) {
+    console.log(error);
+
     if (error.response && error.response.data.msg) {
       return rejectWithValue(error.response.data)
     } else {

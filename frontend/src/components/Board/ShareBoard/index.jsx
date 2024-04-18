@@ -4,8 +4,9 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { Avatar, Button, ClickAwayListener } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchUser from "./SearchUser";
@@ -13,15 +14,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { shareBoard } from "~/redux/actions/boardAction";
 import LoadingIcon from "~/components/LoadingIcon";
 
-function ShareBoard({ setShow, boards }) {
+function ShareBoard({ show, setShow, boards }) {
   const board = boards.boardDetails;
   const [emailSearch, setEmailSearch] = useState("");
   const [userShareAdded, setUserShareAdded] = useState([]);
-
-  const handleClose = (e) => {
-    e.stopPropagation();
-    setShow(false);
-  };
 
   const dispatch = useDispatch();
 
@@ -38,24 +34,15 @@ function ShareBoard({ setShow, boards }) {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100vw",
-        height: "100vh",
-        position: "fixed",
-        zIndex: 100,
-        top: 0,
-        left: 0,
-        background: "#00000099",
-
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        cursor: "auto",
-      }}
-    >
-      <ClickAwayListener onClickAway={handleClose}>
+    <Modal open={show} onClose={() => setShow(false)}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
         <Card
           sx={{
             position: "relative",
@@ -280,8 +267,8 @@ function ShareBoard({ setShow, boards }) {
             )}
           </CardContent>
         </Card>
-      </ClickAwayListener>
-    </Box>
+      </Box>
+    </Modal>
   );
 }
 
