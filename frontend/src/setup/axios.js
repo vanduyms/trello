@@ -31,6 +31,7 @@ instance.interceptors.response.use(function (response) {
 
     try {
       const response = await postAPI(`refresh_token`);
+      console.log(response)
       const { access_token } = response.data;
 
       localStorage.setItem('userToken', access_token);
@@ -40,6 +41,8 @@ instance.interceptors.response.use(function (response) {
       return axios(originalRequest);
     } catch (error) {
       // 
+      console.log(error);
+
     }
   }
 
