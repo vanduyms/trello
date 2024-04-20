@@ -71,6 +71,19 @@ const generateAccessToken = async (req, res, next) => {
   }
 }
 
+const sendResetPassword = async (req, res, next) => {
+  try {
+    const { resetToken, id } = await authService.sendResetPassword(req.body);
+    res.status(StatusCodes.CREATED).json({
+      msg: "Link reset password sent successfully",
+      resetToken: resetToken,
+      id: id
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const authController = {
   login,
   register,

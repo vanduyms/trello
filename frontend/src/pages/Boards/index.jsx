@@ -10,6 +10,7 @@ import { getBoardsIsOwnerAndMember } from "~/redux/actions/boardAction";
 import Link from "~/components/Link";
 import CreateBoardCard from "~/components/Board/CreateBoardCard";
 import { useState } from "react";
+import Loading from "~/components/Loading";
 
 function AllBoard({ auth, boards }) {
   const [showCreateBoard, setShowCreateBoard] = useState(false);
@@ -23,6 +24,7 @@ function AllBoard({ auth, boards }) {
     loadData();
   }, [auth.userInfo._id, dispatch]);
 
+  if (boards.loading) return <Loading />;
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBar boards={boards} auth={auth} />

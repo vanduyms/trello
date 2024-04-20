@@ -3,7 +3,9 @@ import { userService } from "~/services/userService";
 import { generateToken } from "~/utils/jwt.helper";
 import { userModel } from "~/models/userModel";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import sendEmail from "~/utils/email";
 
 const login = async (reqBody) => {
   try {
@@ -59,8 +61,34 @@ const generateAccessToken = async (reqBody) => {
   }
 }
 
+const sendResetPassword = async (reqBody) => {
+  try {
+    const email = reqBody.email;
+    const user = await userModel.findOneByEmail(email);
+
+    if (!user) throw new Error("This email is not exist !");
+
+    let resetToken = await crypto.randomBytes(32).toString("hex");
+    resetToken = await bcrypt.hash(resetToken, 12);
+    const resetTokenExpires = Date.now() + 3600000;
+
+    await userModel.sendResetToken(user._id, resetToken, resetTokenExpires);
+
+    const link = `${process.env.BASE_URL}/resetPassword/${user._id}/${newToken.token}`;
+    await sendEmail(user.email, "Password reset", link);
+
+    return {
+      resetToken: resetToken,
+      id: user._id
+    };
+  } catch (error) {
+    throw (error);
+  }
+}
+
 export const authService = {
   login,
   register,
-  generateAccessToken
+  generateAccessToken,
+  sendResetPassword
 }

@@ -19,6 +19,9 @@ const USER_COLLECTION_SCHEMA = Joi.object({
   isActive: Joi.boolean().default(false),
   verifyToken: Joi.string().default(null),
 
+  resetToken: Joi.string().default(null),
+  resetTokenExpires: Joi.date().required(),
+
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp("javascript").default(null)
 });
@@ -78,6 +81,32 @@ const findOneByEmail = async (email) => {
   }
 }
 
+const sendResetToken = async (id, resetToken, resetTokenExpires) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOneAndUpdate(
+      {
+        _id: id
+      },
+      {
+        resetToken: resetToken,
+        resetTokenExpires: resetTokenExpires
+      }
+    );
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+// const resetToken = async (id, resetToken) => {
+//   try {
+
+//   } catch (err) {
+//     throw new Error()
+//   }
+// }
+
 const update = async (userId, updateData) => {
   try {
     Object.keys(updateData).forEach(fieldName => {
@@ -104,5 +133,6 @@ export const userModel = {
   createNew,
   findOneById,
   findOneByEmail,
-  update
+  update,
+  sendResetToken
 }

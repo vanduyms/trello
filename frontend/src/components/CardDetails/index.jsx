@@ -212,6 +212,7 @@ function CardDetails({ show, setShow, auth, card, board, socket }) {
               position: "absolute",
               top: "22px",
               right: "15px",
+              cursor: "pointer",
             }}
             onClick={handleClose}
           >
