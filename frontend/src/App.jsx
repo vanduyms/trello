@@ -12,7 +12,8 @@ import PrivateRouter from "~/routes/PrivateRouter";
 import AllBoard from "./pages/Boards";
 import Board from "./pages/Boards/_id";
 import Profile from "./pages/Users/_id";
-import ResetPassword from "./pages/Auth/ResetPassword";
+import ForgotPassword from "~/pages/Auth/ResetPassword";
+import ResetPassword from "~/pages/Auth/ResetPassword/_id";
 
 function App() {
   const { auth, boards, socket } = useSelector((state) => state);
@@ -31,7 +32,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Login auth={auth} />} />
         <Route path="/register" element={<Register auth={auth} />} />
-        <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route
+          path="/forgotPassword"
+          element={<ForgotPassword auth={auth} />}
+        />
+        <Route path="/resetPassword" element={<ResetPassword auth={auth} />} />
         <Route element={<PrivateRouter auth={auth} />}>
           <Route
             path="/board"

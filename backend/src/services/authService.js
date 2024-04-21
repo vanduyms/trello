@@ -74,7 +74,7 @@ const sendResetPassword = async (reqBody) => {
 
     await userModel.sendResetToken(user._id, resetToken, resetTokenExpires);
 
-    const link = `${process.env.BASE_URL}/resetPassword/${user._id}/${newToken.token}`;
+    const link = `${env.BASE_URL}/resetPassword?id=${user._id}&resetToken=${resetToken}`;
     await sendEmail(user.email, "Password reset", link);
 
     return {
@@ -86,9 +86,26 @@ const sendResetPassword = async (reqBody) => {
   }
 }
 
+const resetPassword = async (reqQuery, reqBody) => {
+  try {
+    const { id, resetToken } = reqQuery;
+    const userResetPassword = await userModel.findOneByIdAndResetToken(id, resetToken);
+    if (!userResetPassword) throw new Error("Invalid link or expired");
+
+    const password = await bcrypt.hash(reqBody.password, 12);
+
+    const result = await userModel.update(userResetPassword._id, { password: password, resetToken: null, resetTokenExpires: null });
+
+    return { user: { ...result, password: "" } }
+  } catch (err) {
+    throw (err);
+  }
+}
+
 export const authService = {
   login,
   register,
   generateAccessToken,
-  sendResetPassword
+  sendResetPassword,
+  resetPassword
 }

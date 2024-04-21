@@ -8,8 +8,24 @@ const createNew = async (req, res, next) => {
     password: Joi.string().required().min(8)
       .max(25)
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        'password').strict(),
+        'password').strict().message("Password must have at least 8 characters, including lowercase letters, uppercase letters, numbers and special characters"),
     username: Joi.string().required().strict()
+  });
+
+  try {
+    await correctCondition.validateAsync(req.body, { abortEarly: false });
+    next();
+  } catch (error) {
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+  }
+}
+
+const resetPassword = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    password: Joi.string().required().min(8)
+      .max(25)
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'password').strict().message("Password must have at least 8 characters, including lowercase letters, uppercase letters, numbers and special characters"),
   });
 
   try {
@@ -41,4 +57,4 @@ const update = async (req, res, next) => {
 }
 
 
-export const userValidation = { createNew, update }
+export const userValidation = { createNew, resetPassword, update }

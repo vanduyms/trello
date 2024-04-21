@@ -157,7 +157,7 @@ function Login({ auth }) {
               },
             }}
           >
-            <Link to="/resetPassword">Forgot password ?</Link>
+            <Link to="/forgotPassword">Forgot password ?</Link>
             <Link to="/register">Register</Link>
           </Box>
         </Box>

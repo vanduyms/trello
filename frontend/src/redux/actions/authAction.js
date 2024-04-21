@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { postDataAPI, putDataAPI } from "../../apis/fetchData";
 import { imageUpload } from "~/utils/imageUpload";
+import { toast } from "react-toastify";
 
 export const userLogin = createAsyncThunk("api/login", async (data, { rejectWithValue }) => {
   try {
@@ -59,3 +60,31 @@ export const userUpdate = createAsyncThunk("api/updateUser", async ({ id, data, 
     }
   }
 });
+
+
+export const sendResetPassword = createAsyncThunk("api/sendResetPassword", async (email, { rejectWithValue }) => {
+  try {
+    const result = postDataAPI("forgotPassword", { email });
+
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+})
+
+export const resetPassword = createAsyncThunk("api/resetPassword", async ({ infoResetPassword, password }, { rejectWithValue }) => {
+  try {
+    const result = await postDataAPI(`${infoResetPassword}`, { password });
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.msg) {
+      return rejectWithValue(error.response.data)
+    } else {
+      return rejectWithValue(error.response);
+    }
+  }
+})

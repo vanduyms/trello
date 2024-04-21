@@ -59,6 +59,16 @@ const createNew = async (data) => {
   }
 }
 
+const findOne = async (query) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne(query);
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 const findOneById = async (id) => {
   try {
     const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne({
@@ -81,17 +91,12 @@ const findOneByEmail = async (email) => {
   }
 }
 
-const sendResetToken = async (id, resetToken, resetTokenExpires) => {
+const findOneByIdAndResetToken = async (id, resetToken) => {
   try {
-    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOneAndUpdate(
-      {
-        _id: id
-      },
-      {
-        resetToken: resetToken,
-        resetTokenExpires: resetTokenExpires
-      }
-    );
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne({
+      _id: new ObjectId(id),
+      resetToken: resetToken
+    });
 
     return result;
   } catch (err) {
@@ -99,13 +104,26 @@ const sendResetToken = async (id, resetToken, resetTokenExpires) => {
   }
 }
 
-// const resetToken = async (id, resetToken) => {
-//   try {
+const sendResetToken = async (id, resetToken, resetTokenExpires) => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).findOneAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $set: {
+          resetToken: resetToken,
+          resetTokenExpires: resetTokenExpires
+        }
+      },
+      { returnDocument: "after" }
+    );
 
-//   } catch (err) {
-//     throw new Error()
-//   }
-// }
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
 const update = async (userId, updateData) => {
   try {
@@ -131,8 +149,10 @@ export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
   createNew,
+  findOne,
   findOneById,
   findOneByEmail,
   update,
-  sendResetToken
+  sendResetToken,
+  findOneByIdAndResetToken
 }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userLogin, userRegister, userUpdate } from "~/redux/actions/authAction";
+import { userLogin, userRegister, userUpdate, sendResetPassword, resetPassword } from "~/redux/actions/authAction";
 
 const userToken = localStorage.getItem('userToken')
   ? localStorage.getItem('userToken')
@@ -15,6 +15,7 @@ const initialState = {
   loading: false,
   userInfo,
   userToken,
+  resetInfo: null
 };
 
 const authSlice = createSlice({
@@ -66,6 +67,30 @@ const authSlice = createSlice({
         state.userInfo = payload.data
       })
       .addCase(userUpdate.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Send reset password
+      .addCase(sendResetPassword.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(sendResetPassword.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.resetInfo = payload.data
+      })
+      .addCase(sendResetPassword.rejected, (state) => {
+        state.loading = false
+      })
+
+      // Reset password
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(resetPassword.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.resetInfo = payload.data
+      })
+      .addCase(resetPassword.rejected, (state) => {
         state.loading = false
       })
   }

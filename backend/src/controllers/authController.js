@@ -84,8 +84,22 @@ const sendResetPassword = async (req, res, next) => {
   }
 }
 
+const resetPassword = async (req, res, next) => {
+  try {
+    const reqQuery = req.query;
+    const reqBody = req.body;
+
+    const result = await authService.resetPassword(reqQuery, reqBody);
+    res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const authController = {
   login,
   register,
-  generateAccessToken
+  generateAccessToken,
+  sendResetPassword,
+  resetPassword
 }
