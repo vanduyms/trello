@@ -8,61 +8,71 @@ import LoadingIcon from "~/components/LoadingIcon";
 
 function SearchUser({
   board,
+  isSearching,
+  setIsSearching,
   emailSearch,
   setEmailSearch,
   userShareAdded,
   setUserShareAdded,
 }) {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const [userSearch, setUserSearch] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      const res = await getDataAPI(`users?email=${emailSearch}`);
-      setUser(res.data);
+      let query = `users`;
+      if (emailSearch) query = `users?email=${emailSearch}`;
+      const res = await getDataAPI(query);
+      setUserSearch(res.data);
       setLoading(false);
     };
 
-    loadData();
-  }, [emailSearch]);
-  const handleAddUserShare = (id) => {
+    isSearching && loadData();
+  }, [emailSearch, isSearching]);
+
+  const handleAddUserShare = (user) => {
+    const id = user._id;
     if (id === board.ownerUser[0]._id || board.memberIds.includes(id)) return;
     else {
       setUserShareAdded([...userShareAdded, user]);
       setEmailSearch("");
     }
+    setIsSearching(false);
   };
 
-  if (emailSearch) {
-    return (
-      <Box
-        sx={{
-          position: "absolute",
-          zIndex: 100000,
-          width: "100%",
-          top: "54px",
-          left: "0px",
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        zIndex: 100000,
+        width: "100%",
+        maxHeight: isSearching && "136px",
+        top: "54px",
+        left: "0px",
 
-          display: "flex",
-          flexDirection: "row",
-          gap: 1.5,
-          alignItems: "center",
+        display: isSearching ? "flex" : "none",
+        flexDirection: "column",
+        gap: 1.5,
+        alignItems: "center",
 
-          backgroundColor: "primary.widgetBgColor",
+        overflowY: "scroll",
 
-          boxShadow: 2,
-          padding: 2,
-          mt: 0.5,
-          borderRadius: 1,
+        backgroundColor: "primary.widgetBgColor",
 
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderColor: "primary.colorTextColumn",
-        }}
-      >
-        {loading && <LoadingIcon />}
-        {user.email ? (
+        boxShadow: 2,
+        padding: 2,
+        mt: 0.5,
+        borderRadius: 1,
+
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "primary.colorTextColumn",
+      }}
+    >
+      {loading && <LoadingIcon />}
+      {userSearch?.length > 0 ? (
+        userSearch.map((user) => (
           <Box
             sx={{
               display: "flex",
@@ -70,7 +80,8 @@ function SearchUser({
               alignItems: "center",
               width: "100%",
             }}
-            onClick={() => handleAddUserShare(user._id)}
+            key={user._id}
+            onClick={() => handleAddUserShare(user)}
           >
             <Avatar src={user.avatar} />
             <Box>
@@ -78,12 +89,14 @@ function SearchUser({
               <Typography>{`@${user.username}`}</Typography>
             </Box>
           </Box>
-        ) : (
-          !loading && <Typography>Cannot found user!</Typography>
-        )}
-      </Box>
-    );
-  }
+        ))
+      ) : (
+        <Typography sx={{ alignSelf: "flex-start" }}>
+          Cannot find user !
+        </Typography>
+      )}
+    </Box>
+  );
 }
 
 export default SearchUser;

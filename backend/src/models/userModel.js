@@ -20,7 +20,7 @@ const USER_COLLECTION_SCHEMA = Joi.object({
   verifyToken: Joi.string().default(null),
 
   resetToken: Joi.string().default(null),
-  resetTokenExpires: Joi.date().required(),
+  resetTokenExpires: Joi.date().default(null),
 
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp("javascript").default(null)
@@ -53,6 +53,18 @@ const createNew = async (data) => {
 
     const createdUser = await GET_DB().collection(USER_COLLECTION_NAME).insertOne(dataHash);
     return createdUser;
+
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+const findAllUser = async () => {
+  try {
+    const result = await GET_DB().collection(USER_COLLECTION_NAME).find({});
+
+    return result;
+
 
   } catch (err) {
     throw new Error(err);
@@ -149,6 +161,7 @@ export const userModel = {
   USER_COLLECTION_NAME,
   USER_COLLECTION_SCHEMA,
   createNew,
+  findAllUser,
   findOne,
   findOneById,
   findOneByEmail,

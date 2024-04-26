@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, ClickAwayListener } from "@mui/material";
 import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchUser from "./SearchUser";
@@ -17,6 +17,7 @@ import LoadingIcon from "~/components/LoadingIcon";
 function ShareBoard({ show, setShow, boards }) {
   const board = boards.boardDetails;
   const [emailSearch, setEmailSearch] = useState("");
+  const [searching, setSearching] = useState(false);
   const [userShareAdded, setUserShareAdded] = useState([]);
 
   const dispatch = useDispatch();
@@ -102,89 +103,92 @@ function ShareBoard({ show, setShow, boards }) {
                 gap: 1.5,
               }}
             >
-              <Box
-                sx={{
-                  width: "100%",
-                  position: "relative",
-                  display: "flex",
-                  alignItems: "center",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "primary.black_white",
-                  paddingX: 2,
-                  borderRadius: 1,
-                }}
-              >
-                {userShareAdded.map((user) => (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                      backgroundColor: "primary.bgButtonBoard",
-                      borderRadius: 1,
-                      padding: "4px 12px",
-                    }}
-                    key={user._id}
-                  >
-                    <Typography>{user.username}</Typography>
-                    <CloseIcon
-                      fontSize="small"
-                      sx={{
-                        color: "primary.colorTextColumn",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleRemoveUserShare(user._id)}
-                    />
-                  </Box>
-                ))}
-                <TextField
-                  placeholder={userShareAdded.length ? "" : "Email address"}
-                  autoFocus={true}
+              <ClickAwayListener onClickAway={() => setSearching(false)}>
+                <Box
                   sx={{
                     width: "100%",
-                    "& .MuiInputBase-input": {
-                      color: "primary.black_white",
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      paddingRight: 0,
-                    },
-
-                    "& input": {
-                      paddingX: userShareAdded ? "8px" : 0,
-                    },
-
-                    "& fieldset": {
-                      border: "none",
-                      outline: "none",
-                    },
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "primary.black_white",
+                    paddingX: 2,
+                    borderRadius: 1,
                   }}
-                  onClick={() => {}}
-                  value={emailSearch}
-                  onChange={(e) => setEmailSearch(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <CloseIcon
-                          fontSize="small"
-                          sx={{
-                            color: emailSearch ? "white" : "transparent",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => setEmailSearch("")}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <SearchUser
-                  board={board}
-                  emailSearch={emailSearch}
-                  setEmailSearch={setEmailSearch}
-                  userShareAdded={userShareAdded}
-                  setUserShareAdded={setUserShareAdded}
-                />
-              </Box>
+                >
+                  {userShareAdded.map((user) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        backgroundColor: "primary.bgButtonBoard",
+                        borderRadius: 1,
+                        padding: "4px 12px",
+                      }}
+                      key={user._id}
+                    >
+                      <Typography>{user.username}</Typography>
+                      <CloseIcon
+                        fontSize="small"
+                        sx={{
+                          color: "primary.colorTextColumn",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleRemoveUserShare(user._id)}
+                      />
+                    </Box>
+                  ))}
+                  <TextField
+                    placeholder={userShareAdded.length ? "" : "Email address"}
+                    onFocus={() => setSearching(true)}
+                    sx={{
+                      width: "100%",
+                      "& .MuiInputBase-input": {
+                        color: "primary.black_white",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        paddingRight: 0,
+                      },
+
+                      "& input": {
+                        paddingX: userShareAdded ? "8px" : 0,
+                      },
+
+                      "& fieldset": {
+                        border: "none",
+                        outline: "none",
+                      },
+                    }}
+                    value={emailSearch}
+                    onChange={(e) => setEmailSearch(e.target.value)}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <CloseIcon
+                            fontSize="small"
+                            sx={{
+                              color: emailSearch ? "white" : "transparent",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setEmailSearch("")}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <SearchUser
+                    board={board}
+                    isSearching={searching}
+                    setIsSearching={setSearching}
+                    emailSearch={emailSearch}
+                    setEmailSearch={setEmailSearch}
+                    userShareAdded={userShareAdded}
+                    setUserShareAdded={setUserShareAdded}
+                  />
+                </Box>
+              </ClickAwayListener>
               <TextField
                 id="filled-select-currency-native"
                 select

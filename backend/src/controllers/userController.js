@@ -26,9 +26,21 @@ const update = async (req, res, next) => {
 const searchUserByEmail = async (req, res, next) => {
   try {
     const userEmail = req.query.email;
-    const result = await userModel.findOneByEmail(userEmail);
+    let result;
+    let user = [];
 
-    res.status(StatusCodes.CREATED).json({ ...result, password: "" })
+    if (userEmail) {
+      result = await userModel.findOneByEmail(userEmail);
+      user = result;
+      if (result?._id) user = [result]
+    } else {
+      result = await userModel.findAllUser(userEmail);
+      for await (const doc of result) {
+        user.push(doc);
+      }
+    }
+
+    res.status(StatusCodes.CREATED).json(user)
   } catch (error) {
     next(error)
   }
