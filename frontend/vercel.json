@@ -4,7 +4,7 @@
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
+      "src": "/.*",
       "dest": "/index.html",
       "continue": true
     }
