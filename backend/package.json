@@ -11,7 +11,7 @@
     "lint": "eslint src --ext js --report-unused-disable-directives --max-warnings 0",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel ./src -d ./build/src",
-    "build": "npm run clean && npm run build-babel",
+    "build": "npm run clean && npm run build-babel && netlify deploy --prod",
     "production": "npm run build && cross-env BUILD_MODE=production node ./build/src/server.js",
     "dev": "cross-env BUILD_MODE=dev nodemon --exec babel-node ./src/server.js"
   },
@@ -31,8 +31,11 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.3.0",
+    "netlify-cli": "^17.25.0",
+    "netlify-lambda": "^2.0.16",
     "nodemailer": "^6.9.13",
     "rm": "^0.1.8",
+    "serverless-http": "^3.2.0",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
