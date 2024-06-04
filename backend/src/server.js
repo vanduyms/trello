@@ -22,7 +22,10 @@ const START_SERVER = () => {
   const httpServer = createServer(app);
   const io = new Server(httpServer, {
     cors: {
-      origin: "https://trello-xi.vercel.app",
+      origin: [
+        "https://trello-xi.vercel.app",
+        "https://trello-backend.up.railway.app"
+      ],
       // origin: "http://localhost:5173",
       credentials: true
     }

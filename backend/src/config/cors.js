@@ -6,9 +6,6 @@ import ApiError from '~/utils/apiHandleError'
 // Cấu hình CORS Option trong dự án thực tế 
 export const corsOptions = {
   origin: function (origin, callback) {
-    console.log("WHITE LIST: ", WHITELIST_DOMAINS[0])
-    console.log("WHITE LIST: ", WHITELIST_DOMAINS[1])
-    console.log(origin)
 
     // Cho phép việc gọi API bằng POSTMAN trên môi trường dev,
     // Thông thường khi sử dụng postman thì cái origin sẽ có giá trị là undefined
@@ -16,7 +13,7 @@ export const corsOptions = {
       return callback(null, true)
     }
 
-    // Kiểm tra dem origin có phải là domain được chấp nhận hay không
+    // Kiểm tra xem origin có phải là domain được chấp nhận hay không
     if (WHITELIST_DOMAINS.includes(origin)) {
       return callback(null, true)
     }
@@ -28,6 +25,5 @@ export const corsOptions = {
   // Some legacy browsers (IE11, various SmartTVs) choke on 204
   optionsSuccessStatus: 200,
 
-  // CORS sẽ cho phép nhận cookies từ request, (Nhá hàng :D | Ở khóa MERN Stack Advance nâng cao học trực tiếp mình sẽ hướng dẫn các bạn đính kèm jwt access token và refresh token vào httpOnly Cookies)
   credentials: true
 }
