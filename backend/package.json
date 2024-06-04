@@ -11,7 +11,7 @@
     "lint": "eslint src --ext js --report-unused-disable-directives --max-warnings 0",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel ./src -d ./build/src",
-    "build": "npm run clean && npm run build-babel && netlify deploy --prod",
+    "build": "npm run clean && npm run build-babel",
     "production": "npm run build && cross-env BUILD_MODE=production node ./build/src/server.js",
     "dev": "cross-env BUILD_MODE=dev nodemon --exec babel-node ./src/server.js"
   },

@@ -32,7 +32,7 @@ const START_SERVER = () => {
     SocketServer(socket);
   });
 
-  app.use("/.netlify/functions/app/v1", APIs_V1);
+  app.use("/v1", APIs_V1);
   app.use(errorHandlingMiddleware);
 
   if (env.BUILD_MODE === "production") {
