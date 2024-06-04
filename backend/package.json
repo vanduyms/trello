@@ -4,9 +4,6 @@
   "version": "1.0.0",
   "author": "",
   "description": "",
-  "engines": {
-    "node": "18.16.0"
-  },
   "scripts": {
     "lint": "eslint src --ext js --report-unused-disable-directives --max-warnings 0",
     "clean": "rm -rf build && mkdir build",
