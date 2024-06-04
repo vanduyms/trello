@@ -24,7 +24,8 @@ const START_SERVER = () => {
     cors: {
       origin: [
         "https://trello-xi.vercel.app",
-        "https://trello-backend.up.railway.app"
+        "https://trello-backend.up.railway.app",
+        "https://vanduyms.github.io"
       ],
       // origin: "http://localhost:5173",
       credentials: true
