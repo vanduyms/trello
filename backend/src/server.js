@@ -26,6 +26,8 @@ const START_SERVER = () => {
         "https://trello-xi.vercel.app",
         "https://trello-backend.up.railway.app",
         "https://vanduyms.github.io"
+        "https://trello-backend.up.railway.app/",
+        "https://trello-xi.vercel.app/",
       ],
       // origin: "http://localhost:5173",
       credentials: true
